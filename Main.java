@@ -13,6 +13,8 @@ public class Main extends Application {
     BorderPane root = new BorderPane();
     Scene scene = new Scene(root, 1030, 750);
     mainStage.setScene(scene);
+    MenuUI menu = new MenuUI(root);
+    
     mainStage.show();
   }
 }
