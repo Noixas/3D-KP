@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.LinkedList;
+
 public class SolutionSet{
   private List<Box> _solution;
   private double _startTime;
@@ -6,7 +8,7 @@ public class SolutionSet{
   private double _endTime;
   private double _totalTime;
   public SolutionSet(double pStartTime){
-    _solution = new LinkeList<Box>();
+    _solution = new LinkedList<Box>();
     _value = 0;
   }
   public void AddBox(Box pBox)
@@ -43,6 +45,7 @@ public class SolutionSet{
   public int getBoxTypeCount(Box pBox)
   {
     //Todo: implement method that return the amount of boxes of type T in solution
+    return 0;
   }
 
 }
