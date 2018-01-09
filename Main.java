@@ -11,10 +11,10 @@ public class Main extends Application {
   public void start(Stage mainStage) {
     mainStage.setTitle("Phase 3");
     BorderPane root = new BorderPane();
-    Scene scene = new Scene(root, 1030, 750);
+    Scene scene = new Scene(root, 1040, 750);
     mainStage.setScene(scene);
     MenuUI menu = new MenuUI(root);
-    
+
     mainStage.show();
   }
 }
