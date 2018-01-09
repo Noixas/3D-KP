@@ -30,4 +30,14 @@ public class Vector3D{
   {
     return new Vector3D(this);
   }
+  @Override
+  public boolean equals(Object o)
+  {
+    if(o == null) return false;
+    if(o == this) return true;
+    if(o instanceof Vector3D == false) return false;
+    Vector3D other = (Vector3D) o;
+    if(x == other.x && y == other.y && z == other.z)  return true;
+    else return false;
+  }
 }
