@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.LinkedList;
+import java.util.Collections;
 public class AlgorithmZ extends Algorithm
 {
   private Container _container;
@@ -10,6 +11,7 @@ public class AlgorithmZ extends Algorithm
     _container = new Container();
     listEP = new LinkedList<Vector3D>();
     Start();
+
   }
   public void Start(){
     System.out.println("Algorithm Z starting...");
@@ -55,6 +57,8 @@ public class AlgorithmZ extends Algorithm
     {
       EP.add(newEP[i]);
     }
+    Collections.sort(EP);
+    removeDuplicatedEP(EP);
     //TODO; ordering of EP and deleting duplicated
     //TODO; can use comparable interface
   }
@@ -68,5 +72,18 @@ public class AlgorithmZ extends Algorithm
     return false;
     else
     return true;
+  }
+  public void removeDuplicatedEP(List<Vector3D> ep)
+  {
+    List<Vector3D> newList = new LinkedList<Vector3D>();
+    newList.add(ep.get(0));
+    ep.remove(0);
+    while(ep.size() != 0)
+    {
+      if(newList.get(0) != ep.get(0))
+          newList.add(ep.get(0));
+      ep.remove(0);
+    }
+    ep = newList;
   }
 }
