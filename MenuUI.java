@@ -4,7 +4,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
-
+import javafx.geometry.Pos;
 
 public class MenuUI {
   public MenuUI(BorderPane root) {
@@ -30,7 +30,7 @@ public class MenuUI {
 
   public void constructInputFields(HBox top) {
     TextField boxA = new TextField();
-    boxA.setPrefSize(200, 150);
+    boxA.setPrefSize(80, 50);
 
     top.getChildren().addAll(boxA);
   }
