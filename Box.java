@@ -1,9 +1,9 @@
 public class Box{
-  private Vector3D _position;
-  private Vector3D _size;
-  private double _value;
-  private double _volume;
-  private double _densityValue;
+  protected Vector3D _position;
+  protected Vector3D _size;
+  protected double _value;
+  protected double _volume;
+  protected double _densityValue;
   public Box(Vector3D pSize, double pValue)
   {
     _size = pSize;
