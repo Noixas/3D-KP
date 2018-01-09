@@ -73,14 +73,18 @@ public class AlgorithmZ extends Algorithm
     else
     return true;
   }
+  /**
+   * Remove elements that are duplicated in the list
+   * @param List<Vector3D> ep [List of current ExtremePoints]
+   */
   public void removeDuplicatedEP(List<Vector3D> ep)
-  {
+  {//TODO move it to solution set class maybe
     List<Vector3D> newList = new LinkedList<Vector3D>();
     newList.add(ep.get(0));
     ep.remove(0);
     while(ep.size() != 0)
     {
-      if(newList.get(0) != ep.get(0))
+      if(newList.get(0).equals(ep.get(0)) == false)
           newList.add(ep.get(0));
       ep.remove(0);
     }
