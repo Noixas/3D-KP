@@ -14,7 +14,7 @@ public class Main extends Application {
     Scene scene = new Scene(root, 1030, 750);
     mainStage.setScene(scene);
     MenuUI menu = new MenuUI(root);
-    
+    AlgorithmZ z = new AlgorithmZ();
     mainStage.show();
   }
 }
