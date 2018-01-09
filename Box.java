@@ -4,7 +4,7 @@ public class Box{
   private double _value;
   private double _volume;
   private double _densityValue;
-  public Box(Vector3D pSize, double pValue;)
+  public Box(Vector3D pSize, double pValue)
   {
     _size = pSize;
     _value = pValue;

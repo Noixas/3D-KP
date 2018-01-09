@@ -13,10 +13,10 @@ public class SolutionSet{
   {
     _solution.add(pBox);
   }
-  //*
+  /**
    * Delete Box from solution set
    * @param  Box pBox          [Box to be deleted]
-   * @return     [true if box was found and deleted]
+   * @return  true if box was found and deleted
    */
   public boolean deleteBox(Box pBox)
   {
