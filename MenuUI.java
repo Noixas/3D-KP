@@ -1,3 +1,4 @@
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
@@ -19,9 +20,18 @@ public class MenuUI {
     root.setMargin(top, new Insets(2));
     root.setCenter(center);
     root.setMargin(center, new Insets(2));
+
+    constructUI(center, top);
   }
 
   public void constructUI(VBox center, HBox top) {
-    
+    constructInputFields(top);
+  }
+
+  public void constructInputFields(HBox top) {
+    TextField boxA = new TextField();
+    boxA.setPrefSize(200, 150);
+
+    top.getChildren().addAll(boxA);
   }
 }
