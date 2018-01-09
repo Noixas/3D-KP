@@ -12,11 +12,11 @@ public class MenuUI {
 
   public MenuUI(BorderPane root) {
     VBox center = new VBox(10);
-    center.setStyle("-fx-background-color: #357dff");
+    center.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #fffd77, #fa8334)");
     center.setPrefSize(200, 20);
 
     Pane top = new Pane();
-    top.setStyle("-fx-background-color: #825911");
+    top.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #271033, #388697)");
     top.setPrefSize(1040, TOP_HEIGHT);
     //top.setPadding(new Insets(20));
     constructUI(center, top);
