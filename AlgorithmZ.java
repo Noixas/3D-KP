@@ -2,7 +2,7 @@ public class AlgorithmZ extends Algorithm
 {
   private Container _container;
   public AlgorithmZ(){
-    _container = new Container;
+    _container = new Container();
     Start();
   }
   public void Start(){
