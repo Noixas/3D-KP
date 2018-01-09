@@ -20,6 +20,7 @@ public class Main extends Application {
     AlgorithmZ z = new AlgorithmZ();
     mainStage.show();
 
+
     scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
       public void handle(KeyEvent esc) {
         if(esc.getCode() == KeyCode.ESCAPE) {
@@ -27,5 +28,8 @@ public class Main extends Application {
         }
       }
     });
+
+
+
   }
 }

@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 
 public class MenuUI {
   private static final int TOP_HEIGHT = 160;
+  private static Button testButton;
 
   public MenuUI(BorderPane root) {
     Pane center = new Pane();
@@ -33,6 +34,8 @@ public class MenuUI {
     constructInputFields(top);
     constructLabels(top);
     constructButtons(center);
+    //dropdown menu for algorithm
+    //button for printing results
   }
 
   public void constructInputFields(Pane top) {
@@ -154,7 +157,10 @@ public class MenuUI {
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
 
+    Button testButton = new Button();
+    testButton.setText("Tester");
+    testButton.relocate(50,50);
 
-    center.getChildren().addAll(calcButton, viewCargo);
+    center.getChildren().addAll(calcButton, viewCargo, testButton);
   }
 }
