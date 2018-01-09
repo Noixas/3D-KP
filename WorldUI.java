@@ -1,5 +1,5 @@
-public class World {
-  public World() {
-    
+public class WorldUI {
+  public WorldUI() {
+
   }
 }
