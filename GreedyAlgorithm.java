@@ -1,5 +1,5 @@
 import java.util.*;
-
+/*
 public class GreedyAlgorithm extends Algorithm {
   private int amountA;
   private int amountB;
@@ -15,7 +15,7 @@ public class GreedyAlgorithm extends Algorithm {
   private ArrayList<BoxA> listA = new ArrayList<BoxA>();
   private ArrayList<BoxB> listB = new ArrayList<BoxB>();
   private ArrayList<BoxC> listC = new ArrayList<BoxC>();
-  //private ArrayList<Box>[] priorityOrder = new ArrayList[3];
+  private ArrayList<Box>[] priorityOrder = new ArrayList[3];
   private double[] volumeOrder = new double[3];
   private int index = 0;
 
@@ -116,4 +116,4 @@ public class GreedyAlgorithm extends Algorithm {
   public int arrayIndex(double number) {
     return (int)number*2;
   }
-}
+}*/
