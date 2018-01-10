@@ -69,14 +69,18 @@ public class GreedyAlgorithm extends Algorithm {
     double sizeY = box.getSize().y;
     double sizeZ = box.getSize().z;
     Box[][][] boxSpace = new Box[arrayIndex(sizeX)][arrayIndex(sizeY)][arrayIndex(sizeZ)];
-    for(int i=0; i<containerSpace.length;i++) {
-      for(int j=0; j<containerSpace[0].length; j++) {
-        for(int k=0; k<containerSpace[0][0].length; k++) {
+    fillSpace(boxSpace, box);
+    return boxSpace;
+  }
+
+  public void fillSpace(Box[][][] boxSpace, Box box) {
+    for(int i=0; i<boxSpace.length;i++) {
+      for(int j=0; j<boxSpace[0].length; j++) {
+        for(int k=0; k<boxSpace[0][0].length; k++) {
           boxSpace[i][j][k] = box;
         }
       }
     }
-    return boxSpace;
   }
 
 
@@ -93,15 +97,30 @@ public class GreedyAlgorithm extends Algorithm {
   }
 
   public Box[][][] xRotateBox(Box box) {
-
+    double sizeX = box.getSize().x;
+    double sizeY = box.getSize().y;
+    double sizeZ = box.getSize().z;
+    Box[][][] rotatedBox = new Box[arrayIndex(sizeX)][arrayIndex(sizeZ)][arrayIndex(sizeY)];
+    fillSpace(rotatedBox, box);
+    return rotatedBox;
   }
 
-  public void yRotateBox() {
-
+  public Box[][][] yRotateBox(Box box) {
+    double sizeX = box.getSize().x;
+    double sizeY = box.getSize().y;
+    double sizeZ = box.getSize().z;
+    Box[][][] rotatedBox = new Box[arrayIndex(sizeZ)][arrayIndex(sizeY)][arrayIndex(sizeX)];
+    fillSpace(rotatedBox, box);
+    return rotatedBox;
   }
 
-  public void zRotateBox() {
-
+  public Box[][][] zRotateBox(Box box) {
+    double sizeX = box.getSize().x;
+    double sizeY = box.getSize().y;
+    double sizeZ = box.getSize().z;
+    Box[][][] rotatedBox = new Box[arrayIndex(sizeY)][arrayIndex(sizeX)][arrayIndex(sizeZ)];
+    fillSpace(rotatedBox, box);
+    return rotatedBox;
   }
 
   public void makeSetOfBoxesA(int amount) {
@@ -151,4 +170,5 @@ public class GreedyAlgorithm extends Algorithm {
   public int arrayIndex(double number) {
     return (int)number*2;
   }
-}*/
+}
+*/
