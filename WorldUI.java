@@ -14,7 +14,7 @@ import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 
 public class WorldUI {
-    final Group root = new Group();
+    
     final XformWorld world = new XformWorld();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final XformCamera cameraXform = new XformCamera();
@@ -27,7 +27,7 @@ public class WorldUI {
   public WorldUI(Group worldGroup) {
         worldGroup.getChildren().add(world);
         worldGroup.setDepthTest(DepthTest.ENABLE);
-        buildCamera();
+        buildCamera(worldGroup);
         buildBodySystem();
         handleMouse(SceneManager.getScene());
         SceneManager.getScene().setCamera(camera);
@@ -35,8 +35,8 @@ public class WorldUI {
         mouseFactorY = 180.0 / SceneManager.getSceneHeight();
   }
 
-  private void buildCamera() {
-        root.getChildren().add(cameraXform);
+  private void buildCamera(Group worldGroup) {
+        worldGroup.getChildren().add(cameraXform);
         cameraXform.getChildren().add(camera);
         camera.setNearClip(CAMERA_NEAR_CLIP);
         camera.setFarClip(CAMERA_FAR_CLIP);
@@ -44,28 +44,18 @@ public class WorldUI {
     }
 
     private void buildBodySystem() {
-        PhongMaterial whiteMaterial = new PhongMaterial();
-        whiteMaterial.setDiffuseColor(Color.BLUE);
-        //whiteMaterial.setSpecularColor(Color.LIGHTBLUE);
-        Box box = new Box(400, 200, 100);
-
-
-        //Box box1 = new Box(500, 100, 200);
-        box.setMaterial(whiteMaterial);
+        Group box = CreateBox.constructBoxA(400, 200, 100);
+        Group box1 = CreateBox.constructBoxB(50, 100, 100);
+        box.setTranslateZ(-100);
+        
         PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.BLUE);
         //redMaterial.setSpecularColor(Color.GREEN);
 
-        Sphere sphere = new Sphere (50);
-        sphere.setMaterial(redMaterial);
-        sphere.setTranslateZ(-50);
-        sphere.setTranslateX(-200);
-        sphere.setTranslateY(-100);
 
-        //world.getChildren().addAll(box1);
-        world.getChildren().addAll(box);
-        world.getChildren().addAll(sphere);
-        System.out.println("hoi");
+        world.getChildren().addAll(box, box1);
+
+        
 
     }
 
