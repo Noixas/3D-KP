@@ -1,4 +1,4 @@
-public class Vector3D{
+public class Vector3D implements Comparable<Vector3D> {
   public double x;
   public double y;
   public double z;
@@ -29,5 +29,44 @@ public class Vector3D{
   public Vector3D clone()
   {
     return new Vector3D(this);
+  }
+  @Override
+  public boolean equals(Object o)
+  {
+    if(o == null) return false;
+    if(o == this) return true;
+    if(o instanceof Vector3D == false) return false;
+    Vector3D other = (Vector3D) o;
+    if(x == other.x && y == other.y && z == other.z)  return true;
+    else return false;
+  }
+
+	@Override
+	public int compareTo(Vector3D o) {
+
+		if (z > o.z) {
+			return 1;
+		} else if (z == o.z) {
+      if (y > o.y) {
+  			return 1;
+  		} else if (y == y) {
+        if (x > x) {
+    			return 1;
+    		} else if (x == x) {
+    		    return 0;
+    		} else {
+    			return -1;
+    		}
+  		} else {
+  			return -1;
+  		}
+		} else {
+			return -1;
+		}
+	}
+  @Override
+  public String toString()
+  {
+    return "Vector: x: "+ x + " y: " + y + " z: " + z;
   }
 }

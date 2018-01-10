@@ -15,6 +15,14 @@ public class SolutionSet{
   {
     _solution.add(pBox);
   }
+  public Box get(int i)
+  {
+    return _solution.get(i);
+  }
+  public int getLength()
+  {
+    return _solution.size();
+  }
   /**
    * Delete Box from solution set
    * @param  Box pBox          [Box to be deleted]
