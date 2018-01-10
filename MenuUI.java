@@ -167,19 +167,19 @@ public class MenuUI {
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
     viewCargo.relocate(100, 100);
-
-    Button newButton = new Button();
-    newButton.setText("New BUtton");
-    newButton.relocate(300, 300);
-    newButton.setOnAction(new EventHandler<ActionEvent>() {
+    viewCargo.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent swtch) {
         int i = 2;
-        System.out.println("This button works");
         SceneManager.changeScene(i);
 
       }
     });
+    
+    Button newButton = new Button();
+    newButton.setText("New BUtton");
+    newButton.relocate(300, 300);
+
 
     center.getChildren().addAll(calcButton, viewCargo, newButton);
   }
