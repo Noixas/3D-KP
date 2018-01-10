@@ -15,6 +15,13 @@ public class MenuUI {
   private static final int TOP_HEIGHT = 160;
   private static TextArea results;
   private static ComboBox algorithms;
+  private static TextField boxACntr;
+  private static TextField boxBCntr;
+  private static TextField boxCCntr;
+  private static TextField boxAWeight;
+  private static TextField boxBWeight;
+  private static TextField boxCWeight;
+  private static double amountBoxA;
 
   public MenuUI(BorderPane root) {
     Pane center = new Pane();
@@ -29,8 +36,6 @@ public class MenuUI {
     root.setMargin(top, new Insets(2));
     root.setCenter(center);
     root.setMargin(center, new Insets(2));
-
-
   }
 
   public void constructUI(Pane center, Pane top) {
@@ -175,7 +180,9 @@ public class MenuUI {
     calcButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent calc) {
-          System.out.println("Calculate");
+        System.out.println("Calculate");
+        updateInput();
+
       }
     });
 
@@ -206,7 +213,7 @@ public class MenuUI {
         "Total amount of boxes used: " + "46" + "\n" +
         "Total value of the used boxes: " + "635" + "\n" +
         "Total amount of second the algorithm took: " + "1231" + "\n" +
-        "Total amount of different possibilities: " + "873" );
+        "Total amount of different possibilities: " + "873" + "\n" + amountBoxA );
       }
     });
 
@@ -228,5 +235,15 @@ public class MenuUI {
     resultLabel.relocate(280, 20);
     //results.setEditable(false);
     center.getChildren().addAll(results, resultLabel);
+  }
+
+  public void updateInput() {
+    try {
+      double temp = Double.parseDouble(boxACntr.getText());
+      amountBoxA = temp;
+    }
+    catch(NumberFormatException e) {
+
+    }
   }
 }
