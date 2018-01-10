@@ -29,11 +29,15 @@ public class SceneManager {
     }
   }
   
-  public double getSceneWidth() {
+  public static double getSceneWidth() {
     return worldScene.getWidth();
   }
 
-  public double getSceneHeight() {
+  public static double getSceneHeight() {
     return worldScene.getHeight();
+  }
+
+  public static Scene getScene() {
+    return worldScene;
   }
 }

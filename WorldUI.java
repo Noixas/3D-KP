@@ -24,16 +24,15 @@ public class WorldUI {
     double mousePosX, mousePosY, mouseOldX, mouseOldY, mouseDeltaX, mouseDeltaY;
     double mouseFactorX, mouseFactorY;
 
-  public WorldUI(Group worldGroup,Scene worldScene) {
+  public WorldUI(Group worldGroup) {
         root.getChildren().add(world);
         root.setDepthTest(DepthTest.ENABLE);
         buildCamera();
         buildBodySystem();
-        worldScene.setFill(Color.GREEN);
-        handleMouse(worldScene);
-        worldScene.setCamera(camera);
-        mouseFactorX = 180.0 / worldScene.getWidth();
-        mouseFactorY = 180.0 / worldScene.getHeight();
+        handleMouse(SceneManager.getScene());
+        SceneManager.getScene().setCamera(camera);
+        mouseFactorX = 180.0 / SceneManager.getSceneWidth();
+        mouseFactorY = 180.0 / SceneManager.getSceneHeight();
   }
 
   private void buildCamera() {
