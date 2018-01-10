@@ -1,5 +1,3 @@
-import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.geometry.Point3D;
 import javafx.scene.DepthTest;
 import javafx.scene.Group;
@@ -26,8 +24,16 @@ public class WorldUI {
     double mousePosX, mousePosY, mouseOldX, mouseOldY, mouseDeltaX, mouseDeltaY;
     double mouseFactorX, mouseFactorY;
 
-  public WorldUI(Group worldGroup) {
-
+  public WorldUI(Group worldGroup,Scene worldScene) {
+        root.getChildren().add(world);
+        root.setDepthTest(DepthTest.ENABLE);
+        buildCamera();
+        buildBodySystem();
+        worldScene.setFill(Color.GREEN);
+        handleMouse(worldScene);
+        worldScene.setCamera(camera);
+        mouseFactorX = 180.0 / worldScene.getWidth();
+        mouseFactorY = 180.0 / worldScene.getHeight();
   }
 
   private void buildCamera() {
@@ -84,10 +90,6 @@ public class WorldUI {
                 camera.setTranslateZ(camera.getTranslateZ() + mouseDeltaY);
             }
         });
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
 }
