@@ -49,9 +49,9 @@ public class GreedyAlgorithm extends Algorithm {
   }
 
   public boolean checkDimensions() {
-    sizeX = box.getSize().x;
-    sizeY = box.getSize().y;
-    sizeZ = box.getSize().z;
+    double sizeX = box.getSize().x;
+    double sizeY = box.getSize().y;
+    double sizeZ = box.getSize().z;
   }
 
   public boolean containerBoundaries() {
@@ -65,10 +65,10 @@ public class GreedyAlgorithm extends Algorithm {
   }
 
   public Box[][][] makeBoxSpace(Box box) {
-    sizeX = box.getSize().x;
-    sizeY = box.getSize().y;
-    sizeZ = box.getSize().z;
-    Box[][][] boxSpace = new Box[sizeX][sizeY][sizeZ];
+    double sizeX = box.getSize().x;
+    double sizeY = box.getSize().y;
+    double sizeZ = box.getSize().z;
+    Box[][][] boxSpace = new Box[arrayIndex(sizeX)][arrayIndex(sizeY)][arrayIndex(sizeZ)];
     for(int i=0; i<containerSpace.length;i++) {
       for(int j=0; j<containerSpace[0].length; j++) {
         for(int k=0; k<containerSpace[0][0].length; k++) {
@@ -81,7 +81,7 @@ public class GreedyAlgorithm extends Algorithm {
 
 
   public void placeBox() {
-    if() {
+    if(true) {
       for(int i=0; i<priorityOrder[0].size(); i++) {
         Box bufferBox = priorityOrder[0].get(i);
       }
