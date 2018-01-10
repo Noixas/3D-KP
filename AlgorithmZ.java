@@ -59,8 +59,8 @@ public class AlgorithmZ extends Algorithm
     }
     Collections.sort(EP);
     removeDuplicatedEP(EP);
-    //TODO; ordering of EP and deleting duplicated
-    //TODO; can use comparable interface
+    //DONE; ordering of EP and deleting duplicated
+    //Done; can use comparable interface
   }
   public boolean canTakeProjection(Box newBox, Box prevBox, Vector3D axis)
   {
