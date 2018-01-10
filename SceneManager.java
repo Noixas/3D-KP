@@ -28,4 +28,12 @@ public class SceneManager {
       stage.setScene(worldScene);
     }
   }
+  
+  public double getSceneWidth() {
+    return worldScene.getWidth();
+  }
+
+  public double getSceneHeight() {
+    return worldScene.getHeight();
+  }
 }
