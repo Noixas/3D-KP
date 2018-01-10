@@ -152,15 +152,28 @@ public class MenuUI {
   public void constructButtons(Pane center) {
     Button calcButton = new Button();
     calcButton.setText("Calculate...");
-    calcButton.setPrefSize(500, 500);
+    calcButton.setPrefSize(50, 50);
+    calcButton.relocate(200, 200);
 
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
+    viewCargo.relocate(100, 100);
 
-    Button testButton = new Button();
-    testButton.setText("Tester");
-    testButton.relocate(50,50);
+    Button newButton = new Button();
+    newButton.setText("New BUtton");
+    newButton.relocate(300, 300);
 
-    center.getChildren().addAll(calcButton, viewCargo, testButton);
+    //testButton = new Button("test");
+
+    center.getChildren().addAll(calcButton, viewCargo, newButton);
+  }
+
+  public void handle() {
+
+  }
+
+  public static Button getButton() {
+    testButton = new Button();
+    return testButton;
   }
 }
