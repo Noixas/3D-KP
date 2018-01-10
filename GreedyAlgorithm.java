@@ -4,50 +4,24 @@ public class GreedyAlgorithm extends Algorithm {
   private int amountA;
   private int amountB;
   private int amountC;
+  private double VolA;
+  private double VolB;
+  private double VolC;
+  private Box[] boxOrder = new Box[3];
+  private double[] volumeOrder = new double[3];
+  private int[] amountOrder = new int[3];
+  private ArrayList<Box> boxList = new ArrayList<Box>();
+
   private Container container = new Container();
   private Vector3D containerSize = container.getSize();
   private double containerX = containerSize.x;
   private double containerY = containerSize.y;
   private double containerZ = containerSize.z;
-  private double VolA;
-  private double VolB;
-  private double VolC;
-  private ArrayList<BoxA> listA = new ArrayList<BoxA>();
-  private ArrayList<BoxB> listB = new ArrayList<BoxB>();
-  private ArrayList<BoxC> listC = new ArrayList<BoxC>();
-  private ArrayList<Box>[] priorityOrder = new ArrayList[3];
-  private double[] volumeOrder = new double[3];
-  private int index = 0;
-
   private Box[][][] containerSpace = new Box[arrayIndex(containerX)][arrayIndex(containerY)][arrayIndex(containerZ)];
 
-
   public void Start() {
-    makeSetOfBoxesA(amountA);
-    makeSetOfBoxesB(amountB);
-    makeSetOfBoxesC(amountC);
-    if(!listA.isEmpty()) {
-      VolA = listA.get(0).getVolume();
-      priorityOrder[index] = listA;
-      volumeOrder[index] = VolA;
-      index++;
-    }
-    if(!listB.isEmpty()) {
-      VolB = listB.get(0).getVolume();
-      priorityOrder[index] = listB;
-      volumeOrder[index] = VolB;
-      index++;
-    }
-    if(!listC.isEmpty()) {
-      VolC = listC.get(0).getVolume();
-      priorityOrder[index] = listC;
-      volumeOrder[index] = VolC;
-      index++;
-    }
-    orderList();
 
   }
-
   public boolean checkDimensions() {
     double sizeX = box.getSize().x;
     double sizeY = box.getSize().y;
@@ -96,6 +70,26 @@ public class GreedyAlgorithm extends Algorithm {
 
   }
 
+  public void makeOrder() {
+    boxOrder[0] = new BoxA();
+    boxOrder[1] = new BoxB();
+    boxOrder[2] = new BoxC();
+    amountOrder[0] = amountA;
+    amountOrder[1] = amountB;
+    amountOrder[2] = amountC;
+    for(int i=0; i<3; i++) {
+      volumeOrder[i] = boxOrder[i].getVolume()
+    }
+  }
+
+  public void makeBoxList() {
+    for(int i=0; i<3 i++) {
+      for(int j=0; i<amountOrder[i]; j++) {
+
+      }
+    }
+  }
+/*
   public Box[][][] xRotateBox(Box box) {
     double sizeX = box.getSize().x;
     double sizeY = box.getSize().y;
@@ -149,18 +143,28 @@ public class GreedyAlgorithm extends Algorithm {
 
   public void orderList() {
     boolean hasChanged = true;
-    double b = 0;
-    ArrayList<Box> buffer;
+    double volumeBuffer = 0;
+    Box boxBuffer;
+    int amountBuffer;
     while(hasChanged) {
       hasChanged = false;
       for(int i=0;i<index;i++) {
         if(volumeOrder[i]<volumeOrder[i+1]) {
-          b = volumeOrder[i];
-          buffer = priorityOrder[i];
+          //Volume list ordering
+          volumeBuffer = volumeOrder[i];
           volumeOrder[i] = volumeOrder[i+1];
-          priorityOrder[i] = priorityOrder[i+1];
-          volumeOrder[i+1] = b;
-          priorityOrder[i+1] = buffer;
+          volumeOrder[i+1] = volumeBuffer;
+
+          //Box list ordering
+          boxBuffer = boxOrder[i];
+          boxOrder[i] = boxOrder[i+1];
+          boxOrder[i+1] = boxBuffer;
+
+          //Amount list ordering
+          amountBuffer = amountOrder[i];
+          amountOrder[i] = amountOrder[i+1];
+          amountOrder[i+1] = amountBuffer;
+
           hasChanged = true;
         }
       }

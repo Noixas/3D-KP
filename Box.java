@@ -19,6 +19,10 @@ public class Box{
   {
     return _position;
   }
+  public void setSize(Vector3D newSize)
+  {
+    _size = newSize;
+  }
   public Vector3D getSize()
   {
     return _size;
