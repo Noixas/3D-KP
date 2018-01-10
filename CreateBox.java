@@ -74,7 +74,7 @@ public static Group constructBoxA (int width, int height, int dept){
 	return boxA;
 }
 
-public Group constructBoxB (int width, int height, int dept){
+public static Group constructBoxB (int width, int height, int dept){
 	PhongMaterial yellowMaterial = new PhongMaterial();
     yellowMaterial.setDiffuseColor(Color.YELLOW);
 	Box box = new Box(width, height, dept);
@@ -137,7 +137,7 @@ public Group constructBoxB (int width, int height, int dept){
 	return boxB;
 }
 
-public Group constructBoxC (int width, int height, int dept){
+public static Group constructBoxC (int width, int height, int dept){
 	PhongMaterial redMaterial = new PhongMaterial();
     redMaterial.setDiffuseColor(Color.RED);
 	Box box = new Box(width, height, dept);

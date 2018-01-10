@@ -45,14 +45,15 @@ public class WorldUI {
 
     private void buildBodySystem() {
         Group box = CreateBox.constructBoxA(400, 200, 100);
-
+        Group box1 = CreateBox.constructBoxB(50, 100, 100);
+        box.setTranslateZ(-100);
         
         PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.BLUE);
         //redMaterial.setSpecularColor(Color.GREEN);
 
 
-        world.getChildren().addAll(box);
+        world.getChildren().addAll(box, box1);
 
         
 
