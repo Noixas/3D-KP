@@ -5,13 +5,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 public class MenuUI {
   private static final int TOP_HEIGHT = 160;
-  private static Button testButton;
 
   public MenuUI(BorderPane root) {
     Pane center = new Pane();
@@ -154,26 +155,32 @@ public class MenuUI {
     calcButton.setText("Calculate...");
     calcButton.setPrefSize(50, 50);
     calcButton.relocate(200, 200);
+    calcButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent calc) {
+          System.out.println("calc");
+      }
+    });
+
+
 
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
     viewCargo.relocate(100, 100);
+    viewCargo.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent swtch) {
+        int i = 2;
+        SceneManager.changeScene(i);
 
+      }
+    });
+    
     Button newButton = new Button();
     newButton.setText("New BUtton");
     newButton.relocate(300, 300);
 
-    //testButton = new Button("test");
 
     center.getChildren().addAll(calcButton, viewCargo, newButton);
-  }
-
-  public void handle() {
-
-  }
-
-  public static Button getButton() {
-    testButton = new Button();
-    return testButton;
   }
 }

@@ -10,6 +10,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 
 public class Main extends Application {
+  private static Stage stage;
 
   public static void main(String[] args) {
 
@@ -17,17 +18,11 @@ public class Main extends Application {
   }
 
   public void start(Stage mainStage) {
+    stage = mainStage;
     mainStage.setTitle("Phase 3");
-    BorderPane root = new BorderPane();
-    Group worldGroup = new Group();
-    Scene menuScene = new Scene(root, 1040, 750);
-    Scene worldScene = new Scene(worldGroup, 1040, 750);
-    mainStage.setScene(menuScene);
-    MenuUI menu = new MenuUI(root);
-    WorldUI world = new WorldUI(worldGroup);
+    SceneManager scenemanager = new SceneManager(mainStage);
+    
     AlgorithmZ z = new AlgorithmZ();
-
-
 
     mainStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
       public void handle(KeyEvent esc) {
@@ -36,21 +31,6 @@ public class Main extends Application {
         }
       }
     });
-
-
-
-    Button testButton = MenuUI.getButton();
-    testButton.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent e) {
-        System.out.println("test");
-        //mainStage.setScene(worldScene);
-      }
-    });
-
-
-
-
   mainStage.show();
   }
 }

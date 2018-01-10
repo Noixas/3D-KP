@@ -1,5 +1,5 @@
-import java.util.*;
-/*
+/*import java.util.*;
+
 public class GreedyAlgorithm extends Algorithm {
   private int amountA;
   private int amountB;
@@ -48,16 +48,51 @@ public class GreedyAlgorithm extends Algorithm {
 
   }
 
+  public boolean checkDimensions() {
+    sizeX = box.getSize().x;
+    sizeY = box.getSize().y;
+    sizeZ = box.getSize().z;
+  }
+
+  public boolean containerBoundaries() {
+    for(int i=0; i<containerSpace.length;i++) {
+      for(int j=0; j<containerSpace[0].length; j++) {
+        for(int k=0; k<containerSpace[0][0].length; k++) {
+
+        }
+      }
+    }
+  }
+
+  public Box[][][] makeBoxSpace(Box box) {
+    sizeX = box.getSize().x;
+    sizeY = box.getSize().y;
+    sizeZ = box.getSize().z;
+    Box[][][] boxSpace = new Box[sizeX][sizeY][sizeZ];
+    for(int i=0; i<containerSpace.length;i++) {
+      for(int j=0; j<containerSpace[0].length; j++) {
+        for(int k=0; k<containerSpace[0][0].length; k++) {
+          boxSpace[i][j][k] = box;
+        }
+      }
+    }
+    return boxSpace;
+  }
+
 
   public void placeBox() {
-
+    if() {
+      for(int i=0; i<priorityOrder[0].size(); i++) {
+        Box bufferBox = priorityOrder[0].get(i);
+      }
+    }
   }
 
   public void removeBox() {
 
   }
 
-  public void xRotateBox() {
+  public Box[][][] xRotateBox(Box box) {
 
   }
 
