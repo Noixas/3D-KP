@@ -34,7 +34,8 @@ public class SceneManager {
     worldScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
       public void handle(KeyEvent esc) {
         if(esc.getCode() == KeyCode.ESCAPE) {
-          System.exit(0);
+          //System.exit(0);
+          mainStage.setScene(menuScene);
         }
       }
     });
