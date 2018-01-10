@@ -2,6 +2,9 @@ import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
 
 public class SceneManager {
   private static Stage stage;
@@ -17,6 +20,25 @@ public class SceneManager {
     mainStage.setScene(menuScene);
     MenuUI menu = new MenuUI(root);
     WorldUI world = new WorldUI(worldGroup);
+
+    menuScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+      public void handle(KeyEvent esc) {
+        if(esc.getCode() == KeyCode.ESCAPE) {
+          System.exit(0);
+        }
+      }
+    });
+
+    worldScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+      public void handle(KeyEvent esc) {
+        if(esc.getCode() == KeyCode.ESCAPE) {
+          System.exit(0);
+        }
+      }
+    });
+
+
+
   }
 
   public static void changeScene(int i) {
@@ -28,7 +50,7 @@ public class SceneManager {
       stage.setScene(worldScene);
     }
   }
-  
+
   public static double getSceneWidth() {
     return worldScene.getWidth();
   }
