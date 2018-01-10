@@ -25,8 +25,8 @@ public class WorldUI {
     double mouseFactorX, mouseFactorY;
 
   public WorldUI(Group worldGroup) {
-        root.getChildren().add(world);
-        root.setDepthTest(DepthTest.ENABLE);
+        worldGroup.getChildren().add(world);
+        worldGroup.setDepthTest(DepthTest.ENABLE);
         buildCamera();
         buildBodySystem();
         handleMouse(SceneManager.getScene());
@@ -45,7 +45,7 @@ public class WorldUI {
 
     private void buildBodySystem() {
         PhongMaterial whiteMaterial = new PhongMaterial();
-        whiteMaterial.setDiffuseColor(Color.WHITE);
+        whiteMaterial.setDiffuseColor(Color.BLUE);
         //whiteMaterial.setSpecularColor(Color.LIGHTBLUE);
         Box box = new Box(400, 200, 100);
 
@@ -65,6 +65,7 @@ public class WorldUI {
         //world.getChildren().addAll(box1);
         world.getChildren().addAll(box);
         world.getChildren().addAll(sphere);
+        System.out.println("hoi");
 
     }
 
