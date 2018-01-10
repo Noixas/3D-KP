@@ -154,7 +154,7 @@ public class MenuUI {
     Button calcButton = new Button();
     calcButton.setText("Calculate...");
     calcButton.setPrefSize(50, 50);
-    calcButton.relocate(200, 200);
+    calcButton.relocate(100, 200);
     calcButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent calc) {
@@ -175,7 +175,7 @@ public class MenuUI {
 
       }
     });
-    
+
     Button newButton = new Button();
     newButton.setText("New BUtton");
     newButton.relocate(300, 300);

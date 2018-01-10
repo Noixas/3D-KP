@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 
 public class SceneManager {
   private static Stage stage;
@@ -15,7 +16,8 @@ public class SceneManager {
     BorderPane root = new BorderPane();
     Group worldGroup = new Group();
     menuScene = new Scene(root, 1040, 750);
-    worldScene = new Scene(worldGroup, 1040, 750);
+    worldScene = new Scene(worldGroup, 1040, 750, true);
+    worldScene.setFill(Color.GREEN);
     stage = mainStage;
     mainStage.setScene(menuScene);
     MenuUI menu = new MenuUI(root);
@@ -32,7 +34,8 @@ public class SceneManager {
     worldScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
       public void handle(KeyEvent esc) {
         if(esc.getCode() == KeyCode.ESCAPE) {
-          System.exit(0);
+          //System.exit(0);
+          mainStage.setScene(menuScene);
         }
       }
     });

@@ -21,16 +21,7 @@ public class Main extends Application {
     stage = mainStage;
     mainStage.setTitle("Phase 3");
     SceneManager scenemanager = new SceneManager(mainStage);
-    
     AlgorithmZ z = new AlgorithmZ();
-
-    mainStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-      public void handle(KeyEvent esc) {
-        if(esc.getCode() == KeyCode.ESCAPE) {
-          System.exit(0);
-        }
-      }
-    });
-  mainStage.show();
+    mainStage.show();
   }
 }
