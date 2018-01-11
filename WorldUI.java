@@ -12,9 +12,10 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import javafx.scene.text.Text;
 
 public class WorldUI {
-    
+
     final XformWorld world = new XformWorld();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final XformCamera cameraXform = new XformCamera();
@@ -44,18 +45,35 @@ public class WorldUI {
     }
 
     private void buildBodySystem() {
-        Group box = CreateBox.constructBoxA(400, 200, 100);
-        Group box1 = CreateBox.constructBoxB(50, 100, 100);
-        box.setTranslateZ(-100);
-        
+        //Group box = CreateBox.constructBoxA(400, 200, 100);
+        Group box1 = CreateBox.constructBoxC(50, 100, 100);
+        box1.setTranslateZ(-200);
+
         PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.BLUE);
         //redMaterial.setSpecularColor(Color.GREEN);
 
+        PhongMaterial whiteMaterial = new PhongMaterial();
+        whiteMaterial.setDiffuseColor(Color.WHITE);
+        Box xAxis = new Box(500, 3, 3);
+        xAxis.setMaterial(whiteMaterial);
 
-        world.getChildren().addAll(box, box1);
+        PhongMaterial blackMaterial = new PhongMaterial();
+        blackMaterial.setDiffuseColor(Color.BLACK);
+        Box yAxis = new Box(3, 500, 3);
+        yAxis.setMaterial(blackMaterial);
 
-        
+        PhongMaterial blueMaterial = new PhongMaterial();
+        blueMaterial.setDiffuseColor(Color.BLUE);
+        Box zAxis = new Box(3, 3, 500);
+        zAxis.setMaterial(blueMaterial);
+
+        Text x = new Text (200, 20, "X axis ->");
+        Text y = new Text (-15, 230, "Y axis ->");
+        y.setRotate(90);
+
+
+        world.getChildren().addAll(x, y, xAxis, yAxis, zAxis, box1);
 
     }
 
