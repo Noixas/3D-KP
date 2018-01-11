@@ -49,7 +49,6 @@ public class MenuUI {
     constructButtons(center);
     constructChoices(center);
     constructResultField(center);
-    //textfield for results
   }
 
   public void constructInputFields(Pane top) {
@@ -194,12 +193,10 @@ public class MenuUI {
     calcButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent calc) {
-        System.out.println("Calculate");
         updateInput();
+        //start the algorithm
       }
     });
-
-
 
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
