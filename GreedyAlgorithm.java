@@ -11,6 +11,7 @@ public class GreedyAlgorithm extends Algorithm {
   private double[] volumeOrder = new double[3];
   private int[] amountOrder = new int[3];
   private ArrayList<Box> boxList = new ArrayList<Box>();
+  private int index = 0;
 
   private Container container = new Container();
   private Vector3D containerSize = container.getSize();
@@ -20,8 +21,12 @@ public class GreedyAlgorithm extends Algorithm {
   private Box[][][] containerSpace = new Box[arrayIndex(containerX)][arrayIndex(containerY)][arrayIndex(containerZ)];
 
   public void Start() {
+    makeLists();
+    orderLists();
+    makeBoxOrder();
 
   }
+
   public boolean checkDimensions() {
     double sizeX = box.getSize().x;
     double sizeY = box.getSize().y;
@@ -58,10 +63,21 @@ public class GreedyAlgorithm extends Algorithm {
   }
 
 
+  public void mainLoop() {
+    for(int i=0; i<boxList.size(); i++) {
+      Box bufferBox = boxList.get(i);
+
+    }
+  }
+
   public void placeBox() {
-    if(true) {
-      for(int i=0; i<priorityOrder[0].size(); i++) {
-        Box bufferBox = priorityOrder[0].get(i);
+    for(int i=0; i<boxSpace.length;i++) {
+      for(int j=0; j<boxSpace[0].length; j++) {
+        for(int k=0; k<boxSpace[0][0].length; k++) {
+          if(boxSpace[i][j][j] == null) {
+
+          }
+        }
       }
     }
   }
@@ -70,7 +86,28 @@ public class GreedyAlgorithm extends Algorithm {
 
   }
 
-  public void makeOrder() {
+  public void rotateX(Box box) {
+    double sizeX = box.getSize().x;
+    double sizeY = box.getSize().y;
+    double sizeZ = box.getSize().z;
+    box.setSize(new Vector3D(sizeX, sizeZ, sizeY))
+  }
+
+  public void rotateY(Box box) {
+    double sizeX = box.getSize().x;
+    double sizeY = box.getSize().y;
+    double sizeZ = box.getSize().z;
+    box.setSize(new Vector3D(sizeZ, sizeY, sizeY))
+  }
+
+  public void rotateZ(Box box) {
+    double sizeX = box.getSize().x;
+    double sizeY = box.getSize().y;
+    double sizeZ = box.getSize().z;
+    box.setSize(new Vector3D(sizeY, sizeX, sizeZ))
+  }
+
+  public void makeLists() {
     boxOrder[0] = new BoxA();
     boxOrder[1] = new BoxB();
     boxOrder[2] = new BoxC();
@@ -82,68 +119,17 @@ public class GreedyAlgorithm extends Algorithm {
     }
   }
 
-  public void makeBoxList() {
+  public void makeBoxOrder() {
     for(int i=0; i<3 i++) {
       for(int j=0; i<amountOrder[i]; j++) {
-
-      }
-    }
-  }
-/*
-  public Box[][][] xRotateBox(Box box) {
-    double sizeX = box.getSize().x;
-    double sizeY = box.getSize().y;
-    double sizeZ = box.getSize().z;
-    Box[][][] rotatedBox = new Box[arrayIndex(sizeX)][arrayIndex(sizeZ)][arrayIndex(sizeY)];
-    fillSpace(rotatedBox, box);
-    return rotatedBox;
-  }
-
-  public Box[][][] yRotateBox(Box box) {
-    double sizeX = box.getSize().x;
-    double sizeY = box.getSize().y;
-    double sizeZ = box.getSize().z;
-    Box[][][] rotatedBox = new Box[arrayIndex(sizeZ)][arrayIndex(sizeY)][arrayIndex(sizeX)];
-    fillSpace(rotatedBox, box);
-    return rotatedBox;
-  }
-
-  public Box[][][] zRotateBox(Box box) {
-    double sizeX = box.getSize().x;
-    double sizeY = box.getSize().y;
-    double sizeZ = box.getSize().z;
-    Box[][][] rotatedBox = new Box[arrayIndex(sizeY)][arrayIndex(sizeX)][arrayIndex(sizeZ)];
-    fillSpace(rotatedBox, box);
-    return rotatedBox;
-  }
-
-  public void makeSetOfBoxesA(int amount) {
-    if(amountA != 0) {
-      for(int i=0; i<amountA; i++) {
-        listA.add(new BoxA());
+        boxlist.add(boxOrder[i].clone());
       }
     }
   }
 
-  public void makeSetOfBoxesB(int amount) {
-    if(amountB != 0) {
-      for(int i=0; i<amountA; i++) {
-        listB.add(new BoxB());
-      }
-    }
-  }
-
-  public void makeSetOfBoxesC(int amount) {
-    if(amountC != 0) {
-      for(int i=0; i<amountA; i++) {
-        listC.add(new BoxC());
-      }
-    }
-  }
-
-  public void orderList() {
+  public void orderLists() {
     boolean hasChanged = true;
-    double volumeBuffer = 0;
+    double volumeBuffer;
     Box boxBuffer;
     int amountBuffer;
     while(hasChanged) {
