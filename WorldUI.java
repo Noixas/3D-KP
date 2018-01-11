@@ -14,7 +14,7 @@ import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 
 public class WorldUI {
-    
+
     final XformWorld world = new XformWorld();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final XformCamera cameraXform = new XformCamera();
@@ -44,18 +44,18 @@ public class WorldUI {
     }
 
     private void buildBodySystem() {
-        Group box = CreateBox.constructBoxA(400, 200, 100);
-        Group box1 = CreateBox.constructBoxB(50, 100, 100);
-        box.setTranslateZ(-100);
-        
+        //Group box = CreateBox.constructBoxA(400, 200, 100);
+        Group box1 = CreateBox.constructBoxC(50, 100, 100);
+        //box.setTranslateZ(-100);
+
         PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.BLUE);
         //redMaterial.setSpecularColor(Color.GREEN);
 
 
-        world.getChildren().addAll(box, box1);
+        world.getChildren().addAll(box1);
 
-        
+
 
     }
 
