@@ -47,7 +47,7 @@ public class WorldUI {
     private void buildBodySystem() {
         //Group box = CreateBox.constructBoxA(400, 200, 100);
         Group box1 = CreateBox.constructBoxC(50, 100, 100);
-        //box.setTranslateZ(-100);
+        box1.setTranslateZ(-200);
 
         PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.BLUE);
@@ -69,8 +69,10 @@ public class WorldUI {
         zAxis.setMaterial(blueMaterial);
 
         Text x = new Text (200, 20, "X axis ->");
+        Text y = new Text (-15, 230, "Y axis ->");
+        y.setRotate(90);
 
-        world.getChildren().addAll(x, xAxis, yAxis, zAxis);
+        world.getChildren().addAll(x, y, xAxis, yAxis, zAxis, box1);
 
 
 
