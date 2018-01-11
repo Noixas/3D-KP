@@ -57,7 +57,7 @@ public class WorldUI {
         whiteMaterial.setDiffuseColor(Color.WHITE);
         Box xAxis = new Box(500, 3, 3);
         xAxis.setMaterial(whiteMaterial);
-        
+
         PhongMaterial blackMaterial = new PhongMaterial();
         blackMaterial.setDiffuseColor(Color.BLACK);
         Box yAxis = new Box(3, 500, 3);
@@ -72,9 +72,8 @@ public class WorldUI {
         Text y = new Text (-15, 230, "Y axis ->");
         y.setRotate(90);
 
+
         world.getChildren().addAll(x, y, xAxis, yAxis, zAxis, box1);
-
-
 
     }
 
