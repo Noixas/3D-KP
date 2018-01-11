@@ -1,4 +1,4 @@
-import java.util.*;
+/*import java.util.*;
 
 public class GreedyAlgorithm extends Algorithm {
   private int amountA;
@@ -29,7 +29,7 @@ public class GreedyAlgorithm extends Algorithm {
     }
   }
 
-  /*public boolean containerBoundaries() {
+  public boolean containerBoundaries() {
     for(int i=0; i<containerSpace.length;i++) {
       for(int j=0; j<containerSpace[0].length; j++) {
         for(int k=0; k<containerSpace[0][0].length; k++) {
@@ -37,7 +37,7 @@ public class GreedyAlgorithm extends Algorithm {
         }
       }
     }
-  }*/
+  }
 
   public Box[][][] makeBoxSpace(Box box) {
     int sizeX = arrayIndex(box.getSize().x);
@@ -80,6 +80,7 @@ public class GreedyAlgorithm extends Algorithm {
       for(int j=0; j<containerSpace[0].length; j++) {
         for(int k=0; k<containerSpace[0][0].length; k++) {
           if(containerSpace[i][j][k] == null && isCorner(i, j, k) && canFit(box, i, j, k)) {
+
           }
         }
       }
@@ -87,6 +88,21 @@ public class GreedyAlgorithm extends Algorithm {
   }
 
   public boolean canFit(Box box, int i, int j, int k) {
+    int posX = arrayIndex(box.getPosition().x);
+    int posY = arrayIndex(box.getPosition().y);
+    int posZ = arrayIndex(box.getPosition().z);
+    int sizeX = arrayIndex(box.getSize().x);
+    int sizeY = arrayIndex(box.getSize().y);
+    int sizeZ = arrayIndex(box.getSize().z);
+    for(int i=posX; i<=posX+sizeX;i++) {
+      for(int j=posY; j<=posY+sizeY; j++) {
+        for(int k=posZ; k<=containerSpace[0][0].length; k++) {
+          if(containerSpace[i][j][k] != null) {
+            return false;
+          }
+        }
+      }
+    }
     return true;
   }
 
@@ -191,3 +207,4 @@ public class GreedyAlgorithm extends Algorithm {
     return (int)number*2;
   }
 }
+*/
