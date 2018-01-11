@@ -20,7 +20,7 @@ public class WorldUI {
     final XformWorld world = new XformWorld();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final XformCamera cameraXform = new XformCamera();
-    final CreateBox boxCreation = new CreateBox();
+    final CreateParcel boxCreation = new CreateParcel();
     private static final double CAMERA_INITIAL_DISTANCE = -1000;
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000.0;

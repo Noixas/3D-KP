@@ -1,10 +1,10 @@
-public class Box{
+public class Parcel{
   protected Vector3D _position;
   protected Vector3D _size;
   protected double _value;
   protected double _volume;
   protected double _densityValue;
-  public Box(Vector3D pSize, double pValue)
+  public Parcel(Vector3D pSize, double pValue)
   {
     _size = pSize;
     _value = pValue;
@@ -40,12 +40,12 @@ public class Box{
     return _densityValue;
   }
   /**
-    Clone box without position parameter
-    @return this box clone without position
+    Clone Parcel without position parameter
+    @return this Parcel clone without position
    */
-  public Box clone()
+  public Parcel clone()
   {
-    return new Box(_size.clone(), _value);
+    return new Parcel(_size.clone(), _value);
   }
 
 }

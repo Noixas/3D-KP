@@ -4,10 +4,10 @@ import javafx.scene.shape.Box;
 import javafx.scene.shape.Sphere;
 import javafx.scene.Group;
 
-public class CreateBox {
-	private static Group boxC;
+public class CreateParcel {
+	private static Group parcelC;
 
-	public CreateBox() {}
+	public CreateParcel() {}
 
 	public static PhongMaterial getColor(Color color) {
 		PhongMaterial material = new PhongMaterial();
@@ -34,10 +34,10 @@ public class CreateBox {
 	public static Group constructBoxC (int width, int height, int depth){
 		Box box = new Box(width, height, depth);
 		box.setMaterial(getColor(Color.RED));
-		boxC = new Group();
+		parcelC = new Group();
 		createSphere(width, height, depth, getColor(Color.BLACK));
-	  boxC.getChildren().addAll(box);
-		return boxC;
+	  parcelC.getChildren().addAll(box);
+		return parcelC;
 	}
 
 	public static void createSphere(int x, int y, int z, PhongMaterial color) {
@@ -47,7 +47,7 @@ public class CreateBox {
 	  sphere.setTranslateX(x/2);
 	  sphere.setTranslateY(y/2);
 
-		boxC.getChildren().addAll(sphere);
+		parcelC.getChildren().addAll(sphere);
 	}
 
 	public static Group updateGroup() {
