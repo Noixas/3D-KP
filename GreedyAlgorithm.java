@@ -15,22 +15,18 @@ public class GreedyAlgorithm extends Algorithm {
 
   private Container container = new Container();
   private Vector3D containerSize = container.getSize();
-  private double containerX = containerSize.x;
-  private double containerY = containerSize.y;
-  private double containerZ = containerSize.z;
-  private Box[][][] containerSpace = new Box[arrayIndex(containerX)][arrayIndex(containerY)][arrayIndex(containerZ)];
+  private int containerX = arrayIndex(containerSize.x);
+  private int containerY = arrayIndex(containerSize.y);
+  private int containerZ = arrayIndex(containerSize.z);
+  private Box[][][] containerSpace = new Box[containerX][containerY][containerZ];
 
   public void Start() {
     makeLists();
     orderLists();
     makeBoxOrder();
-
-  }
-
-  public boolean checkDimensions() {
-    double sizeX = box.getSize().x;
-    double sizeY = box.getSize().y;
-    double sizeZ = box.getSize().z;
+    while(!isDone()) {
+      System.out.println("is not done");
+    }
   }
 
   public boolean containerBoundaries() {
@@ -44,10 +40,10 @@ public class GreedyAlgorithm extends Algorithm {
   }
 
   public Box[][][] makeBoxSpace(Box box) {
-    double sizeX = box.getSize().x;
-    double sizeY = box.getSize().y;
-    double sizeZ = box.getSize().z;
-    Box[][][] boxSpace = new Box[arrayIndex(sizeX)][arrayIndex(sizeY)][arrayIndex(sizeZ)];
+    int sizeX = arrayIndex(box.getSize().x);
+    int sizeY = arrayIndex(box.getSize().y);
+    int sizeZ = arrayIndex(box.getSize().z);
+    Box[][][] boxSpace = new Box[sizeX][sizeY][sizeZ];
     fillSpace(boxSpace, box);
     return boxSpace;
   }
@@ -63,23 +59,73 @@ public class GreedyAlgorithm extends Algorithm {
   }
 
 
-  public void mainLoop() {
-    for(int i=0; i<boxList.size(); i++) {
-      Box bufferBox = boxList.get(i);
-
+  public void placeBox(Box box) {
+    int posX = arrayIndex(box.getPosition().x);
+    int posY = arrayIndex(box.getPosition().y);
+    int posZ = arrayIndex(box.getPosition().z);
+    int sizeX = arrayIndex(box.getSize().x);
+    int sizeY = arrayIndex(box.getSize().y);
+    int sizeZ = arrayIndex(box.getSize().z);
+    for(int i=posX; i<=sizeX;i++) {
+      for(int j=posY; j<=sizeY; j++) {
+        for(int k=posZ; k<=sizeZ; k++) {
+          containerSpace[i][j][k] = box;
+        }
+      }
     }
   }
 
-  public void placeBox() {
-    for(int i=0; i<boxSpace.length;i++) {
-      for(int j=0; j<boxSpace[0].length; j++) {
-        for(int k=0; k<boxSpace[0][0].length; k++) {
-          if(boxSpace[i][j][j] == null) {
+  public void placeable(Box box) {
+    for(int i=0; i<containerSpace.length;i++) {
+      for(int j=0; j<containerSpace[0].length; j++) {
+        for(int k=0; k<containerSpace[0][0].length; k++) {
+          if(containerSpace[i][j][k] == null && isCorner(i, j, k) && canFit(box, i, j, k)) {
 
           }
         }
       }
     }
+  }
+
+  public boolean canFit(Box box, int i, int j, int k) {
+    int posX = arrayIndex(box.getPosition().x);
+    int posY = arrayIndex(box.getPosition().y);
+    int posZ = arrayIndex(box.getPosition().z);
+    int sizeX = arrayIndex(box.getSize().x);
+    int sizeY = arrayIndex(box.getSize().y);
+    int sizeZ = arrayIndex(box.getSize().z);
+    for(int i=posX; i<=posX+sizeX;i++) {
+      for(int j=posY; j<=posY+sizeY; j++) {
+        for(int k=posZ; k<=containerSpace[0][0].length; k++) {
+          if(containerSpace[i][j][k] != null) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  public boolean isCorner(int i, int j, int k) {
+    boolean xEdge = true;
+    boolean yEdge = true;
+    boolean zEdge = true;
+    if(i != 0) {
+      if(containerSpace[i-1][j][k] == null) {
+        xEdge = false;
+      }
+    }
+    if(j != 0) {
+      if(containerSpace[i][j-1][k] == null) {
+        xEdge = false;
+      }
+    }
+    if(k != 0) {
+      if(containerSpace[i][j][k-1] == null) {
+        xEdge = false;
+      }
+    }
+    return xEdge && yEdge && zEdge;
   }
 
   public void removeBox() {
@@ -90,21 +136,21 @@ public class GreedyAlgorithm extends Algorithm {
     double sizeX = box.getSize().x;
     double sizeY = box.getSize().y;
     double sizeZ = box.getSize().z;
-    box.setSize(new Vector3D(sizeX, sizeZ, sizeY))
+    box.setSize(new Vector3D(sizeX, sizeZ, sizeY));
   }
 
   public void rotateY(Box box) {
     double sizeX = box.getSize().x;
     double sizeY = box.getSize().y;
     double sizeZ = box.getSize().z;
-    box.setSize(new Vector3D(sizeZ, sizeY, sizeY))
+    box.setSize(new Vector3D(sizeZ, sizeY, sizeY));
   }
 
   public void rotateZ(Box box) {
     double sizeX = box.getSize().x;
     double sizeY = box.getSize().y;
     double sizeZ = box.getSize().z;
-    box.setSize(new Vector3D(sizeY, sizeX, sizeZ))
+    box.setSize(new Vector3D(sizeY, sizeX, sizeZ));
   }
 
   public void makeLists() {
@@ -115,14 +161,14 @@ public class GreedyAlgorithm extends Algorithm {
     amountOrder[1] = amountB;
     amountOrder[2] = amountC;
     for(int i=0; i<3; i++) {
-      volumeOrder[i] = boxOrder[i].getVolume()
+      volumeOrder[i] = boxOrder[i].getVolume();
     }
   }
 
   public void makeBoxOrder() {
-    for(int i=0; i<3 i++) {
+    for(int i=0; i<3; i++) {
       for(int j=0; i<amountOrder[i]; j++) {
-        boxlist.add(boxOrder[i].clone());
+        boxList.add(boxOrder[i].clone());
       }
     }
   }
