@@ -49,4 +49,11 @@ public class CreateBox {
 
 		boxC.getChildren().addAll(sphere);
 	}
+
+	public static Group updateGroup() {
+		Group boxGroup = new Group();
+		constructBoxA(50,50,50);
+		boxGroup.getChildren().addAll();
+		return boxGroup;
+	}
 }

@@ -13,12 +13,14 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
+import java.util.ArrayList;
 
 public class WorldUI {
 
     final XformWorld world = new XformWorld();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final XformCamera cameraXform = new XformCamera();
+    final CreateBox boxCreation = new CreateBox();
     private static final double CAMERA_INITIAL_DISTANCE = -1000;
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000.0;
@@ -46,8 +48,7 @@ public class WorldUI {
 
     private void buildBodySystem() {
         //Group box = CreateBox.constructBoxA(400, 200, 100);
-        Group box1 = CreateBox.constructBoxC(50, 100, 100);
-        box1.setTranslateZ(-200);
+        Group box1 = boxCreation.updateGroup();
 
         PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.BLUE);
@@ -72,9 +73,7 @@ public class WorldUI {
         Text y = new Text (-15, 230, "Y axis ->");
         y.setRotate(90);
 
-
         world.getChildren().addAll(x, y, xAxis, yAxis, zAxis, box1);
-
     }
 
     private void handleMouse(Scene scene) {
