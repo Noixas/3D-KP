@@ -27,6 +27,9 @@ public class MenuUI {
   private static double weightBoxA;
   private static double weightBoxB;
   private static double weightBoxC;
+  private static String chosenAlgorithm;
+  private static int errorCheck;
+
 
   public MenuUI(BorderPane root) {
     Pane center = new Pane();
@@ -193,7 +196,28 @@ public class MenuUI {
     calcButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent calc) {
+        errorCheck = 0;
         updateInput();
+        if(errorCheck == 0) {
+          if(algorithms.getValue() == null) {
+            results.setText("No algorithm was selected.");
+          }
+          else if(algorithms.getValue() == "Algorithm A") {
+            results.setText("Algorithm A has started calculating the possibilities.");
+            chosenAlgorithm = algorithms.getValue().toString();
+          }
+          else if(algorithms.getValue() == "Algorithm B") {
+            results.setText("Algorithm B has started calculating the possibilities.");
+            chosenAlgorithm = algorithms.getValue().toString();
+          }
+          else if(algorithms.getValue() == "Algorithm C") {
+            results.setText("Algorithm C has started calculating the possibilities.");
+            chosenAlgorithm = algorithms.getValue().toString();
+          }
+        }
+        else {
+          results.setText("There was an input-error detected.");
+        }
         //start the algorithm
       }
     });
@@ -219,7 +243,7 @@ public class MenuUI {
       @Override
       public void handle(ActionEvent print) {
         results.setText(
-          "The algorithm that was used is: " + algorithms.getValue() + "\n" +
+          "The algorithm that was used is: " + chosenAlgorithm + "\n" +
           "Total amount of boxes used: " + "46" + "\n" +
           "Total value of the used boxes: " + "635" + "\n" +
           "Total amount of second the algorithm took: " + "1231" + "\n" +
@@ -252,6 +276,7 @@ public class MenuUI {
     }
     catch(NumberFormatException e) {
       boxACntr.setText("Error");
+      errorCheck = 1;
     }
 
     try {
@@ -259,6 +284,7 @@ public class MenuUI {
     }
     catch(NumberFormatException e) {
       boxBCntr.setText("Error");
+      errorCheck = 1;
     }
 
     try {
@@ -266,6 +292,7 @@ public class MenuUI {
     }
     catch(NumberFormatException e) {
       boxCCntr.setText("Error");
+      errorCheck = 1;
     }
 
     try {
@@ -273,6 +300,7 @@ public class MenuUI {
     }
     catch(NumberFormatException e) {
       boxAWeight.setText("Error");
+      errorCheck = 1;
     }
 
     try {
@@ -280,6 +308,7 @@ public class MenuUI {
     }
     catch(NumberFormatException e) {
       boxBWeight.setText("Error");
+      errorCheck = 1;
     }
 
     try {
@@ -287,7 +316,7 @@ public class MenuUI {
     }
     catch(NumberFormatException e) {
       boxCWeight.setText("Error");
+      errorCheck = 1;
     }
-
   }
 }
