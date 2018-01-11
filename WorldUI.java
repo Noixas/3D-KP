@@ -12,6 +12,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import javafx.scene.text.Text;
 
 public class WorldUI {
 
@@ -52,8 +53,24 @@ public class WorldUI {
         redMaterial.setDiffuseColor(Color.BLUE);
         //redMaterial.setSpecularColor(Color.GREEN);
 
+        PhongMaterial whiteMaterial = new PhongMaterial();
+        whiteMaterial.setDiffuseColor(Color.WHITE);
+        Box xAxis = new Box(500, 3, 3);
+        xAxis.setMaterial(whiteMaterial);
+        
+        PhongMaterial blackMaterial = new PhongMaterial();
+        blackMaterial.setDiffuseColor(Color.BLACK);
+        Box yAxis = new Box(3, 500, 3);
+        yAxis.setMaterial(blackMaterial);
 
-        world.getChildren().addAll(box1);
+        PhongMaterial blueMaterial = new PhongMaterial();
+        blueMaterial.setDiffuseColor(Color.BLUE);
+        Box zAxis = new Box(3, 3, 500);
+        zAxis.setMaterial(blueMaterial);
+
+        Text x = new Text (200, 20, "X axis ->");
+
+        world.getChildren().addAll(x, xAxis, yAxis, zAxis);
 
 
 
