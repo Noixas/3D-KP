@@ -20,7 +20,7 @@ public class WorldUI {
     final XformWorld world = new XformWorld();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final XformCamera cameraXform = new XformCamera();
-    final CreateParcel boxCreation = new CreateParcel();
+    final CreateParcel parcels = new CreateParcel();
     private static final double CAMERA_INITIAL_DISTANCE = -1000;
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000.0;
@@ -47,33 +47,12 @@ public class WorldUI {
     }
 
     private void buildBodySystem() {
-        //Group box = CreateBox.constructBoxA(400, 200, 100);
-        Group box1 = boxCreation.updateGroup();
+        parcels.createParcelA(new Parcel(new Vector3D(100, 100, 100), 5));
+        parcels.createParcelB(new Parcel(new Vector3D(100, 100, 100), 5));
+        parcels.createParcelC(new Parcel(new Vector3D(100, 100, 100), 5));
+        Group parcelGroup = parcels.getParcels();
 
-        PhongMaterial redMaterial = new PhongMaterial();
-        redMaterial.setDiffuseColor(Color.BLUE);
-        //redMaterial.setSpecularColor(Color.GREEN);
-
-        PhongMaterial whiteMaterial = new PhongMaterial();
-        whiteMaterial.setDiffuseColor(Color.WHITE);
-        Box xAxis = new Box(500, 3, 3);
-        xAxis.setMaterial(whiteMaterial);
-
-        PhongMaterial blackMaterial = new PhongMaterial();
-        blackMaterial.setDiffuseColor(Color.BLACK);
-        Box yAxis = new Box(3, 500, 3);
-        yAxis.setMaterial(blackMaterial);
-
-        PhongMaterial blueMaterial = new PhongMaterial();
-        blueMaterial.setDiffuseColor(Color.BLUE);
-        Box zAxis = new Box(3, 3, 500);
-        zAxis.setMaterial(blueMaterial);
-
-        Text x = new Text (200, 20, "X axis ->");
-        Text y = new Text (-15, 230, "Y axis ->");
-        y.setRotate(90);
-
-        world.getChildren().addAll(x, y, xAxis, yAxis, zAxis, box1);
+        world.getChildren().addAll(parcelGroup);
     }
 
     private void handleMouse(Scene scene) {
