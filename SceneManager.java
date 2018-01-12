@@ -16,7 +16,7 @@ public class SceneManager {
     BorderPane root = new BorderPane();
     Group worldGroup = new Group();
     menuScene = new Scene(root, 640, 460);
-    worldScene = new Scene(worldGroup, 1040, 750, true);
+    worldScene = new Scene(worldGroup, 1920, 980, true);
     worldScene.setFill(Color.WHITE);
     stage = mainStage;
     mainStage.setScene(menuScene);
@@ -36,21 +36,21 @@ public class SceneManager {
         if(esc.getCode() == KeyCode.ESCAPE) {
           //System.exit(0);
           mainStage.setScene(menuScene);
+          mainStage.centerOnScreen();
         }
       }
     });
-
-
-
   }
 
   public static void changeScene(int i) {
 
     if (i == 1) {
       stage.setScene(menuScene);
+      stage.centerOnScreen();
     }
     else if (i == 2) {
       stage.setScene(worldScene);
+      stage.centerOnScreen();
     }
   }
 

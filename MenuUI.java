@@ -189,15 +189,16 @@ public class MenuUI {
       "Greedy Algorithm",
       "Extreme Points",
       "Algorithm C");
-    algorithms.setPrefSize(120, 20);
+    algorithms.setPrefSize(140, 20);
     algorithms.relocate(50, 50);
+    algorithms.setValue("Greedy Algorithm");
     center.getChildren().addAll(algorithms);
   }
 
   public void constructButtons(Pane center) {
     Button calcButton = new Button();
     calcButton.setText("Calculate");
-    calcButton.setPrefSize(120, 20);
+    calcButton.setPrefSize(140, 20);
     calcButton.relocate(50, 90);
     calcButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
@@ -231,7 +232,7 @@ public class MenuUI {
 
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
-    viewCargo.setPrefSize(120, 20);
+    viewCargo.setPrefSize(140, 20);
     viewCargo.relocate(50, 130);
     viewCargo.setOnAction(new EventHandler<ActionEvent>() {
       @Override
@@ -244,7 +245,7 @@ public class MenuUI {
 
     Button printResult = new Button();
     printResult.setText("Print results");
-    printResult.setPrefSize(120, 20);
+    printResult.setPrefSize(140, 20);
     printResult.relocate(50, 170);
     printResult.setOnAction(new EventHandler<ActionEvent>() {
       @Override
@@ -260,7 +261,7 @@ public class MenuUI {
 
     Button resetWorld = new Button();
     resetWorld.setText("Clear all parcels");
-    resetWorld.setPrefSize(120, 20);
+    resetWorld.setPrefSize(140, 20);
     resetWorld.relocate(50, 210);
     resetWorld.setOnAction(new EventHandler<ActionEvent>() {
       @Override
