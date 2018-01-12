@@ -29,7 +29,7 @@ public class MenuUI {
   private static double weightBoxC;
   private static String chosenAlgorithm;
   private static int errorCheck;
-
+  private static GreedyAlgorithm greedy = new GreedyAlgorithm();
 
   public MenuUI(BorderPane root) {
     Pane center = new Pane();
@@ -180,7 +180,7 @@ public class MenuUI {
   public void constructChoices(Pane center) {
     algorithms = new ComboBox();
     algorithms.getItems().addAll(
-      "Algorithm A",
+      "Greedy Algorithm",
       "Algorithm B",
       "Algorithm C");
     algorithms.setPrefSize(120, 20);
@@ -202,9 +202,10 @@ public class MenuUI {
           if(algorithms.getValue() == null) {
             results.setText("No algorithm was selected.");
           }
-          else if(algorithms.getValue() == "Algorithm A") {
-            results.setText("Algorithm A has started calculating the possibilities.");
+          else if(algorithms.getValue() == "Greedy Algorithm") {
+            results.setText("Greedy Algorithm has started calculating the possibilities.");
             chosenAlgorithm = algorithms.getValue().toString();
+            greedy.Start();
           }
           else if(algorithms.getValue() == "Algorithm B") {
             results.setText("Algorithm B has started calculating the possibilities.");
