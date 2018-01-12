@@ -22,7 +22,7 @@ public class Main extends Application {
     mainStage.centerOnScreen();
     mainStage.setTitle("Phase 3");
     SceneManager scenemanager = new SceneManager(mainStage);
-    AlgorithmZ z = new AlgorithmZ();
+    //AlgorithmZ z = new AlgorithmZ();
     mainStage.show();
   }
 }

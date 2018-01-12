@@ -29,6 +29,7 @@ public class GreedyAlgorithm extends Algorithm {
       if(placeable(p)) {
         placeParcel(p);
         System.out.println("parcel placed");
+        System.out.println(p.toString());
       }
     }
     _done = true;
@@ -82,6 +83,7 @@ public class GreedyAlgorithm extends Algorithm {
     return false;
   }
 
+
   public boolean isCorner(int i, int j, int k) {
     boolean xEdge = true;
     boolean yEdge = true;
@@ -93,12 +95,12 @@ public class GreedyAlgorithm extends Algorithm {
     }
     if(j != 0) {
       if(containerSpace[i][j-1][k] == null) {
-        xEdge = false;
+        yEdge = false;
       }
     }
     if(k != 0) {
       if(containerSpace[i][j][k-1] == null) {
-        xEdge = false;
+        zEdge = false;
       }
     }
     return xEdge && yEdge && zEdge;
