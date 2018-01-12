@@ -1,9 +1,9 @@
 import java.util.*;
 
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA;
-  private int amountB;
-  private int amountC;
+  private int amountA = 4;
+  private int amountB = 6;
+  private int amountC = 10;
   private double VolA;
   private double VolB;
   private double VolC;
@@ -18,16 +18,18 @@ public class GreedyAlgorithm extends Algorithm {
   private Parcel[][][] containerSpace = new Parcel[arrayIndex(containerSize.x)][arrayIndex(containerSize.y)][arrayIndex(containerSize.z)];
 
   public void Start() {
-    makeOrders();
+    makeLists();
+    System.out.println("lists made");
     orderLists();
+    System.out.println("");
     makeParcelList();
-    while(!isDone()) {
-      for(Parcel p : parcelList) {
-        if(placeable(p)) {
-          placeParcel(p);
-        }
+    for(Parcel p : parcelList) {
+      if(placeable(p)) {
+        placeParcel(p);
       }
     }
+    _done = true;
+    System.out.println("hello");
   }
 
 
@@ -117,7 +119,7 @@ public class GreedyAlgorithm extends Algorithm {
     parcel.setSize(new Vector3D(size.y, size.x, size.z));
   }
 
-  public void makeOrders() {
+  public void makeLists() {
     parcelOrder[0] = new ParcelA();
     parcelOrder[1] = new ParcelB();
     parcelOrder[2] = new ParcelC();
