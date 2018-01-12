@@ -29,7 +29,7 @@ public class MenuUI {
   private static double weightBoxC;
   private static String chosenAlgorithm;
   private static int errorCheck;
-
+  private static GreedyAlgorithm greedy = new GreedyAlgorithm();
 
   public MenuUI(BorderPane root) {
     Pane center = new Pane();
@@ -180,7 +180,7 @@ public class MenuUI {
   public void constructChoices(Pane center) {
     algorithms = new ComboBox();
     algorithms.getItems().addAll(
-      "Algorithm A",
+      "Greedy Algorithm",
       "Algorithm B",
       "Algorithm C");
     algorithms.setPrefSize(120, 20);
@@ -192,7 +192,7 @@ public class MenuUI {
     Button calcButton = new Button();
     calcButton.setText("Calculate");
     calcButton.setPrefSize(120, 20);
-    calcButton.relocate(100, 100);
+    calcButton.relocate(100, 90);
     calcButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent calc) {
@@ -202,9 +202,10 @@ public class MenuUI {
           if(algorithms.getValue() == null) {
             results.setText("No algorithm was selected.");
           }
-          else if(algorithms.getValue() == "Algorithm A") {
-            results.setText("Algorithm A has started calculating the possibilities.");
+          else if(algorithms.getValue() == "Greedy Algorithm") {
+            results.setText("Greedy Algorithm has started calculating the possibilities.");
             chosenAlgorithm = algorithms.getValue().toString();
+            greedy.Start();
           }
           else if(algorithms.getValue() == "Algorithm B") {
             results.setText("Algorithm B has started calculating the possibilities.");
@@ -225,7 +226,7 @@ public class MenuUI {
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
     viewCargo.setPrefSize(120, 20);
-    viewCargo.relocate(100, 150);
+    viewCargo.relocate(100, 130);
     viewCargo.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent swtch) {
@@ -238,7 +239,7 @@ public class MenuUI {
     Button printResult = new Button();
     printResult.setText("Print results");
     printResult.setPrefSize(120, 20);
-    printResult.relocate(100, 200);
+    printResult.relocate(100, 170);
     printResult.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent print) {
@@ -251,7 +252,18 @@ public class MenuUI {
       }
     });
 
-    center.getChildren().addAll(calcButton, viewCargo, printResult);
+    Button resetWorld = new Button();
+    resetWorld.setText("Clear all parcels");
+    resetWorld.setPrefSize(120, 20);
+    resetWorld.relocate(100, 210);
+    resetWorld.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent clear) {
+        CreateParcel.clearAllParcels();
+      }
+    });
+
+    center.getChildren().addAll(calcButton, viewCargo, printResult, resetWorld);
   }
 
   public void constructResultField(Pane center) {

@@ -46,16 +46,14 @@ public class WorldUI {
         camera.setTranslateZ(CAMERA_INITIAL_DISTANCE);
     }
 
-    private void buildBodySystem() {
-        parcels.createParcelA(new Parcel(new Vector3D(100, 100, 100), 5));
-        parcels.createParcelB(new Parcel(new Vector3D(100, 100, 100), 5));
-        parcels.createParcelC(new Parcel(new Vector3D(100, 100, 100), 5));
+  private void buildBodySystem() {
+        parcels.createParcel(new Parcel(new Vector3D(100, 100, 100), 5));
         Group parcelGroup = parcels.getParcels();
 
         world.getChildren().addAll(parcelGroup);
     }
 
-    private void handleMouse(Scene scene) {
+  private void handleMouse(Scene scene) {
         scene.setOnMousePressed((MouseEvent me) -> {
             mousePosX = me.getSceneX();
             mousePosY = me.getSceneY();
