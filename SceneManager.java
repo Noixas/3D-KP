@@ -17,7 +17,7 @@ public class SceneManager {
     Group worldGroup = new Group();
     menuScene = new Scene(root, 640, 460);
     worldScene = new Scene(worldGroup, 1040, 750, true);
-    worldScene.setFill(Color.GREEN);
+    worldScene.setFill(Color.WHITE);
     stage = mainStage;
     mainStage.setScene(menuScene);
     MenuUI menu = new MenuUI(root);

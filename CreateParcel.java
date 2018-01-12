@@ -41,39 +41,13 @@ public class CreateParcel {
 		p.setPosition(new Vector3D(100, 50, 30));
 		size = p.getSize();
 		pos = p.getPosition();
-		Box box = new Box(size.x, size.y, size.z);
+		Box box = new Box(size.x * 50, size.y * 50, size.z * 50);
 		box.setMaterial(getColor(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), .99)));
 		box.setTranslateX(pos.x);
 		box.setTranslateY(pos.y);
 		box.setTranslateZ(pos.z);
 		parcelGroup.getChildren().addAll(box);
 	}
-
-	/*
-	public static void createParcelB(Parcel p){
-		p.setPosition(new Vector3D(60, 20, 100));
-		size = p.getSize();
-		pos = p.getPosition();
-		Box box = new Box(size.x, size.y, size.z);
-		box.setMaterial(getColor(Color.YELLOW));
-		box.setTranslateX(pos.x);
-		box.setTranslateY(pos.y);
-		box.setTranslateZ(pos.z);
-		parcelGroup.getChildren().addAll(box);
-	}
-
-	public static void createParcelC(Parcel p){
-		p.setPosition(new Vector3D(40, 100, 70));
-		size = p.getSize();
-		pos = p.getPosition();
-		Box box = new Box(size.x, size.y, size.z);
-		box.setMaterial(getColor(Color.RED));
-		box.setTranslateX(pos.x);
-		box.setTranslateY(pos.y);
-		box.setTranslateZ(pos.z);
-		parcelGroup.getChildren().addAll(box);
-	}
-	*/
 
 	public static void createSphere(int x, int y, int z) {
 		Sphere sphere = new Sphere(5);
@@ -111,6 +85,6 @@ public class CreateParcel {
 	}
 
 	public static void removeParcel() {
-
+		//if()
 	}
 }

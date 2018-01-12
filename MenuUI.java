@@ -56,26 +56,32 @@ public class MenuUI {
 
   public void constructInputFields(Pane top) {
     boxACntr = new TextField();
+    boxACntr.setText("5");
     boxACntr.setPrefSize(80, 20);
     boxACntr.relocate(100, (TOP_HEIGHT-50) /2);
 
     boxBCntr = new TextField();
+    boxBCntr.setText("5");
     boxBCntr.setPrefSize(80, 20);
     boxBCntr.relocate(280, (TOP_HEIGHT-50) /2);
 
     boxCCntr = new TextField();
+    boxCCntr.setText("5");
     boxCCntr.setPrefSize(80, 20);
     boxCCntr.relocate(460, (TOP_HEIGHT-50) /2);
 
     boxAWeight = new TextField();
+    boxAWeight.setText("1");
     boxAWeight.setPrefSize(80, 20);
     boxAWeight.relocate(100, (TOP_HEIGHT+20) /2);
 
     boxBWeight = new TextField();
+    boxBWeight.setText("2");
     boxBWeight.setPrefSize(80, 20);
     boxBWeight.relocate(280, (TOP_HEIGHT+20) /2);
 
     boxCWeight = new TextField();
+    boxCWeight.setText("5");
     boxCWeight.setPrefSize(80, 20);
     boxCWeight.relocate(460, (TOP_HEIGHT+20) /2);
 
@@ -181,10 +187,10 @@ public class MenuUI {
     algorithms = new ComboBox();
     algorithms.getItems().addAll(
       "Greedy Algorithm",
-      "Algorithm B",
+      "Extreme Points",
       "Algorithm C");
     algorithms.setPrefSize(120, 20);
-    algorithms.relocate(100, 50);
+    algorithms.relocate(50, 50);
     center.getChildren().addAll(algorithms);
   }
 
@@ -192,7 +198,7 @@ public class MenuUI {
     Button calcButton = new Button();
     calcButton.setText("Calculate");
     calcButton.setPrefSize(120, 20);
-    calcButton.relocate(100, 90);
+    calcButton.relocate(50, 90);
     calcButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent calc) {
@@ -226,7 +232,7 @@ public class MenuUI {
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
     viewCargo.setPrefSize(120, 20);
-    viewCargo.relocate(100, 130);
+    viewCargo.relocate(50, 130);
     viewCargo.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent swtch) {
@@ -239,7 +245,7 @@ public class MenuUI {
     Button printResult = new Button();
     printResult.setText("Print results");
     printResult.setPrefSize(120, 20);
-    printResult.relocate(100, 170);
+    printResult.relocate(50, 170);
     printResult.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent print) {
@@ -255,7 +261,7 @@ public class MenuUI {
     Button resetWorld = new Button();
     resetWorld.setText("Clear all parcels");
     resetWorld.setPrefSize(120, 20);
-    resetWorld.relocate(100, 210);
+    resetWorld.relocate(50, 210);
     resetWorld.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent clear) {
@@ -268,8 +274,8 @@ public class MenuUI {
 
   public void constructResultField(Pane center) {
     results = new TextArea();
-    results.setPrefSize(280, 180);
-    results.relocate(280, 50);
+    results.setPrefSize(320, 190);
+    results.relocate(230, 50);
 
     Label resultLabel = new Label();
     resultLabel.setText("Results");
@@ -278,7 +284,7 @@ public class MenuUI {
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #271033;" +
       "-fx-font-style: italic;");
-    resultLabel.relocate(280, 20);
+    resultLabel.relocate(230, 20);
     center.getChildren().addAll(results, resultLabel);
   }
 
