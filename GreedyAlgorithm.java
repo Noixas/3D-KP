@@ -1,4 +1,4 @@
-/*import java.util.*;
+import java.util.*;
 
 public class GreedyAlgorithm extends Algorithm {
   private int amountA;
@@ -15,54 +15,29 @@ public class GreedyAlgorithm extends Algorithm {
 
   private Container container = new Container();
   private Vector3D containerSize = container.getSize();
-  private int containerX = arrayIndex(containerSize.x);
-  private int containerY = arrayIndex(containerSize.y);
-  private int containerZ = arrayIndex(containerSize.z);
-  private Parcel[][][] containerSpace = new Parcel[containerX][containerY][containerZ];
+  private Parcel[][][] containerSpace = new Parcel[arrayIndex(containerSize.x)][arrayIndex(containerSize.y)][arrayIndex(containerSize.z)];
 
   public void Start() {
-    makeLists();
+    makeOrders();
     orderLists();
-    makeParcelOrder();
+    makeParcelList();
     while(!isDone()) {
-      System.out.println("is not done");
-    }
-  }
-
-  public boolean containerBoundaries() {
-    for(int i=0; i<containerSpace.length;i++) {
-      for(int j=0; j<containerSpace[0].length; j++) {
-        for(int k=0; k<containerSpace[0][0].length; k++) {
-
+      for(Parcel p : parcelList) {
+        if(placeable(p)) {
+          placeParcel(p);
         }
       }
     }
   }
 
-  public Parcel[][][] makeParcelSpace(Parcel parcel) {
-    Vector3D size = parcel.getSize();
-    Parcel[][][] parcelSpace = new Parcel[arrayIndex(size.x)][arrayIndex(size.y)][arrayIndex(s.y)];
-    fillSpace(parcelSpace, parcel);
-    return parcelSpace;
-  }
-
-  public void fillSpace(Parcel[][][] parcelSpace, Parcel parcel) {
-    for(int i=0; i<parcelSpace.length;i++) {
-      for(int j=0; j<parcelSpace[0].length; j++) {
-        for(int k=0; k<parcelSpace[0][0].length; k++) {
-          parcelSpace[i][j][k] = parcel;
-        }
-      }
-    }
-  }
 
 
   public void placeParcel(Parcel parcel) {
     Vector3D size = parcel.getSize();
     Vector3D pos = parcel.getPosition();
-    for(int i=pos.x; i<=size.x;i++) {
-      for(int j=pos.y; j<=size.y; j++) {
-        for(int k=pos.z; k<=size.z; k++) {
+    for(int i=arrayIndex(pos.x); i<=arrayIndex(size.x);i++) {
+      for(int j=arrayIndex(pos.y); j<=arrayIndex(size.y); j++) {
+        for(int k=arrayIndex(pos.z); k<=arrayIndex(size.z); k++) {
           containerSpace[i][j][k] = parcel;
         }
       }
@@ -70,10 +45,12 @@ public class GreedyAlgorithm extends Algorithm {
   }
 
   public boolean placeable(Parcel parcel) {
-    for(int i=0; i<containerSpace.length;i++) {
-      for(int j=0; j<containerSpace[0].length; j++) {
-        for(int k=0; k<containerSpace[0][0].length; k++) {
+    for(int i=0; i < containerSpace.length;i++) {
+      for(int j=0; j < containerSpace[0].length; j++) {
+        for(int k=0; k < containerSpace[0][0].length; k++) {
           if(containerSpace[i][j][k] == null && isCorner(i, j, k) && canFit(parcel, i, j, k)) {
+            parcel.setPosition(new Vector3D(i, j, k));
+            //make 3d parcel
             return true;
           }
         }
@@ -83,22 +60,20 @@ public class GreedyAlgorithm extends Algorithm {
   }
 
   public boolean canFit(Parcel parcel, int i, int j, int k) {
-    int posX = arrayIndex(parcel.getPosition().x);
-    int posY = arrayIndex(parcel.getPosition().y);
-    int posZ = arrayIndex(parcel.getPosition().z);
-    int sizeX = arrayIndex(parcel.getSize().x);
-    int sizeY = arrayIndex(parcel.getSize().y);
-    int sizeZ = arrayIndex(parcel.getSize().z);
-    for(int i=posX; i<=posX+sizeX;i++) {
-      for(int j=posY; j<=posY+sizeY; j++) {
-        for(int k=posZ; k<=containerSpace[0][0].length; k++) {
-          if(containerSpace[i][j][k] != null) {
-            return false;
+    Vector3D size = parcel.getSize();
+    if((i+arrayIndex(size.x))<=arrayIndex(containerSize.x) && (j+arrayIndex(size.y))<=arrayIndex(containerSize.y) && (k+arrayIndex(size.z))<=arrayIndex(containerSize.z)) {
+      for(int m=i; m <= i+arrayIndex(size.x); m++) {
+        for(int n=j; n <= j+arrayIndex(size.y); n++) {
+          for(int o=k; o <= k+arrayIndex(size.z); o++) {
+            if(containerSpace[m][n][o] != null) {
+              return false;
+            }
           }
         }
       }
+      return true;
     }
-    return true;
+    return false;
   }
 
   public boolean isCorner(int i, int j, int k) {
@@ -128,27 +103,21 @@ public class GreedyAlgorithm extends Algorithm {
   }
 
   public void rotateX(Parcel parcel) {
-    double sizeX = parcel.getSize().x;
-    double sizeY = parcel.getSize().y;
-    double sizeZ = parcel.getSize().z;
-    parcel.setSize(new Vector3D(sizeX, sizeZ, sizeY));
+    Vector3D size = parcel.getSize();
+    parcel.setSize(new Vector3D(size.x, size.z, size.y));
   }
 
   public void rotateY(Parcel parcel) {
-    double sizeX = parcel.getSize().x;
-    double sizeY = parcel.getSize().y;
-    double sizeZ = parcel.getSize().z;
-    parcel.setSize(new Vector3D(sizeZ, sizeY, sizeY));
+    Vector3D size = parcel.getSize();
+    parcel.setSize(new Vector3D(size.z, size.y, size.x));
   }
 
   public void rotateZ(Parcel parcel) {
-    double sizeX = parcel.getSize().x;
-    double sizeY = parcel.getSize().y;
-    double sizeZ = parcel.getSize().z;
-    parcel.setSize(new Vector3D(sizeY, sizeX, sizeZ));
+    Vector3D size = parcel.getSize();
+    parcel.setSize(new Vector3D(size.y, size.x, size.z));
   }
 
-  public void makeLists() {
+  public void makeOrders() {
     parcelOrder[0] = new ParcelA();
     parcelOrder[1] = new ParcelB();
     parcelOrder[2] = new ParcelC();
@@ -160,7 +129,7 @@ public class GreedyAlgorithm extends Algorithm {
     }
   }
 
-  public void makeParcelOrder() {
+  public void makeParcelList() {
     for(int i=0; i<3; i++) {
       for(int j=0; i<amountOrder[i]; j++) {
         parcelList.add(parcelOrder[i].clone());
@@ -201,4 +170,4 @@ public class GreedyAlgorithm extends Algorithm {
   public int arrayIndex(double number) {
     return (int)number*2;
   }
-}*/
+}
