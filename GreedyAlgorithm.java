@@ -21,15 +21,18 @@ public class GreedyAlgorithm extends Algorithm {
     makeLists();
     System.out.println("lists made");
     orderLists();
-    System.out.println("");
+    System.out.println("lists order");
     makeParcelList();
+    System.out.println("parcels in arraylist");
+    System.out.println("loop starts");
     for(Parcel p : parcelList) {
       if(placeable(p)) {
         placeParcel(p);
+        System.out.println("parcel placed");
       }
     }
     _done = true;
-    System.out.println("hello");
+    System.out.println("done");
   }
 
 
@@ -52,6 +55,7 @@ public class GreedyAlgorithm extends Algorithm {
         for(int k=0; k < containerSpace[0][0].length; k++) {
           if(containerSpace[i][j][k] == null && isCorner(i, j, k) && canFit(parcel, i, j, k)) {
             parcel.setPosition(new Vector3D(i, j, k));
+            CreateParcel.createParcel(parcel);
             //make 3d parcel
             return true;
           }
@@ -133,7 +137,7 @@ public class GreedyAlgorithm extends Algorithm {
 
   public void makeParcelList() {
     for(int i=0; i<3; i++) {
-      for(int j=0; i<amountOrder[i]; j++) {
+      for(int j=0; j<amountOrder[i]; j++) {
         parcelList.add(parcelOrder[i].clone());
       }
     }

@@ -47,7 +47,7 @@ public class WorldUI {
     }
 
   private void buildBodySystem() {
-        parcels.createParcel(new Parcel(new Vector3D(100, 100, 100), 5));
+        //parcels.createParcel(new Parcel(new Vector3D(100, 100, 100), 5));
         Group parcelGroup = parcels.getParcels();
 
         world.getChildren().addAll(parcelGroup);
