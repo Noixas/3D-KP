@@ -2,20 +2,20 @@ import java.util.*;
 import java.util.LinkedList;
 
 public class SolutionSet{
-  private List<Box> _solution;
+  private List<Parcel> _solution;
   private double _startTime;
   private double _value;
   private double _endTime;
   private double _totalTime;
   public SolutionSet(double pStartTime){
-    _solution = new LinkedList<Box>();
+    _solution = new LinkedList<Parcel>();
     _value = 0;
   }
-  public void AddBox(Box pBox)
+  public void AddParcel(Parcel pParcel)
   {
-    _solution.add(pBox);
+    _solution.add(pParcel);
   }
-  public Box get(int i)
+  public Parcel get(int i)
   {
     return _solution.get(i);
   }
@@ -24,13 +24,13 @@ public class SolutionSet{
     return _solution.size();
   }
   /**
-   * Delete Box from solution set
-   * @param  Box pBox          [Box to be deleted]
-   * @return  true if box was found and deleted
+   * Delete Parcel from solution set
+   * @param  Parcel pParcel          [Parcel to be deleted]
+   * @return  true if parcel was found and deleted
    */
-  public boolean deleteBox(Box pBox)
+  public boolean deleteParcel(Parcel pParcel)
   {
-    _solution.remove(pBox);
+    _solution.remove(pParcel);
     return true;
   }
   public double getValue()
@@ -50,9 +50,9 @@ public class SolutionSet{
   {
     return _totalTime;
   }
-  public int getBoxTypeCount(Box pBox)
+  public int getParcelTypeCount(Parcel pParcel)
   {
-    //Todo: implement method that return the amount of boxes of type T in solution
+    //Todo: implement method that return the amount of parcels of type T in solution
     return 0;
   }
 
