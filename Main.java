@@ -19,6 +19,7 @@ public class Main extends Application {
 
   public void start(Stage mainStage) {
     stage = mainStage;
+    mainStage.centerOnScreen();
     mainStage.setTitle("Phase 3");
     SceneManager scenemanager = new SceneManager(mainStage);
     AlgorithmZ z = new AlgorithmZ();

@@ -3,6 +3,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Sphere;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.text.Text;
 import java.util.Random;
 
@@ -11,6 +12,7 @@ public class CreateParcel {
 	private static Parcel parcel;
 	private static Vector3D size;
 	private static Vector3D pos;
+	private static Box box;
 
 	public CreateParcel() {
 		Box xAxis = new Box(500, 3, 3);
@@ -41,11 +43,11 @@ public class CreateParcel {
 		p.setPosition(new Vector3D(100, 50, 30));
 		size = p.getSize();
 		pos = p.getPosition();
-		Box box = new Box(size.x * 50, size.y * 50, size.z * 50);
+		box = new Box(size.x * 40, size.y * 40, size.z * 40);
 		box.setMaterial(getColor(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), .99)));
-		box.setTranslateX(pos.x);
-		box.setTranslateY(pos.y);
-		box.setTranslateZ(pos.z);
+		box.setTranslateX(pos.x * 2);
+		box.setTranslateY(pos.y * 2);
+		box.setTranslateZ(pos.z * 2);
 		parcelGroup.getChildren().addAll(box);
 	}
 
@@ -84,7 +86,14 @@ public class CreateParcel {
 
 	}
 
-	public static void removeParcel() {
-		//if()
+	public static void removeParcel(Parcel p) {
+		//parcelGroup.getChildren().removeIf()
+		pos = p.getPosition();
+
+		for(Node box : parcelGroup.getChildren()) {
+			if(box.getTranslateX() == pos.x * 2 && box.getTranslateY() == pos.y * 2 && box.getTranslateZ() == pos.z * 2) {
+				parcelGroup.getChildren().remove(box);
+			}
+		}
 	}
 }
