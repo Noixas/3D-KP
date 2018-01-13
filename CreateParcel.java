@@ -40,14 +40,14 @@ public class CreateParcel {
 	public static void createParcel(Parcel p){
 		//System.out.println(p.getSize());
 		Random rand = new Random();
-		p.setPosition(new Vector3D(100, 50, 30));
+		//p.setPosition(new Vector3D(100, 50, 30));
 		size = p.getSize();
 		pos = p.getPosition();
 		box = new Box(size.x * 40, size.y * 40, size.z * 40);
 		box.setMaterial(getColor(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), .99)));
-		box.setTranslateX(pos.x * 2);
-		box.setTranslateY(pos.y * 2);
-		box.setTranslateZ(pos.z * 2);
+		box.setTranslateX((pos.x + size.x/2)* 40);
+		box.setTranslateY((pos.y + size.y/2)* 40);
+		box.setTranslateZ((pos.z + size.z/2)* 40);
 		parcelGroup.getChildren().addAll(box);
 	}
 

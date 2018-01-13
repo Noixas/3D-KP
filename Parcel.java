@@ -48,7 +48,7 @@ public class Parcel{
     return new Parcel(_size.clone(), _value);
   }
   public String toString() {
-    return getClass() + ": [Size = " + getSize() + "] [Position= " + getPosition() + "]";
+    return getClass() + ": [Size = " + getSize() + "] [Position = " + getPosition() + "]";
   }
 
 }

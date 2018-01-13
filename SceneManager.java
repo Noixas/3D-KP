@@ -16,7 +16,7 @@ public class SceneManager {
     BorderPane root = new BorderPane();
     Group worldGroup = new Group();
     menuScene = new Scene(root, 640, 460);
-    worldScene = new Scene(worldGroup, 1920, 980, true);
+    worldScene = new Scene(worldGroup, 1220, 980, true);
     worldScene.setFill(Color.WHITE);
     stage = mainStage;
     mainStage.setScene(menuScene);
