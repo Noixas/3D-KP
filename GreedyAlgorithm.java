@@ -29,7 +29,8 @@ public class GreedyAlgorithm extends Algorithm {
     System.out.println("parcels in arraylist");
     for(Parcel p : parcelList) {
       if(placeable(p)) {
-        placeParcel(p);
+        CreateParcel.createParcel(p);
+        placeInArray(p);
         System.out.println("parcel placed");
         System.out.println(p.toString());
       }
@@ -43,7 +44,7 @@ public class GreedyAlgorithm extends Algorithm {
    * Places references to the parcel object in the 3D array which rapresents the container.
    * @param parcel the parcel that is getting placed in the container.
    */
-  public void placeParcel(Parcel parcel) {
+  public void placeInArray(Parcel parcel) {
     Vector3D size = parcel.getSize();
     Vector3D pos = parcel.getPosition();
     int a =1; //logging
@@ -78,8 +79,6 @@ public class GreedyAlgorithm extends Algorithm {
             System.out.println("j: " + j);
             System.out.println("k: " + k);
             parcel.setPosition(new Vector3D((double)i/2, (double)j/2, (double)k/2));
-            CreateParcel.createParcel(parcel);
-            //make 3d parcel
             return true;
           }
         }
@@ -143,9 +142,7 @@ public class GreedyAlgorithm extends Algorithm {
     return xEdge && yEdge && zEdge;
   }
 
-  public void removeParcel() {
-
-  }
+  
 
   /**
    * Rotates the given parcel around the x axis by 90° degrees.
