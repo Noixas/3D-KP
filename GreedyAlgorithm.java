@@ -38,7 +38,7 @@ public class GreedyAlgorithm extends Algorithm {
         placeInArray(p);
         System.out.println("parcel placed");
         System.out.println(p.toString());
-      }
+      } else {System.out.println("not placed");}
     }
     _done = true;
     System.out.println("done");
@@ -79,11 +79,36 @@ public class GreedyAlgorithm extends Algorithm {
     for(int i=0; i < containerSpace.length;i++) {
       for(int j=0; j < containerSpace[0].length; j++) {
         for(int k=0; k < containerSpace[0][0].length; k++) {
-          if(containerSpace[i][j][k] == null && isCorner(i, j, k) && tryRotations(parcel, i, j, k)) {
+          Vector3D posIndex = new Vector3D(i, j, k);
+          if(containerSpace[i][j][k] == null) {
+            System.out.println("(" + i + ", " + j + ", " + k + ") is empty");
+            if(isCorner(posIndex)) {
+              if(tryRotations(parcel, posIndex)) {
+                System.out.println("i: " + i);
+                System.out.println("j: " + j);
+                System.out.println("k: " + k);
+                parcel.setPosition(new Vector3D((double)posIndex.x/2, (double)posIndex.y/2, (double)posIndex.z/2));
+                return true;
+              }
+            }
+          } else {System.out.println("(" + i + ", " + j + ", " + k + ") is not empty");}
+        }
+      }
+    }
+    return false;
+  }
+
+/*
+  public boolean placeable(Parcel parcel) {
+    for(int i=0; i < containerSpace.length;i++) {
+      for(int j=0; j < containerSpace[0].length; j++) {
+        for(int k=0; k < containerSpace[0][0].length; k++) {
+          Vector3D posIndex = new Vector3D(i, j, k);
+          if(containerSpace[i][j][k] == null && isCorner(posIndex) && tryRotations(parcel, posIndex)) {
             System.out.println("i: " + i);
             System.out.println("j: " + j);
             System.out.println("k: " + k);
-            parcel.setPosition(new Vector3D((double)i/2, (double)j/2, (double)k/2));
+            parcel.setPosition(new Vector3D((double)posIndex.x/2, (double)posIndex.y/2, (double)posIndex.z/2));
             return true;
           }
         }
@@ -91,38 +116,24 @@ public class GreedyAlgorithm extends Algorithm {
     }
     return false;
   }
-/*
-  public boolean placeable(Parcel parcel) {
-    for(int i=0; i < containerSpace.length;i++) {
-      for(int j=0; j < containerSpace[0].length; j++) {
-        for(int k=0; k < containerSpace[0][0].length; k++) {
-          if(containerSpace[i][j][k] == null && isCorner(i, j, k)){
-            if(tryRotations(parcel, i, j, k)) {
-              System.out.println("i: " + i);
-              System.out.println("j: " + j);
-              System.out.println("k: " + k);
-              parcel.setPosition(new Vector3D((double)i/2, (double)j/2, (double)k/2));
-              return true;
-            }
-          }
-        }
-      }
-    }
-    return false;
-  }
 */
+
+
   /**
    * Helper method which looks if the parcel can physically fit inside the container.
    * @param parcel the parcel that is getting placed in the container.
    */
-  public boolean canFit(Parcel parcel, int i, int j, int k) {
+  public boolean canFit(Parcel parcel, Vector3D posIndex) {
     Vector3D size = parcel.getSize();
-    if((i+arrayIndex(size.x))<=arrayIndex(containerSize.x) && (j+arrayIndex(size.y))<=arrayIndex(containerSize.y) && (k+arrayIndex(size.z))<=arrayIndex(containerSize.z)) {
-      for(int m=i; m < i+arrayIndex(size.x); m++) {
-        for(int n=j; n < j+arrayIndex(size.y); n++) {
-          for(int o=k; o < k+arrayIndex(size.z); o++) {
+    int xIndex = (int)posIndex.x;
+    int yIndex = (int)posIndex.y;
+    int zIndex = (int)posIndex.z;
+    if((xIndex+arrayIndex(size.x))<=arrayIndex(containerSize.x) && (yIndex+arrayIndex(size.y))<=arrayIndex(containerSize.y) && (xIndex+arrayIndex(size.z))<=arrayIndex(containerSize.z)) {
+      for(int m=xIndex; m < xIndex+arrayIndex(size.x); m++) {
+        for(int n=yIndex; n < yIndex+arrayIndex(size.y); n++) {
+          for(int o=xIndex; o < zIndex+arrayIndex(size.z); o++) {
             if(containerSpace[m][n][o] != null) {
-              System.out.println("can't fit");
+              //System.out.println("can't fit");
               return false;
             }
           }
@@ -139,30 +150,34 @@ public class GreedyAlgorithm extends Algorithm {
    * Helper method which checks if the corner point of the parcels is closest to other parcels or one of the sides of the container.
    * @param
    */
-  public boolean isCorner(int i, int j, int k) {
+  public boolean isCorner(Vector3D posIndex) {
     boolean xEdge = true;
     boolean yEdge = true;
     boolean zEdge = true;
-    if(i != 0) {
-      if(containerSpace[i-1][j][k] == null) {
+    int xIndex = (int)posIndex.x;
+    int yIndex = (int)posIndex.y;
+    int zIndex = (int)posIndex.z;
+
+    if(xIndex != 0) {
+      if(containerSpace[xIndex-1][yIndex][zIndex] == null) {
         xEdge = false;
       }
     }
-    if(j != 0) {
-      if(containerSpace[i][j-1][k] == null) {
+    if(yIndex != 0) {
+      if(containerSpace[xIndex][yIndex-1][zIndex] == null) {
         yEdge = false;
       }
     }
-    if(k != 0) {
-      if(containerSpace[i][j][k-1] == null) {
+    if(zIndex != 0) {
+      if(containerSpace[xIndex][yIndex][zIndex-1] == null) {
         zEdge = false;
       }
     }
     if(xEdge && yEdge && zEdge) { //logging
       System.out.println("is corner");
-    } else {
+    } /*else {
       System.out.println("is not corner");
-    }
+    }*/
     return xEdge && yEdge && zEdge;
   }
 
@@ -170,42 +185,42 @@ public class GreedyAlgorithm extends Algorithm {
    * Check for the possible rotations of the parcel for the given coordinates.
    *
    */
-   public boolean tryRotations(Parcel parcel, int i, int j, int k) {
+   public boolean tryRotations(Parcel parcel, Vector3D posIndex) {
      Parcel buffer = parcel.clone();
      //No rotation
-     if(canFit(buffer, i, j, k)) { //x y z
+     if(canFit(buffer, posIndex)) { //x y z
        return true;
      }
      rotateX(buffer);
-     if(canFit(buffer, i, j, k)) { //x z y
-       parcel = buffer.clone();
+     if(canFit(buffer, posIndex)) { //x z y
+       parcel.setSize(buffer.getSize());
        return true;
      }
 
      buffer = parcel.clone();
      rotateY(buffer);
-     if(canFit(buffer, i, j, k)) { //z y x
-       parcel = buffer.clone();
+     if(canFit(buffer, posIndex)) { //z y x
+       parcel.setSize(buffer.getSize());
        return true;
      }
      rotateX(buffer);
-     if(canFit(buffer, i, j, k)) { //z x y
-       parcel = buffer.clone();
+     if(canFit(buffer, posIndex)) { //z x y
+       parcel.setSize(buffer.getSize());
        return true;
      }
 
      buffer = parcel.clone();
      rotateZ(buffer);
-     if(canFit(buffer, i, j, k)) { //y x z
-       parcel = buffer.clone();
+     if(canFit(buffer, posIndex)) { //y x z
+       parcel.setSize(buffer.getSize());
        return true;
      }
      rotateX(buffer);
-     if(canFit(buffer, i, j, k)) { //y z x
-       parcel = buffer.clone();
+     if(canFit(buffer, posIndex)) { //y z x
+       parcel.setSize(buffer.getSize());
        return true;
      }
-
+     System.out.println("no possible rotation found for corner " + "(" + posIndex.x + ", " + posIndex.y + ", " + posIndex.z + ")");
      return false;
    }
 
