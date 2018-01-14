@@ -79,7 +79,7 @@ public class GreedyAlgorithm extends Algorithm {
     for(int i=0; i < containerSpace.length;i++) {
       for(int j=0; j < containerSpace[0].length; j++) {
         for(int k=0; k < containerSpace[0][0].length; k++) {
-          if(containerSpace[i][j][k] == null && isCorner(i, j, k) && canFit(parcel, i, j, k)) {
+          if(containerSpace[i][j][k] == null && isCorner(i, j, k) && tryRotations(parcel, i, j, k)) {
             System.out.println("i: " + i);
             System.out.println("j: " + j);
             System.out.println("k: " + k);
@@ -91,7 +91,26 @@ public class GreedyAlgorithm extends Algorithm {
     }
     return false;
   }
-
+/*
+  public boolean placeable(Parcel parcel) {
+    for(int i=0; i < containerSpace.length;i++) {
+      for(int j=0; j < containerSpace[0].length; j++) {
+        for(int k=0; k < containerSpace[0][0].length; k++) {
+          if(containerSpace[i][j][k] == null && isCorner(i, j, k)){
+            if(tryRotations(parcel, i, j, k)) {
+              System.out.println("i: " + i);
+              System.out.println("j: " + j);
+              System.out.println("k: " + k);
+              parcel.setPosition(new Vector3D((double)i/2, (double)j/2, (double)k/2));
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+*/
   /**
    * Helper method which looks if the parcel can physically fit inside the container.
    * @param parcel the parcel that is getting placed in the container.
@@ -147,7 +166,48 @@ public class GreedyAlgorithm extends Algorithm {
     return xEdge && yEdge && zEdge;
   }
 
+  /**
+   * Check for the possible rotations of the parcel for the given coordinates.
+   *
+   */
+   public boolean tryRotations(Parcel parcel, int i, int j, int k) {
+     Parcel buffer = parcel.clone();
+     //No rotation
+     if(canFit(buffer, i, j, k)) { //x y z
+       return true;
+     }
+     rotateX(buffer);
+     if(canFit(buffer, i, j, k)) { //x z y
+       parcel = buffer.clone();
+       return true;
+     }
 
+     buffer = parcel.clone();
+     rotateY(buffer);
+     if(canFit(buffer, i, j, k)) { //z y x
+       parcel = buffer.clone();
+       return true;
+     }
+     rotateX(buffer);
+     if(canFit(buffer, i, j, k)) { //z x y
+       parcel = buffer.clone();
+       return true;
+     }
+
+     buffer = parcel.clone();
+     rotateZ(buffer);
+     if(canFit(buffer, i, j, k)) { //y x z
+       parcel = buffer.clone();
+       return true;
+     }
+     rotateX(buffer);
+     if(canFit(buffer, i, j, k)) { //y z x
+       parcel = buffer.clone();
+       return true;
+     }
+
+     return false;
+   }
 
   /**
    * Rotates the given parcel around the x axis by 90° degrees.
