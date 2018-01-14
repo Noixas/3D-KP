@@ -11,7 +11,6 @@ public class GreedyAlgorithm extends Algorithm {
   private double[] volumeOrder = new double[3];
   private int[] amountOrder = new int[3];
   private ArrayList<Parcel> parcelList = new ArrayList<Parcel>();
-  private int index = 0;
 
   private Container container = new Container();
   private Vector3D containerSize = container.getSize();
@@ -22,8 +21,14 @@ public class GreedyAlgorithm extends Algorithm {
    */
   public void Start() {
     makeLists();
+    printArray(parcelOrder);
+    printArray(volumeOrder);
+    printArray(amountOrder);
     System.out.println("lists made");
     orderLists();
+    printArray(parcelOrder);
+    printArray(volumeOrder);
+    printArray(amountOrder);
     System.out.println("lists order");
     makeParcelList();
     System.out.println("parcels in arraylist");
@@ -142,7 +147,7 @@ public class GreedyAlgorithm extends Algorithm {
     return xEdge && yEdge && zEdge;
   }
 
-  
+
 
   /**
    * Rotates the given parcel around the x axis by 90° degrees.
@@ -191,13 +196,16 @@ public class GreedyAlgorithm extends Algorithm {
    * Orders the 3 lists by the volume of the parcels(biggest to smalles).
    */
   public void orderLists() {
+    System.out.println("called");
     boolean hasChanged = true;
     double volumeBuffer;
     Parcel parcelBuffer;
     int amountBuffer;
     while(hasChanged) {
+      System.out.println("loop started");
       hasChanged = false;
-      for(int i=0;i<index;i++) {
+      System.out.println("hasChanged set to false");
+      for(int i=0; i<volumeOrder.length-1; i++) {
         if(volumeOrder[i]<volumeOrder[i+1]) {
           //Volume list ordering
           volumeBuffer = volumeOrder[i];
@@ -215,6 +223,7 @@ public class GreedyAlgorithm extends Algorithm {
           amountOrder[i+1] = amountBuffer;
 
           hasChanged = true;
+          System.out.println("Has changed");
         }
       }
     }
@@ -231,8 +240,28 @@ public class GreedyAlgorithm extends Algorithm {
     }
   }
 
-
   public int arrayIndex(double number) {
     return (int)(number*2);
+  }
+
+
+
+//logging
+  public void printArray(double[] ar) {
+    for(int i = 0; i<ar.length; i++) {
+      System.out.println(ar[i]);
+    }
+  }
+
+  public void printArray(Parcel[] ar) {
+    for(int i = 0; i<ar.length; i++) {
+      System.out.println(ar[i].getClass());
+    }
+  }
+
+  public void printArray(int[] ar) {
+    for(int i = 0; i<ar.length; i++) {
+      System.out.println(ar[i]);
+    }
   }
 }
