@@ -1,9 +1,9 @@
 import java.util.*;
 
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 5;
-  private int amountB = 8;
-  private int amountC = 10;
+  private int amountA = 22;
+  private int amountB = 22;
+  private int amountC = 22;
   private double VolA;
   private double VolB;
   private double VolC;
@@ -65,7 +65,7 @@ public class GreedyAlgorithm extends Algorithm {
       for(int j=arrayIndex(pos.y); j<arrayIndex(size.y) + arrayIndex(pos.y); j++) {
         for(int k=arrayIndex(pos.z); k<arrayIndex(size.z) + arrayIndex(pos.z); k++) {
           containerSpace[i][j][k] = parcel;
-          System.out.println("placed" + a++);
+          System.out.println("placed at " + i + ", " + j + ", " + k);
         }
       }
     }
@@ -84,9 +84,6 @@ public class GreedyAlgorithm extends Algorithm {
             System.out.println("(" + i + ", " + j + ", " + k + ") is empty");
             if(isCorner(posIndex)) {
               if(tryRotations(parcel, posIndex)) {
-                System.out.println("i: " + i);
-                System.out.println("j: " + j);
-                System.out.println("k: " + k);
                 parcel.setPosition(new Vector3D((double)posIndex.x/2, (double)posIndex.y/2, (double)posIndex.z/2));
                 return true;
               }
@@ -128,10 +125,20 @@ public class GreedyAlgorithm extends Algorithm {
     int xIndex = (int)posIndex.x;
     int yIndex = (int)posIndex.y;
     int zIndex = (int)posIndex.z;
-    if((xIndex+arrayIndex(size.x))<=arrayIndex(containerSize.x) && (yIndex+arrayIndex(size.y))<=arrayIndex(containerSize.y) && (xIndex+arrayIndex(size.z))<=arrayIndex(containerSize.z)) {
+    /*if(xIndex+arrayIndex(size.x)<=arrayIndex(containerSize.x)) {
+      System.out.println("can fit in x");
+    }
+    if(yIndex+arrayIndex(size.y)<=arrayIndex(containerSize.y)) {
+      System.out.println("can fit in y");
+    }
+    if(zIndex+arrayIndex(size.z)<=arrayIndex(containerSize.z)) {
+      System.out.println("can fit in z");
+    }*/
+    if(xIndex+arrayIndex(size.x)<=arrayIndex(containerSize.x) && yIndex+arrayIndex(size.y)<=arrayIndex(containerSize.y) && zIndex+arrayIndex(size.z)<=arrayIndex(containerSize.z)) {
+      System.out.println("parcel can fit in container dimensions");
       for(int m=xIndex; m < xIndex+arrayIndex(size.x); m++) {
         for(int n=yIndex; n < yIndex+arrayIndex(size.y); n++) {
-          for(int o=xIndex; o < zIndex+arrayIndex(size.z); o++) {
+          for(int o=zIndex; o < zIndex+arrayIndex(size.z); o++) {
             if(containerSpace[m][n][o] != null) {
               //System.out.println("can't fit");
               return false;
@@ -220,7 +227,7 @@ public class GreedyAlgorithm extends Algorithm {
        parcel.setSize(buffer.getSize());
        return true;
      }
-     System.out.println("no possible rotation found for corner " + "(" + posIndex.x + ", " + posIndex.y + ", " + posIndex.z + ")");
+     System.out.println("no possible rotation found for corner (" + posIndex.x + ", " + posIndex.y + ", " + posIndex.z + ")");
      return false;
    }
 
@@ -271,7 +278,6 @@ public class GreedyAlgorithm extends Algorithm {
    * Orders the 3 lists by the volume of the parcels(biggest to smalles).
    */
   public void orderLists() {
-    System.out.println("called");
     boolean hasChanged = true;
     double volumeBuffer;
     Parcel parcelBuffer;
