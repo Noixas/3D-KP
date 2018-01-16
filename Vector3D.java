@@ -2,6 +2,7 @@ public class Vector3D implements Comparable<Vector3D> {
   public double x;
   public double y;
   public double z;
+  public static final Vector3D zero = new Vector3D(0,0,0);
   public Vector3D(float x, float y, float z)
   {
     this.x = x;
@@ -69,4 +70,5 @@ public class Vector3D implements Comparable<Vector3D> {
   {
     return "Vector: x: "+ x + " y: " + y + " z: " + z;
   }
+
 }

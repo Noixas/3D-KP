@@ -30,6 +30,7 @@ public class MenuUI {
   private static String chosenAlgorithm;
   private static int errorCheck;
   private static GreedyAlgorithm greedy = new GreedyAlgorithm();
+  private static AlgorithmZ extremePoints = new AlgorithmZ();
 
   public MenuUI(BorderPane root) {
     Pane center = new Pane();
@@ -226,8 +227,14 @@ public class MenuUI {
             greedy.setID(2);
             greedy.Start();
           }
+<<<<<<< HEAD
+          else if(algorithms.getValue() == "Extreme Points") {
+            results.setText("Algorithm B has started calculating the possibilities.");
+=======
           else if(algorithms.getValue() == "Algorithm B") {
+>>>>>>> 45ff030c002f67dfd027dc948db4418c1b9fd77b
             chosenAlgorithm = algorithms.getValue().toString();
+           extremePoints.Start();
           }
           else if(algorithms.getValue() == "Algorithm C") {
             chosenAlgorithm = algorithms.getValue().toString();
