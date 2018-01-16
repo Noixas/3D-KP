@@ -13,6 +13,7 @@ public class CreateParcel {
 	private static Vector3D size;
 	private static Vector3D pos;
 	private static Box box;
+	private static boolean _cleared = false;
 
 	public CreateParcel() {
 		Box xAxis = new Box(500, 3, 3);
@@ -72,7 +73,12 @@ public class CreateParcel {
 
 		//extreme points coordinates need to be added but can only be done
 	}
-
+public static boolean getCleared()
+{
+	boolean result = _cleared; //buffer the result
+	_cleared = false; //auto reset so we can just check for cleared once
+	return result;
+}
 	public static Group getParcels() {
 		return parcelGroup;
 	}
@@ -93,7 +99,7 @@ public class CreateParcel {
 		y.setRotate(90);
 
 		parcelGroup.getChildren().addAll(xAxis, yAxis, zAxis, x, y);
-
+		_cleared = true;
 	}
 
 	public static void removeParcel(Parcel p) {
