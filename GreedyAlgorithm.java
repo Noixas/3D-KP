@@ -7,9 +7,9 @@ import java.util.*;
  * -The value density(value/volume) of the parcels in descending order.
  */
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 20;
-  private int amountB = 20;
-  private int amountC = 20;
+  private int amountA = 31;
+  private int amountB = 19;
+  private int amountC = 13;
   private double VolA;
   private double VolB;
   private double VolC;
@@ -34,8 +34,7 @@ public class GreedyAlgorithm extends Algorithm {
     orderLists();
     makeParcelList();
     for(Parcel p : parcelList) {
-      int lol = parcelList.indexOf(p);
-      System.out.println(parcelList.get(lol).getClass());
+      System.out.println("the current parcel is: " + p.getClass());
       if(parcelFits || !(p.getClass().equals(parcelList.get(parcelList.indexOf(p)-1).getClass()))) {
         if(placeable(p)) {
           placeInArray(p);
@@ -49,7 +48,7 @@ public class GreedyAlgorithm extends Algorithm {
     makeParcelSolutionArray();
     display();
     System.out.println("done");
-    System.out.println("Empty space: " + countEmptySpaces() + " meters cubed");
+    System.out.println("Empty space: " + countEmptySpaces() + " metres cubed");
   }
 
 
@@ -104,7 +103,14 @@ public class GreedyAlgorithm extends Algorithm {
               }
             } /*else if(isNextTo(posIndex, false, false, true)) {
               if(tryRotations(parcel, posIndex)) {
-                parcel.setPosition(new Vector3D((double)posIndex.x/2, (double)posIndex.y/2, (double)posIndex.z/2));
+                parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
+                parcelFits = true;
+                return true;
+              }
+            }
+            else if(isNextTo(posIndex, false, false, false)) {
+              if(tryRotations(parcel, posIndex)) {
+                parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
                 parcelFits = true;
                 return true;
               }
@@ -127,7 +133,9 @@ public class GreedyAlgorithm extends Algorithm {
     int xIndex = (int)posIndex.x;
     int yIndex = (int)posIndex.y;
     int zIndex = (int)posIndex.z;
-    if(xIndex+arrayIndex(size.x)<=arrayIndex(containerSize.x) && yIndex+arrayIndex(size.y)<=arrayIndex(containerSize.y) && zIndex+arrayIndex(size.z)<=arrayIndex(containerSize.z)) {
+    if(xIndex+arrayIndex(size.x)<=arrayIndex(containerSize.x) &&
+     yIndex+arrayIndex(size.y)<=arrayIndex(containerSize.y) &&
+     zIndex+arrayIndex(size.z)<=arrayIndex(containerSize.z)) {
       System.out.println("parcel can fit in container dimensions");
       for(int m=xIndex; m < xIndex+arrayIndex(size.x); m++) {
         for(int n=yIndex; n < yIndex+arrayIndex(size.y); n++) {
