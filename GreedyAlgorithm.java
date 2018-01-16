@@ -156,10 +156,14 @@ public class GreedyAlgorithm extends Algorithm {
   /**
    * Checks if the corner point of the parcels is closest to other parcels or one of the sides of the container.
    * @param posIndex The position of the parcel in the array given as a vector.
+<<<<<<< HEAD
    * @param x Whether to check on the x axis
    * @param y Whether to check on the y axis
    * @param z Whether to check on the z axis
    * @return Whether the given coordinates satisfy the given conditions
+=======
+   * @return the
+>>>>>>> 45ff030c002f67dfd027dc948db4418c1b9fd77b
    */
   public boolean isNextTo(Vector3D posIndex, boolean x, boolean y, boolean z) {
     boolean xEdge = true;
@@ -388,5 +392,9 @@ public void makeLists(int id) {
     for(int i = 0; i<ar.length; i++) {
       System.out.println(ar[i]);
     }
+  }
+
+  public void setID(int i) {
+    heuristicID = i;
   }
 }

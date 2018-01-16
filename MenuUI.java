@@ -186,12 +186,14 @@ public class MenuUI {
   public void constructChoices(Pane center) {
     algorithms = new ComboBox();
     algorithms.getItems().addAll(
-      "Greedy Algorithm",
+      "Greedy Volume",
+      "Greedy Density",
+      "Greedy Value",
       "Extreme Points",
       "Algorithm C");
     algorithms.setPrefSize(140, 20);
     algorithms.relocate(50, 50);
-    algorithms.setValue("Greedy Algorithm");
+    algorithms.setValue("Greedy Volume");
     center.getChildren().addAll(algorithms);
   }
 
@@ -209,17 +211,25 @@ public class MenuUI {
           if(algorithms.getValue() == null) {
             results.setText("No algorithm was selected.");
           }
-          else if(algorithms.getValue() == "Greedy Algorithm") {
-            results.setText("Greedy Algorithm has started calculating the possibilities.");
+          else if(algorithms.getValue() == "Greedy Volume") {
             chosenAlgorithm = algorithms.getValue().toString();
+            greedy.setID(1);
+            greedy.Start();
+          }
+          else if(algorithms.getValue() == "Greedy Density") {
+            chosenAlgorithm = algorithms.getValue().toString();
+            greedy.setID(3);
+            greedy.Start();
+          }
+          else if(algorithms.getValue() == "Greedy Value") {
+            chosenAlgorithm = algorithms.getValue().toString();
+            greedy.setID(2);
             greedy.Start();
           }
           else if(algorithms.getValue() == "Algorithm B") {
-            results.setText("Algorithm B has started calculating the possibilities.");
             chosenAlgorithm = algorithms.getValue().toString();
           }
           else if(algorithms.getValue() == "Algorithm C") {
-            results.setText("Algorithm C has started calculating the possibilities.");
             chosenAlgorithm = algorithms.getValue().toString();
           }
         }
