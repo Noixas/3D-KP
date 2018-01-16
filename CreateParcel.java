@@ -44,7 +44,7 @@ public class CreateParcel {
 		size = p.getSize();
 		pos = p.getPosition();
 		box = new Box(size.x * 40, size.y * 40, size.z * 40);
-		if(p instanceof ParcelA) {
+		/*if(p instanceof ParcelA) {
 			box.setMaterial(getColor(Color.RED));
 		} else if(p instanceof ParcelA) {
 			box.setMaterial(getColor(Color.BLUE));
@@ -52,7 +52,8 @@ public class CreateParcel {
 			box.setMaterial(getColor(Color.GREEN));
 		} else {
 			box.setMaterial(getColor(Color.PINK));
-		}
+		}*/
+		box.setMaterial(getColor(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), .99)));
 		box.setTranslateX((pos.x + size.x/2)* 40);
 		box.setTranslateY((pos.y + size.y/2)* 40);
 		box.setTranslateZ((pos.z + size.z/2)* 40);
