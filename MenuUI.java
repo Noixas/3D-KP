@@ -243,6 +243,16 @@ public class MenuUI {
       }
     });
 
+    Button display = new Button();
+    display.setText("Display solution");
+    display.setPrefSize(140, 20);
+    display.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent display) {
+
+      }
+    });
+
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
     viewCargo.setPrefSize(140, 20);
@@ -283,7 +293,7 @@ public class MenuUI {
       }
     });
 
-    center.getChildren().addAll(calcButton, viewCargo, printResult, resetWorld);
+    center.getChildren().addAll(calcButton, viewCargo, printResult, resetWorld, display);
   }
 
   public void constructResultField(Pane center) {

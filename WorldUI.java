@@ -1,9 +1,13 @@
+import javafx.event.EventHandler;
 import javafx.geometry.Point3D;
+import javafx.scene.control.Label;
 import javafx.scene.DepthTest;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.PickResult;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -17,65 +21,85 @@ import java.util.ArrayList;
 
 public class WorldUI {
 
-    final XformWorld world = new XformWorld();
-    final PerspectiveCamera camera = new PerspectiveCamera(true);
-    final XformCamera cameraXform = new XformCamera();
-    final CreateParcel parcels = new CreateParcel();
-    private static final double CAMERA_INITIAL_DISTANCE = -2000;
-    private static final double CAMERA_NEAR_CLIP = 0.1;
-    private static final double CAMERA_FAR_CLIP = 10000.0;
-    double mousePosX, mousePosY, mouseOldX, mouseOldY, mouseDeltaX, mouseDeltaY;
-    double mouseFactorX, mouseFactorY;
+  final XformWorld world = new XformWorld();
+  final PerspectiveCamera camera = new PerspectiveCamera(true);
+  final XformCamera cameraXform = new XformCamera();
+  final CreateParcel parcels = new CreateParcel();
+  private static final double CAMERA_INITIAL_DISTANCE = -2000;
+  private static final double CAMERA_NEAR_CLIP = 0.1;
+  private static final double CAMERA_FAR_CLIP = 10000.0;
+  double mousePosX, mousePosY, mouseOldX, mouseOldY, mouseDeltaX, mouseDeltaY;
+  double mouseFactorX, mouseFactorY;
+  private static double xCoord;
+  private static double yCoord;
+  private static double zCoord;
 
   public WorldUI(Group worldGroup) {
-        worldGroup.getChildren().add(world);
-        worldGroup.setDepthTest(DepthTest.ENABLE);
-        buildCamera(worldGroup);
-        buildBodySystem();
-        handleMouse(SceneManager.getScene());
-        SceneManager.getScene().setCamera(camera);
-        mouseFactorX = 180.0 / SceneManager.getSceneWidth();
-        mouseFactorY = 180.0 / SceneManager.getSceneHeight();
+    //createInfo();
+    worldGroup.getChildren().add(world);
+    worldGroup.setDepthTest(DepthTest.ENABLE);
+    buildCamera(worldGroup);
+    buildBodySystem();
+    handleMouse(SceneManager.getScene());
+    SceneManager.getScene().setCamera(camera);
+    mouseFactorX = 180.0 / SceneManager.getSceneWidth();
+    mouseFactorY = 180.0 / SceneManager.getSceneHeight();
   }
 
   private void buildCamera(Group worldGroup) {
-        worldGroup.getChildren().add(cameraXform);
-        cameraXform.getChildren().add(camera);
-        camera.setNearClip(CAMERA_NEAR_CLIP);
-        camera.setFarClip(CAMERA_FAR_CLIP);
-        camera.setTranslateZ(CAMERA_INITIAL_DISTANCE);
-    }
+    worldGroup.getChildren().add(cameraXform);
+    cameraXform.getChildren().add(camera);
+    camera.setNearClip(CAMERA_NEAR_CLIP);
+    camera.setFarClip(CAMERA_FAR_CLIP);
+    camera.setTranslateZ(CAMERA_INITIAL_DISTANCE);
+  }
+
+  private void createInfo() {
+    Label testLabel = new Label("TestLabel");
+    world.getChildren().addAll(testLabel);
+  }
 
   private void buildBodySystem() {
-        //parcels.createParcel(new Parcel(new Vector3D(100, 100, 100), 5));
-        Group parcelGroup = parcels.getParcels();
+    Group parcelGroup = parcels.getParcels();
 
-        world.getChildren().addAll(parcelGroup);
-    }
+    parcelGroup.setTranslateX(-1*CreateParcel.getContainerWidth()/2);
+    parcelGroup.setTranslateY(-1*CreateParcel.getContainerHeight()/2);
+    parcelGroup.setTranslateZ(-1*CreateParcel.getContainerDepth()/2);
+    world.getChildren().addAll(parcelGroup);
+  }
 
   private void handleMouse(Scene scene) {
-        scene.setOnMousePressed((MouseEvent me) -> {
-            mousePosX = me.getSceneX();
-            mousePosY = me.getSceneY();
-            mouseOldX = me.getSceneX();
-            mouseOldY = me.getSceneY();
-        });
-        scene.setOnMouseDragged((MouseEvent me) -> {
-            mouseOldX = mousePosX;
-            mouseOldY = mousePosY;
-            mousePosX = me.getSceneX();
-            mousePosY = me.getSceneY();
-            mouseDeltaX = (mousePosX - mouseOldX);
-            mouseDeltaY = (mousePosY - mouseOldY);
-            if (me.isPrimaryButtonDown()) {
-                cameraXform.ry(mouseDeltaX * 180.0 / scene.getWidth());
-                cameraXform.rx(-mouseDeltaY * 180.0 / scene.getHeight());
-            } else if (me.isSecondaryButtonDown()) {
-                camera.setTranslateZ(camera.getTranslateZ() + mouseDeltaY);
-            }
-        });
-    }
+    scene.setOnMousePressed((MouseEvent me) -> {
+      mousePosX = me.getSceneX();
+      mousePosY = me.getSceneY();
+      mouseOldX = me.getSceneX();
+      mouseOldY = me.getSceneY();
+      try {
+        PickResult result = me.getPickResult();
+        Node testNode = result.getIntersectedNode();
+        xCoord = testNode.getTranslateX();
+        yCoord = testNode.getTranslateZ();
+        zCoord = testNode.getTranslateZ();
+      }
+      catch(NullPointerException e) {}
+    });
 
+    scene.setOnMouseDragged((MouseEvent me) -> {
+      mouseOldX = mousePosX;
+      mouseOldY = mousePosY;
+      mousePosX = me.getSceneX();
+      mousePosY = me.getSceneY();
+      mouseDeltaX = (mousePosX - mouseOldX);
+      mouseDeltaY = (mousePosY - mouseOldY);
+      if (me.isPrimaryButtonDown()) {
+        cameraXform.ry(mouseDeltaX * 180.0 / scene.getWidth());
+        cameraXform.rx(-mouseDeltaY * 180.0 / scene.getHeight());
+      }
+      else if (me.isSecondaryButtonDown()) {
+        camera.setTranslateZ(camera.getTranslateZ() + mouseDeltaY);
+      }
+    });
+  }
 }
 
 class XformWorld extends Group {

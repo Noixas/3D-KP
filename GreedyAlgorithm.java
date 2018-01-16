@@ -7,9 +7,9 @@ import java.util.*;
  * -The value density(value/volume) of the parcels in descending order.
  */
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 0;
-  private int amountB = 100;
-  private int amountC = 0;
+  private int amountA = 31;
+  private int amountB = 19;
+  private int amountC = 13;
   private double VolA;
   private double VolB;
   private double VolC;
@@ -34,11 +34,9 @@ public class GreedyAlgorithm extends Algorithm {
     orderLists();
     makeParcelList();
     for(Parcel p : parcelList) {
-      int lol = parcelList.indexOf(p);
-      System.out.println(parcelList.get(lol).getClass());
+      System.out.println("the current parcel is: " + p.getClass());
       if(parcelFits || !(p.getClass().equals(parcelList.get(parcelList.indexOf(p)-1).getClass()))) {
         if(placeable(p)) {
-          CreateParcel.createParcel(p);
           placeInArray(p);
           System.out.println(p.toString());
         }
@@ -48,11 +46,11 @@ public class GreedyAlgorithm extends Algorithm {
     parcelFits = true;
     solution.endSolution(System.currentTimeMillis());
     makeParcelSolutionArray();
+    display();
     System.out.println("done");
-    System.out.println("Empty space: " + countEmptySpaces() + " meters cubed");
+    System.out.println("Empty space: " + countEmptySpaces() + " metres cubed");
   }
 
-public void display(){}
   /**
    * Places references to the parcel object in the 3D array which rapresents the container.
    * @param parcel the parcel that is getting placed in the container.
@@ -92,19 +90,26 @@ public void display(){}
             //System.out.println("(" + i + ", " + j + ", " + k + ") is empty");
             if(isNextTo(posIndex, true, true, true)) {
               if(tryRotations(parcel, posIndex)) {
-                parcel.setPosition(new Vector3D((double)posIndex.x/2, (double)posIndex.y/2, (double)posIndex.z/2));
+                parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
                 parcelFits = true;
                 return true;
               }
             }else if(isNextTo(posIndex, false, true, true)) {
               if(tryRotations(parcel, posIndex)) {
-                parcel.setPosition(new Vector3D((double)posIndex.x/2, (double)posIndex.y/2, (double)posIndex.z/2));
+                parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
                 parcelFits = true;
                 return true;
               }
             } /*else if(isNextTo(posIndex, false, false, true)) {
               if(tryRotations(parcel, posIndex)) {
-                parcel.setPosition(new Vector3D((double)posIndex.x/2, (double)posIndex.y/2, (double)posIndex.z/2));
+                parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
+                parcelFits = true;
+                return true;
+              }
+            }
+            else if(isNextTo(posIndex, false, false, false)) {
+              if(tryRotations(parcel, posIndex)) {
+                parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
                 parcelFits = true;
                 return true;
               }
@@ -127,7 +132,9 @@ public void display(){}
     int xIndex = (int)posIndex.x;
     int yIndex = (int)posIndex.y;
     int zIndex = (int)posIndex.z;
-    if(xIndex+arrayIndex(size.x)<=arrayIndex(containerSize.x) && yIndex+arrayIndex(size.y)<=arrayIndex(containerSize.y) && zIndex+arrayIndex(size.z)<=arrayIndex(containerSize.z)) {
+    if(xIndex+arrayIndex(size.x)<=arrayIndex(containerSize.x) &&
+     yIndex+arrayIndex(size.y)<=arrayIndex(containerSize.y) &&
+     zIndex+arrayIndex(size.z)<=arrayIndex(containerSize.z)) {
       System.out.println("parcel can fit in container dimensions");
       for(int m=xIndex; m < xIndex+arrayIndex(size.x); m++) {
         for(int n=yIndex; n < yIndex+arrayIndex(size.y); n++) {
@@ -345,8 +352,8 @@ public void makeLists(int id) {
    * @param number The number that needs to be converted into an array index.
    * @return The number converted into an array index.
    */
-  public double vectorValue(int number) {
-    return (double)number/scalingFactor;
+  public double vectorValue(double number) {
+    return number/(double)scalingFactor;
   }
 
   public double countEmptySpaces() {
@@ -373,6 +380,12 @@ public void makeLists(int id) {
 
   public void setID(int i) {
     heuristicID = i;
+  }
+
+  public void display() {
+    for(int p=0; p<solution.getLength(); p++) {
+      CreateParcel.createParcel(solution.get(p));
+    }
   }
 
 
