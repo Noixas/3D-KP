@@ -70,11 +70,14 @@ public class WorldUI {
       mousePosY = me.getSceneY();
       mouseOldX = me.getSceneX();
       mouseOldY = me.getSceneY();
-      PickResult result = me.getPickResult();
-      Node testNode = result.getIntersectedNode();
-      xCoord = testNode.getTranslateX();
-      yCoord = testNode.getTranslateZ();
-      zCoord = testNode.getTranslateZ();
+      try {
+        PickResult result = me.getPickResult();
+        Node testNode = result.getIntersectedNode();
+        xCoord = testNode.getTranslateX();
+        yCoord = testNode.getTranslateZ();
+        zCoord = testNode.getTranslateZ();
+      }
+      catch(NullPointerException e) {}
     });
 
     scene.setOnMouseDragged((MouseEvent me) -> {
