@@ -7,9 +7,9 @@ import java.util.*;
  * -The value density(value/volume) of the parcels in descending order.
  */
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 22;
-  private int amountB = 22;
-  private int amountC = 22;
+  private int amountA = 50;
+  private int amountB = 13;
+  private int amountC = 10;
   private double VolA;
   private double VolB;
   private double VolC;
@@ -17,9 +17,8 @@ public class GreedyAlgorithm extends Algorithm {
   private double[] heuristicOrder = new double[3];
   private int[] amountOrder = new int[3];
   private ArrayList<Parcel> parcelList = new ArrayList<Parcel>();
+  private int scalingFactor = 2;
   private boolean parcelFits = true;
-  private int heuristicID = 2;
-
   private Container container = new Container();
   private Vector3D containerSize = container.getSize();
   private Parcel[][][] containerSpace = new Parcel[arrayIndex(containerSize.x)][arrayIndex(containerSize.y)][arrayIndex(containerSize.z)];
@@ -28,23 +27,22 @@ public class GreedyAlgorithm extends Algorithm {
    * Start computing solution separated from constructor to be able to configure it with the UI
    */
   public void Start() {
-    makeLists(heuristicID);
+    makeLists(1);
     System.out.println("Starting order:");
     printArray(parcelOrder);
     printArray(heuristicOrder);
     printArray(amountOrder);
     System.out.println("lists made");
     orderLists();
+    System.out.println("Sorted order:");
     printArray(parcelOrder);
     printArray(heuristicOrder);
     printArray(amountOrder);
     System.out.println("lists order");
     makeParcelList();
     System.out.println("parcels in arraylist");
-
     for(Parcel p : parcelList) {
       int lol = parcelList.indexOf(p);
-
       System.out.println(parcelList.get(lol).getClass());
       if(parcelFits || !(p.getClass().equals(parcelList.get(parcelList.indexOf(p)-1).getClass()))) {
         if(placeable(p)) {
@@ -54,11 +52,11 @@ public class GreedyAlgorithm extends Algorithm {
           System.out.println(p.toString());
         } else {System.out.println("not placed");}
       }
-
     }
     _done = true;
     parcelFits = true;
     System.out.println("done");
+    System.out.println("Empty space: " + countEmptySpaces() + " meters cubed");
   }
 
 
@@ -69,7 +67,6 @@ public class GreedyAlgorithm extends Algorithm {
   public void placeInArray(Parcel parcel) {
     Vector3D size = parcel.getSize();
     Vector3D pos = parcel.getPosition();
-    int a =1; //logging
     System.out.println("position:");
     System.out.println(arrayIndex(pos.x));
     System.out.println(arrayIndex(pos.y));
@@ -100,13 +97,25 @@ public class GreedyAlgorithm extends Algorithm {
           Vector3D posIndex = new Vector3D(i, j, k);
           if(containerSpace[i][j][k] == null) {
             System.out.println("(" + i + ", " + j + ", " + k + ") is empty");
-            if(isCorner(posIndex)) {
+            if(isNextTo(posIndex, true, true, true)) {
               if(tryRotations(parcel, posIndex)) {
                 parcel.setPosition(new Vector3D((double)posIndex.x/2, (double)posIndex.y/2, (double)posIndex.z/2));
                 parcelFits = true;
                 return true;
               }
-            }
+            }else if(isNextTo(posIndex, false, true, true)) {
+              if(tryRotations(parcel, posIndex)) {
+                parcel.setPosition(new Vector3D((double)posIndex.x/2, (double)posIndex.y/2, (double)posIndex.z/2));
+                parcelFits = true;
+                return true;
+              }
+            } /*else if(isNextTo(posIndex, false, false, true)) {
+              if(tryRotations(parcel, posIndex)) {
+                parcel.setPosition(new Vector3D((double)posIndex.x/2, (double)posIndex.y/2, (double)posIndex.z/2));
+                parcelFits = true;
+                return true;
+              }
+            }*/
           } else {System.out.println("(" + i + ", " + j + ", " + k + ") is not empty");}
         }
       }
@@ -145,11 +154,14 @@ public class GreedyAlgorithm extends Algorithm {
   }
 
   /**
-   * Helper method which checks if the corner point of the parcels is closest to other parcels or one of the sides of the container.
+   * Checks if the corner point of the parcels is closest to other parcels or one of the sides of the container.
    * @param posIndex The position of the parcel in the array given as a vector.
-   * @return the 
+   * @param x Whether to check on the x axis
+   * @param y Whether to check on the y axis
+   * @param z Whether to check on the z axis
+   * @return Whether the given coordinates satisfy the given conditions
    */
-  public boolean isCorner(Vector3D posIndex) {
+  public boolean isNextTo(Vector3D posIndex, boolean x, boolean y, boolean z) {
     boolean xEdge = true;
     boolean yEdge = true;
     boolean zEdge = true;
@@ -157,17 +169,18 @@ public class GreedyAlgorithm extends Algorithm {
     int yIndex = (int)posIndex.y;
     int zIndex = (int)posIndex.z;
 
-    if(xIndex != 0) {
+    if(x && xIndex != 0) {
       if(containerSpace[xIndex-1][yIndex][zIndex] == null) {
         xEdge = false;
       }
     }
-    if(yIndex != 0) {
+
+    if(y && yIndex != 0) {
       if(containerSpace[xIndex][yIndex-1][zIndex] == null) {
         yEdge = false;
       }
     }
-    if(zIndex != 0) {
+    if(z && zIndex != 0) {
       if(containerSpace[xIndex][yIndex][zIndex-1] == null) {
         zEdge = false;
       }
@@ -184,7 +197,7 @@ public class GreedyAlgorithm extends Algorithm {
    * Check for the possible rotations of the parcel for the given coordinates.
    * @param parcel The parcel to rotate.
    * @param posIndex The position the parcel given as a vector.
-   * @return Either true or false
+   * @return Either true or false depending if a possible rotation can fit in the container.
    */
    public boolean tryRotations(Parcel parcel, Vector3D posIndex) {
      Parcel buffer = parcel.clone();
@@ -255,7 +268,7 @@ public void makeLists(int id) {
   }
 
   /**
-   * Orders the 3 lists by the given heuristic of the parcels(biggest to smallest).
+   * Orders the 3 lists by the given heuristic of the parcels.
    */
   public void orderLists() {
     boolean hasChanged = true;
@@ -263,12 +276,10 @@ public void makeLists(int id) {
     Parcel parcelBuffer;
     int amountBuffer;
     while(hasChanged) {
-      System.out.println("loop started");
       hasChanged = false;
-      System.out.println("hasChanged set to false");
       for(int i=0; i<heuristicOrder.length-1; i++) {
         if(heuristicOrder[i]<heuristicOrder[i+1]) {
-          //heuristic list ordering
+          //Heuristic list ordering
           heuristicBuffer = heuristicOrder[i];
           heuristicOrder[i] = heuristicOrder[i+1];
           heuristicOrder[i+1] = heuristicBuffer;
@@ -284,7 +295,6 @@ public void makeLists(int id) {
           amountOrder[i+1] = amountBuffer;
 
           hasChanged = true;
-          System.out.println("Has changed");
         }
       }
     }
@@ -334,7 +344,7 @@ public void makeLists(int id) {
    * @return The number converted into an array index.
    */
   public int arrayIndex(double number) {
-    return (int)(number*2);
+    return (int)(number*scalingFactor);
   }
 
   /**
@@ -343,9 +353,22 @@ public void makeLists(int id) {
    * @return The number converted into an array index.
    */
   public double vectorValue(int number) {
-    return (double)number/2;
+    return (double)number/scalingFactor;
   }
 
+  public double countEmptySpaces() {
+    double count = 0;
+    for(int i=0; i < containerSpace.length;i++) {
+      for(int j=0; j < containerSpace[0].length; j++) {
+        for(int k=0; k < containerSpace[0][0].length; k++) {
+          if(containerSpace[i][j][k] == null) {
+            count++;
+          }
+        }
+      }
+    }
+    return count/4;
+  }
 
 
 //logging
