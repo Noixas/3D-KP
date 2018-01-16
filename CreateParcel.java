@@ -29,66 +29,70 @@ public class CreateParcel {
 		Text y = new Text (-15, 230, "Y axis ->");
 		y.setRotate(90);
 
-		Box boxOutline = new Box(650, 3, 3);
+		int width = 650;
+		int height = 100;
+		int depth = 160;
+
+		Box boxOutline = new Box(width, 3, 3);
 		boxOutline.setMaterial(getColor(Color.BLACK));
-		boxOutline.setTranslateX(325);
+		boxOutline.setTranslateX(0.5*width);
 
-		Box boxOutline1 = new Box(650, 3, 3);
+		Box boxOutline1 = new Box(width, 3, 3);
 		boxOutline1.setMaterial(getColor(Color.BLACK));
-		boxOutline1.setTranslateX(325);
-		boxOutline1.setTranslateY(100);
+		boxOutline1.setTranslateX(0.5*width);
+		boxOutline1.setTranslateY(height);
 
-		Box boxOutline2 = new Box(650, 3, 3);
+		Box boxOutline2 = new Box(width, 3, 3);
 		boxOutline2.setMaterial(getColor(Color.BLACK));
-		boxOutline2.setTranslateX(325);
-		boxOutline2.setTranslateY(100);
-		boxOutline2.setTranslateZ(160);
+		boxOutline2.setTranslateX(0.5*width);
+		boxOutline2.setTranslateY(height);
+		boxOutline2.setTranslateZ(depth);
 
 
-		Box boxOutline3 = new Box(650, 3, 3);
+		Box boxOutline3 = new Box(width, 3, 3);
 		boxOutline3.setMaterial(getColor(Color.BLACK));
-		boxOutline3.setTranslateX(325);
-		boxOutline3.setTranslateZ(160);
+		boxOutline3.setTranslateX(0.5*width);
+		boxOutline3.setTranslateZ(depth);
 
-		Box boxOutline4 = new Box(3, 100, 3);
-		boxOutline4.setTranslateY(50);
+		Box boxOutline4 = new Box(3, height, 3);
+		boxOutline4.setTranslateY(0.5*height);
 		boxOutline4.setMaterial(getColor(Color.BLACK));
 
-		Box boxOutline5 = new Box(3, 100, 3);
+		Box boxOutline5 = new Box(3, height, 3);
 		boxOutline5.setMaterial(getColor(Color.BLACK));
-		boxOutline5.setTranslateY(50);
-		boxOutline5.setTranslateZ(160);
+		boxOutline5.setTranslateY(0.5*height);
+		boxOutline5.setTranslateZ(depth);
 
-		Box boxOutline7 = new Box(3, 100, 3);
+		Box boxOutline7 = new Box(3, height, 3);
 		boxOutline7.setMaterial(getColor(Color.BLACK));
-		boxOutline7.setTranslateY(50);
-		boxOutline7.setTranslateZ(160);
-		boxOutline7.setTranslateX(650);
+		boxOutline7.setTranslateY(0.5*height);
+		boxOutline7.setTranslateZ(depth);
+		boxOutline7.setTranslateX(width);
 
-		Box boxOutline8 = new Box(3, 100, 3);
+		Box boxOutline8 = new Box(3, height, 3);
 		boxOutline8.setMaterial(getColor(Color.BLACK));
-		boxOutline8.setTranslateY(50);
-		boxOutline8.setTranslateX(650);
+		boxOutline8.setTranslateY(0.5*height);
+		boxOutline8.setTranslateX(width);
 
-		Box boxOutline6 = new Box(3, 3, 160);
+		Box boxOutline6 = new Box(3, 3, depth);
 		boxOutline6.setMaterial(getColor(Color.BLACK));
-		boxOutline6.setTranslateZ(80);
+		boxOutline6.setTranslateZ(0.5*depth);
 
-		Box boxOutline9 = new Box(3, 3, 160);
+		Box boxOutline9 = new Box(3, 3, depth);
 		boxOutline9.setMaterial(getColor(Color.BLACK));
-		boxOutline9.setTranslateZ(80);
-		boxOutline9.setTranslateY(100);
+		boxOutline9.setTranslateZ(0.5*depth);
+		boxOutline9.setTranslateY(height);
 
-		Box boxOutline10 = new Box(3, 3, 160);
+		Box boxOutline10 = new Box(3, 3, depth);
 		boxOutline10.setMaterial(getColor(Color.BLACK));
-		boxOutline10.setTranslateZ(80);
-		boxOutline10.setTranslateX(650);
+		boxOutline10.setTranslateZ(0.5*depth);
+		boxOutline10.setTranslateX(width);
 
-		Box boxOutline11 = new Box(3, 3, 160);
+		Box boxOutline11 = new Box(3, 3, depth);
 		boxOutline11.setMaterial(getColor(Color.BLACK));
-		boxOutline11.setTranslateZ(80);
-		boxOutline11.setTranslateY(100);
-		boxOutline11.setTranslateX(650);
+		boxOutline11.setTranslateZ(0.5*depth);
+		boxOutline11.setTranslateY(height);
+		boxOutline11.setTranslateX(width);
 
 
 
