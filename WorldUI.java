@@ -21,7 +21,7 @@ public class WorldUI {
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final XformCamera cameraXform = new XformCamera();
     final CreateParcel parcels = new CreateParcel();
-    private static final double CAMERA_INITIAL_DISTANCE = -1200;
+    private static final double CAMERA_INITIAL_DISTANCE = -2000;
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000.0;
     double mousePosX, mousePosY, mouseOldX, mouseOldY, mouseDeltaX, mouseDeltaY;
