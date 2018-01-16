@@ -44,7 +44,15 @@ public class CreateParcel {
 		size = p.getSize();
 		pos = p.getPosition();
 		box = new Box(size.x * 40, size.y * 40, size.z * 40);
-		box.setMaterial(getColor(Color.GREY));
+		if(p instanceof ParcelA) {
+			box.setMaterial(getColor(Color.RED));
+		} else if(p instanceof ParcelA) {
+			box.setMaterial(getColor(Color.BLUE));
+		} else if(p instanceof ParcelA) {
+			box.setMaterial(getColor(Color.GREEN));
+		} else {
+			box.setMaterial(getColor(Color.PINK));
+		}
 		box.setTranslateX((pos.x + size.x/2)* 40);
 		box.setTranslateY((pos.y + size.y/2)* 40);
 		box.setTranslateZ((pos.z + size.z/2)* 40);
