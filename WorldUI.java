@@ -61,6 +61,10 @@ public class WorldUI {
 
   private void buildBodySystem() {
     Group parcelGroup = parcels.getParcels();
+
+    parcelGroup.setTranslateX(-1*CreateParcel.getContainerWidth()/2);
+    parcelGroup.setTranslateY(-1*CreateParcel.getContainerHeight()/2);
+    parcelGroup.setTranslateZ(-1*CreateParcel.getContainerDepth()/2);
     world.getChildren().addAll(parcelGroup);
   }
 
