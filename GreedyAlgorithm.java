@@ -19,6 +19,7 @@ public class GreedyAlgorithm extends Algorithm {
   private ArrayList<Parcel> parcelList = new ArrayList<Parcel>();
   private int scalingFactor = 2;
   private boolean parcelFits = true;
+  private int heuristicID = 1;
   private Container container = new Container();
   private Vector3D containerSize = container.getSize();
   private Parcel[][][] containerSpace = new Parcel[arrayIndex(containerSize.x)][arrayIndex(containerSize.y)][arrayIndex(containerSize.z)];
@@ -27,7 +28,7 @@ public class GreedyAlgorithm extends Algorithm {
    * Start computing solution separated from constructor to be able to configure it with the UI
    */
   public void Start() {
-    makeLists(1);
+    makeLists(heuristicID);
     System.out.println("Starting order:");
     printArray(parcelOrder);
     printArray(heuristicOrder);
