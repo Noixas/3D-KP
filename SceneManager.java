@@ -15,6 +15,7 @@ public class SceneManager {
   public SceneManager(Stage mainStage){
     BorderPane root = new BorderPane();
     Group worldGroup = new Group();
+    BorderPane worldPane = new BorderPane();
     menuScene = new Scene(root, 640, 460);
     worldScene = new Scene(worldGroup, 1220, 980, true);
     worldScene.setFill(Color.WHITE);
@@ -22,6 +23,7 @@ public class SceneManager {
     mainStage.setScene(menuScene);
     MenuUI menu = new MenuUI(root);
     WorldUI world = new WorldUI(worldGroup);
+
 
     menuScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
       public void handle(KeyEvent esc) {
