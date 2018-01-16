@@ -45,7 +45,15 @@ public class Parcel{
    */
   public Parcel clone()
   {
-    return new Parcel(_size.clone(), _value);
+    if(this instanceof ParcelA) {
+      return new ParcelA();
+    } else if(this instanceof ParcelB) {
+      return new ParcelB();
+    } else if(this instanceof ParcelC) {
+      return new ParcelC();
+    } else {
+      return new Parcel(_size.clone(), _value);
+    }
   }
   public String toString() {
     return getClass() + ": [Size = " + getSize() + "] [Position = " + getPosition() + "]";
