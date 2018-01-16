@@ -11,7 +11,7 @@ public class SolutionSet{
     _solution = new LinkedList<Parcel>();
     _value = 0;
   }
-  public void AddParcel(Parcel pParcel)
+  public void addParcel(Parcel pParcel)
   {
     _solution.add(pParcel);
   }

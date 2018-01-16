@@ -5,19 +5,118 @@ public class AlgorithmZ extends Algorithm
 {
   private Container _container;
   private SolutionSet _solution;
-  private List<Vector3D> listEP;
+  private List<Vector3D> _listEP;
+  private boolean _started;
+  private List<Parcel> _baseParcels;
+  private Random rnd;
+  ////////Temporary container boundaries from c#///////////
+    public int xBound = 16;
+    public int yBound = 4;
+    public int zBound = 5;
+  ///////////////////////////////////////
   public AlgorithmZ(){
-    _solution = new SolutionSet(0);
+      rnd = new Random();
+
     _container = new Container();
-    listEP = new LinkedList<Vector3D>();
+    _baseParcels = new LinkedList<Parcel>();
+    _baseParcels.add(new ParcelA());
+    _baseParcels.add(new ParcelB());
+    _baseParcels.add(new ParcelC());
+
+    _started = false;
+    _listEP = new LinkedList<Vector3D>();
+    _solution = new SolutionSet(0);
     //Start();
 
   }
   public void Start(){
     System.out.println("Algorithm Z starting...");
+    createContainerWalls();
+      computeSolution();
 
   }
+  private void createContainerWalls()
+  {
+    int wallsCount = 3;
+    for(int i = 0; i < wallsCount; i++)
+      {
+          Parcel c = new Parcel(new Vector3D(0,0,0), 0);
+          Vector3D pos = Vector3D.getZero();
+          Vector3D size = Vector3D.getZero();
+              switch (i)
+              {
+                  case 0://Negative X
+                    size.y = 100;
+                    size.z = 100;
+                    pos.x = -size.x;
+                      break;
+                  case 1: //Negative Y
+                    size.x = 100;
+                    size.z = 100;
+                    pos.y = -size.y;
+                      break;
+                  case 2://Negative Z
+                    size.x = 100;
+                    size.y = 100;
+                    pos.z = -size.z;
+                      break;
+              }
+              c.setSize(size);
+              c.setPosition(pos);
+              _solution.addParcel(c);
+              CreateParcel.createParcel(c);
+            }
+  }
+private void computeSolution()
+{
 
+
+          if ( _started == false)
+          {
+            //  GameObject newCube = Instantiate(pivot);
+              int s = rnd.nextInt(_baseParcels.size());
+              //   Debug.Log(s);
+            //  newCube.transform.localScale = parcelSize[s];
+              //newCube.transform.position += parcelSize[s] - Vector3D.one;
+              Parcel a = _baseParcels.get(s).clone();
+              a.setPosition(Vector3D.getZero());
+              _listEP.add(new Vector3D(a.getSize().x, 0, 0));
+              _listEP.add(new Vector3D(0, a.getSize().y, 0));
+              _listEP.add(new Vector3D(0, 0, a.getSize().z));
+              //newCube.transform.localPosition = Vector3D.getZero();// + new Vector3D(.5f, .5f, .5f); ;
+              //newCube.transform.localPosition += parcelSize[s];
+              //newCube.transform.localPosition -= Vector3D.one;
+              _solution.addParcel(a);
+              // updateEP(_solution, _listEP, a);
+              _started = true;
+              CreateParcel.createParcel(a);
+          }
+          else
+          {
+              for (int i = 0; i < _listEP.size(); i++)
+              {
+                  if (_listEP.get(i).x + 1 < xBound && _listEP.get(i).y + 1 < yBound && _listEP.get(i).z + 1 < zBound)//container boundaries
+                  {
+                      int s = rnd.nextInt(_baseParcels.size());
+                    //  GameObject newCube = Instantiate(pivot);
+                      Parcel a = _baseParcels.get(s).clone();
+
+                      //newCube.transform.localScale = parcelSize[s];
+                      //newCube.transform.localPosition += parcelSize[s];
+                      //newCube.transform.localPosition -= Vector3D.one;
+                      Vector3D pos = _listEP.get(i);
+                      _listEP.remove(i);
+                      a.setPosition(pos);
+                      //newCube.transform.position = pos;// + new Vector3D(.5f, .5f, .5f); ;
+
+                      updateEP(_solution, _listEP, a);
+                      _solution.addParcel(a);
+                      CreateParcel.createParcel(a);
+                      i = _listEP.size();
+                  }
+              }
+          }
+}
   /**
    * Remove elements that are duplicated in the list
    * @param List<Vector3D> ep [List of current ExtremePoints]
@@ -56,11 +155,11 @@ public class AlgorithmZ extends Algorithm
             Parcel placedParcel = placedParcels.get(i);
             Vector3D placedSize = placedParcel.getSize();
             Vector3D placedPos = placedParcel.getPosition();
-            //TODO; add 6 boxes at the begginning so the points can be projected on the container itself or specifc walls of it (eg. only the base), probably 3 are required since we proyect only towards to the origin
+            //TODO; add 6 Parceles at the begginning so the points can be projected on the container itself or specifc walls of it (eg. only the base), probably 3 are required since we proyect only towards to the origin
 
-            //Idea: check if the y +  hight of the placed box is less or equal than the y of the new box
+            //Idea: check if the y +  hight of the placed Parcel is less or equal than the y of the new Parcel
 
-            //Maybe because the box in unity has pivot in the middle, the x of the box is 50 and not 0
+            //Maybe because the Parcel in unity has pivot in the middle, the x of the Parcel is 50 and not 0
             System.out.println("X of placed Parcel" + placedPos.x);
             //Xy:
             if ((X.x  >= placedPos.x && X.x  < (placedPos.x + placedSize.x)) && (X.z >= placedPos.z && X.z < (placedPos.z + placedSize.z))&&(placedPos.y + placedSize.y > maxBound[0]))
@@ -101,26 +200,31 @@ public class AlgorithmZ extends Algorithm
             }
 
         }
-        //listEP.Clear();
+        //_listEP.Clear();
 
         for (int i = 0; i < newEP.length; i++)
         {
-            if (newEP[i].equals( Vector3D.zero) == false)//We dont want point 0, TODO check if it even give us this case in java Reason first was coded in c unity
+          System.out.println("Length "+newEP.length);
+          System.out.println("i: "+ i);
+          System.out.println("newEP[i]: "+newEP[i]);
+
+
+            if (Vector3D.getZero().equals(newEP[i]) == false && newEP[i] != null)//We dont want point 0, TODO check if it even give us this case in java Reason first was coded in c unity
             {
 
-                listEP.add(newEP[i]);
+                _listEP.add(newEP[i]);
             }
 
         }
-        //listEP = newEP.ToList<Vector3D;
+        //_listEP = newEP.ToList<Vector3D;
         // System.out.println(newEP.length);
         Collections.sort(EP);
         // EP = EP.OrderBy(v => v.x).ToList();
         //EP = EP.OrderBy(v => v.y).ToList();
         //EP = EP.OrderBy(v => v.z).ToList();
         //    EP.Sort();
-        listEP = removeDuplicatedEP(EP);
-     //   System.out.println(listEP.Count);
+        _listEP = removeDuplicatedEP(EP);
+     //   System.out.println(_listEP.Count);
         //DONE; ordering of EP and deleting duplicated
         //Done; can use comparable interface
     }
