@@ -37,7 +37,7 @@ public class SolutionSet{
   {
     return _value;
   }
-  public void EndSolution(double pEndTime)
+  public void endSolution(double pEndTime)
   {
     _endTime = pEndTime;
     _totalTime = _endTime - _startTime;
