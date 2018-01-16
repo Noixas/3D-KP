@@ -13,6 +13,7 @@ public class CreateParcel {
 	private static Vector3D size;
 	private static Vector3D pos;
 	private static Box box;
+	private static boolean _cleared = false;
 
 	public CreateParcel() {
 		Box xAxis = new Box(500, 3, 3);
@@ -106,9 +107,10 @@ public class CreateParcel {
 		//System.out.println(p.getSize());
 		Random rand = new Random();
 		//p.setPosition(new Vector3D(100, 50, 30));
+		int scaleConstant = 40;
 		size = p.getSize();
 		pos = p.getPosition();
-		box = new Box(size.x * 40, size.y * 40, size.z * 40);
+		box = new Box(size.x * scaleConstant, size.y * scaleConstant, size.z * scaleConstant);
 		/*if(p instanceof ParcelA) {
 			box.setMaterial(getColor(Color.RED));
 		} else if(p instanceof ParcelA) {
@@ -119,9 +121,9 @@ public class CreateParcel {
 			box.setMaterial(getColor(Color.PINK));
 		}*/
 		box.setMaterial(getColor(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), .99)));
-		box.setTranslateX((pos.x + size.x/2)* 40);
-		box.setTranslateY((pos.y + size.y/2)* 40);
-		box.setTranslateZ((pos.z + size.z/2)* 40);
+		box.setTranslateX((pos.x + size.x/2)* scaleConstant);
+		box.setTranslateY((pos.y + size.y/2)* scaleConstant);
+		box.setTranslateZ((pos.z + size.z/2)* scaleConstant);
 		parcelGroup.getChildren().addAll(box);
 	}
 
@@ -136,7 +138,12 @@ public class CreateParcel {
 
 		//extreme points coordinates need to be added but can only be done
 	}
-
+public static boolean getCleared()
+{
+	boolean result = _cleared; //buffer the result
+	_cleared = false; //auto reset so we can just check for cleared once
+	return result;
+}
 	public static Group getParcels() {
 		return parcelGroup;
 	}
@@ -157,7 +164,7 @@ public class CreateParcel {
 		y.setRotate(90);
 
 		parcelGroup.getChildren().addAll(xAxis, yAxis, zAxis, x, y);
-
+		_cleared = true;
 	}
 
 	public static void removeParcel(Parcel p) {
