@@ -7,9 +7,9 @@ import java.util.*;
  * -The value density(value/volume) of the parcels in descending order.
  */
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 50;
-  private int amountB = 13;
-  private int amountC = 10;
+  private int amountA = 100;
+  private int amountB = 0;
+  private int amountC = 0;
   private double VolA;
   private double VolB;
   private double VolC;
@@ -23,25 +23,16 @@ public class GreedyAlgorithm extends Algorithm {
   private Container container = new Container();
   private Vector3D containerSize = container.getSize();
   private Parcel[][][] containerSpace = new Parcel[arrayIndex(containerSize.x)][arrayIndex(containerSize.y)][arrayIndex(containerSize.z)];
+  private SolutionSet solution;
 
   /**
    * Start computing solution separated from constructor to be able to configure it with the UI
    */
   public void Start() {
+    solution = new SolutionSet(System.currentTimeMillis());
     makeLists(heuristicID);
-    System.out.println("Starting order:");
-    printArray(parcelOrder);
-    printArray(heuristicOrder);
-    printArray(amountOrder);
-    System.out.println("lists made");
     orderLists();
-    System.out.println("Sorted order:");
-    printArray(parcelOrder);
-    printArray(heuristicOrder);
-    printArray(amountOrder);
-    System.out.println("lists order");
     makeParcelList();
-    System.out.println("parcels in arraylist");
     for(Parcel p : parcelList) {
       int lol = parcelList.indexOf(p);
       System.out.println(parcelList.get(lol).getClass());
@@ -49,13 +40,14 @@ public class GreedyAlgorithm extends Algorithm {
         if(placeable(p)) {
           CreateParcel.createParcel(p);
           placeInArray(p);
-          System.out.println("parcel placed");
           System.out.println(p.toString());
-        } else {System.out.println("not placed");}
+        }
       }
     }
     _done = true;
     parcelFits = true;
+    solution.endSolution(System.currentTimeMillis());
+    makeParcelSolutionArray();
     System.out.println("done");
     System.out.println("Empty space: " + countEmptySpaces() + " meters cubed");
   }
@@ -97,7 +89,7 @@ public class GreedyAlgorithm extends Algorithm {
         for(int k=0; k < containerSpace[0][0].length; k++) {
           Vector3D posIndex = new Vector3D(i, j, k);
           if(containerSpace[i][j][k] == null) {
-            System.out.println("(" + i + ", " + j + ", " + k + ") is empty");
+            //System.out.println("(" + i + ", " + j + ", " + k + ") is empty");
             if(isNextTo(posIndex, true, true, true)) {
               if(tryRotations(parcel, posIndex)) {
                 parcel.setPosition(new Vector3D((double)posIndex.x/2, (double)posIndex.y/2, (double)posIndex.z/2));
@@ -117,7 +109,7 @@ public class GreedyAlgorithm extends Algorithm {
                 return true;
               }
             }*/
-          } else {System.out.println("(" + i + ", " + j + ", " + k + ") is not empty");}
+          } //else {System.out.println("(" + i + ", " + j + ", " + k + ") is not empty");}
         }
       }
     }
@@ -157,14 +149,10 @@ public class GreedyAlgorithm extends Algorithm {
   /**
    * Checks if the corner point of the parcels is closest to other parcels or one of the sides of the container.
    * @param posIndex The position of the parcel in the array given as a vector.
-<<<<<<< HEAD
    * @param x Whether to check on the x axis
    * @param y Whether to check on the y axis
    * @param z Whether to check on the z axis
    * @return Whether the given coordinates satisfy the given conditions
-=======
-   * @return the
->>>>>>> 45ff030c002f67dfd027dc948db4418c1b9fd77b
    */
   public boolean isNextTo(Vector3D posIndex, boolean x, boolean y, boolean z) {
     boolean xEdge = true;
@@ -375,6 +363,18 @@ public void makeLists(int id) {
     return count/4;
   }
 
+  public void makeParcelSolutionArray() {
+    for(Parcel p : parcelList) {
+      if(p.getPosition() != null) {
+        solution.addParcel(p);
+      }
+    }
+  }
+
+  public void setID(int i) {
+    heuristicID = i;
+  }
+
 
 //logging
   public void printArray(double[] ar) {
@@ -393,9 +393,5 @@ public void makeLists(int id) {
     for(int i = 0; i<ar.length; i++) {
       System.out.println(ar[i]);
     }
-  }
-
-  public void setID(int i) {
-    heuristicID = i;
   }
 }
