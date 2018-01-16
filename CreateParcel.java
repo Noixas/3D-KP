@@ -138,6 +138,22 @@ public class CreateParcel {
 
 		//extreme points coordinates need to be added but can only be done
 	}
+	public static void createSphere(Vector3D v) {
+		double x = v.x;
+		double y = v.y;
+		double z = v.z;
+		Sphere sphere = new Sphere(5);
+			int scaleConstant = 40;
+		System.out.println("New sphere created at coord: " + v);
+		sphere.setMaterial(getColor(Color.BLACK));
+		sphere.setTranslateZ((z)*scaleConstant);
+		sphere.setTranslateX((x)*scaleConstant);
+		sphere.setTranslateY((y)*scaleConstant);
+
+		parcelGroup.getChildren().addAll(sphere);
+
+		//extreme points coordinates need to be added but can only be done
+	}
 public static boolean getCleared()
 {
 	boolean result = _cleared; //buffer the result

@@ -10,14 +10,17 @@ public class AlgorithmZ extends Algorithm
   private List<Parcel> _baseParcels;
   private Random rnd;
   ////////Temporary container boundaries from c#///////////
-    public int xBound = 16;
-    public int yBound = 4;
-    public int zBound = 5;
+    public double xBound = 16.5;
+    public double yBound = 2.5;
+    public double zBound = 4;
   ///////////////////////////////////////
   public AlgorithmZ(){
       rnd = new Random();
 
     _container = new Container();
+    xBound = _container.getSize().x;
+    yBound = _container.getSize().y;
+    zBound = _container.getSize().z;
     _baseParcels = new LinkedList<Parcel>();
     _baseParcels.add(new ParcelA());
     _baseParcels.add(new ParcelB());
@@ -32,8 +35,16 @@ public class AlgorithmZ extends Algorithm
   public void Start(){
     System.out.println("Algorithm Z starting...");
     createContainerWalls();
-      computeSolution();
+    computeSolution();
+    displayExtremePoints();
 
+  }
+  public void displayExtremePoints()
+  {
+    for(int i = 0; i < _listEP.size(); i++)
+    {
+      CreateParcel.createSphere(_listEP.get(i));
+    }
   }
   private void createContainerWalls()
   {
@@ -64,9 +75,10 @@ public class AlgorithmZ extends Algorithm
               c.setSize(size);
               c.setPosition(pos);
               _solution.addParcel(c);
-              CreateParcel.createParcel(c);
+            //  CreateParcel.createParcel(c);
             }
   }
+  public void display(){}
 private void computeSolution()
 {
 
@@ -117,24 +129,7 @@ private void computeSolution()
               }
           }
 }
-  /**
-   * Remove elements that are duplicated in the list
-   * @param List<Vector3D> ep [List of current ExtremePoints]
-   */
-  public List<Vector3D> removeDuplicatedEP(List<Vector3D> ep)
-  {//TODO move it to solution set class maybe
-    List<Vector3D> newList = new LinkedList<Vector3D>();
-    newList.add(ep.get(0));
-    ep.remove(0);
-    while(ep.size() != 0)
-    {
-      if(newList.get(0).equals(ep.get(0)) == false)
-          newList.add(ep.get(0));
-      ep.remove(0);
-    }
-    ep = newList;
-    return ep;
-  }
+
 
     public void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newParcel)
     {
@@ -223,12 +218,33 @@ private void computeSolution()
         //EP = EP.OrderBy(v => v.y).ToList();
         //EP = EP.OrderBy(v => v.z).ToList();
         //    EP.Sort();
-        _listEP = removeDuplicatedEP(EP);
+        _listEP = removeDuplicatedEP(EP, newParcel);
+
+
      //   System.out.println(_listEP.Count);
         //DONE; ordering of EP and deleting duplicated
         //Done; can use comparable interface
     }
-    public boolean canTakeProjection(Parcel newParcel, Parcel prevParcel, int axis)
+    /**
+     * Remove elements that are duplicated in the list
+     * @param List<Vector3D> ep [List of current ExtremePoints]
+     */
+    public List<Vector3D> removeDuplicatedEP(List<Vector3D> ep, Parcel p)
+{//TODO move it to solution set class maybe
+      List<Vector3D> newList = new LinkedList<Vector3D>();
+      newList.add(ep.get(0));
+      ep.remove(0);
+      while(ep.size() != 0)
+      {
+        Vector3D v = ep.get(0);
+        if(newList.get(0).equals(v) == false && p.contains(v) == false)//if its not repeated and doesnt overlap a point then add
+            newList.add(v);
+        ep.remove(0);
+      }
+      ep = newList;
+      return ep;
+    }
+public boolean canTakeProjection(Parcel newParcel, Parcel prevParcel, int axis)
 {
     //return true;
     Vector3D newpos = newParcel.getPosition();
@@ -264,4 +280,5 @@ private void computeSolution()
     }
     return false;
 }
+
 }

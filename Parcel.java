@@ -40,6 +40,19 @@ public class Parcel{
     return _densityValue;
   }
   /**
+   * Check if a vector v is inside the parcel
+   * @param  Vector3D v             Vector to be checked
+   * @return          [True if the vector point is inside the parcel]
+   */
+  public boolean contains(Vector3D v)
+  {
+    if(_position.x > v.x || v.x >= _position.x + _size.x) return false;
+    else if(_position.y > v.y || v.y >= _position.y + _size.y) return false;
+    else if(_position.z > v.z || v.z >= _position.z + _size.z) return false;
+    else return true;
+
+  }
+  /**
     Clone Parcel without position parameter
     @return this Parcel clone without position
    */

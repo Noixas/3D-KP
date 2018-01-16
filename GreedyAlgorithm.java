@@ -52,7 +52,7 @@ public class GreedyAlgorithm extends Algorithm {
     System.out.println("Empty space: " + countEmptySpaces() + " meters cubed");
   }
 
-
+public void display(){}
   /**
    * Places references to the parcel object in the 3D array which rapresents the container.
    * @param parcel the parcel that is getting placed in the container.
