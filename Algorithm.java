@@ -25,6 +25,7 @@ public abstract class Algorithm{
   {
     return _solutions;
   }
+  public abstract void display();
   /**
    * Add a solutionSet to the total solution found by this algorithm
    * @param SolutionSet pSolution [the new solution to be added]

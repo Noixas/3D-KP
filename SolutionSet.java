@@ -11,7 +11,7 @@ public class SolutionSet{
     _solution = new LinkedList<Parcel>();
     _value = 0;
   }
-  public void AddParcel(Parcel pParcel)
+  public void addParcel(Parcel pParcel)
   {
     _solution.add(pParcel);
   }
@@ -37,7 +37,7 @@ public class SolutionSet{
   {
     return _value;
   }
-  public void EndSolution(double pEndTime)
+  public void endSolution(double pEndTime)
   {
     _endTime = pEndTime;
     _totalTime = _endTime - _startTime;

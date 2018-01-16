@@ -2,6 +2,7 @@ public class Vector3D implements Comparable<Vector3D> {
   public double x;
   public double y;
   public double z;
+//  public static final Vector3D zero = new Vector3D(0,0,0);
   public Vector3D(float x, float y, float z)
   {
     this.x = x;
@@ -40,7 +41,10 @@ public class Vector3D implements Comparable<Vector3D> {
     if(x == other.x && y == other.y && z == other.z)  return true;
     else return false;
   }
-
+  public Vector3D substract(Vector3D o)
+  {
+    return new Vector3D(this.x - o.x, this.y - o.y, this.z - o.z);
+  }
 	@Override
 	public int compareTo(Vector3D o) {
 
@@ -69,4 +73,9 @@ public class Vector3D implements Comparable<Vector3D> {
   {
     return "Vector: x: "+ x + " y: " + y + " z: " + z;
   }
+  public static Vector3D getZero()
+  {
+    return new Vector3D(0,0,0);
+  }
+
 }
