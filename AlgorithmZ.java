@@ -264,4 +264,6 @@ private void computeSolution()
     }
     return false;
 }
+
+  public void display() {}
 }
