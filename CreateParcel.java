@@ -14,6 +14,9 @@ public class CreateParcel {
 	private static Vector3D pos;
 	private static Box box;
 	private static boolean _cleared = false;
+	private static int width = 650;
+	private static int height = 100;
+	private static int depth = 160;
 
 	public CreateParcel() {
 		Box xAxis = new Box(500, 3, 3);
@@ -28,10 +31,6 @@ public class CreateParcel {
 		Text x = new Text (200, 20, "X axis ->");
 		Text y = new Text (-15, 230, "Y axis ->");
 		y.setRotate(90);
-
-		int width = 650;
-		int height = 100;
-		int depth = 160;
 
 		Box boxOutline = new Box(width, 3, 3);
 		boxOutline.setMaterial(getColor(Color.BLACK));
@@ -236,6 +235,18 @@ public static boolean getCleared()
 			, boxOutline2, boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7
 			, boxOutline8, boxOutline9, boxOutline10, boxOutline11);
 		_cleared = true;
+	}
+
+	public static int getContainerHeight () {
+		return height;
+	}
+
+	public static int getContainerWidth () {
+		return width;
+	}
+
+	public static int getContainerDepth () {
+		return depth;
 	}
 
 	public static void removeParcel(Parcel p) {
