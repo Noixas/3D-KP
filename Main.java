@@ -11,7 +11,7 @@ import javafx.scene.input.KeyCode;
 
 public class Main extends Application {
   private static Stage stage;
-
+  private static Stage secondStage;
   public static void main(String[] args) {
 
     launch(args);
@@ -19,6 +19,8 @@ public class Main extends Application {
 
   public void start(Stage mainStage) {
     stage = mainStage;
+    Stage infoStage = new Stage();
+    infoStage.setTitle("Info");
     mainStage.centerOnScreen();
     mainStage.setTitle("Phase 3");
     SceneManager scenemanager = new SceneManager(mainStage);
