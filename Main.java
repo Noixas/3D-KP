@@ -20,6 +20,7 @@ public class Main extends Application {
   public void start(Stage mainStage) {
     stage = mainStage;
     Stage infoStage = new Stage();
+    secondStage = infoStage;
     infoStage.setTitle("Info");
     mainStage.centerOnScreen();
     mainStage.setTitle("Phase 3");

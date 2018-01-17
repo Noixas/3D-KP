@@ -2,6 +2,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.stage.Stage;
 import javafx.stage.Screen;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -30,13 +31,13 @@ public class SceneManager {
     MenuUI menu = new MenuUI(root);
     WorldUI worldUI = new WorldUI(worldGroup);
 
+
     Stage infoStage = new Stage();
     infoStage.setTitle("Info");
-    BorderPane root2 = new BorderPane();
-
+    GridPane root2 = new GridPane();
     infoScene = new Scene(root2, 300, 1000);
     secondStage = infoStage;
-    secondStage.setScene(infoScene);
+    //secondStage.setScene(infoScene);
     WorldUI infoUI = new WorldUI(root2);
 
 
@@ -85,6 +86,7 @@ public class SceneManager {
       getScreenBounds();
       secondStage.setX((screenBoundWidth / 2) + (stage.getWidth() / 2));
       secondStage.setY(0);
+      secondStage.setScene(infoScene);
       secondStage.show();
     }
   }

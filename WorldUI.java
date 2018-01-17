@@ -1,4 +1,5 @@
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Point3D;
 import javafx.scene.control.Label;
 import javafx.scene.DepthTest;
@@ -8,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.PickResult;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -47,14 +48,20 @@ public class WorldUI {
     mouseFactorY = 180.0 / SceneManager.getSceneHeight();
   }
 
-  public WorldUI(BorderPane root) {
-    Pane pane = new Pane();
-    Label testLabel = new Label();
-    testLabel.setText("TestLabel");
+  public WorldUI(GridPane root) {
+    root.setPadding(new Insets(5));
 
-    pane.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #ffffff, #c9ddff)");
+    Label coordLabel = new Label();
+    coordLabel.setText("Coordinates: ");
+    coordLabel.setStyle(
+      "-fx-font-size: 18px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #000000;" +
+      "-fx-font-style: italic;");
 
-    root.getChildren().addAll(pane);
+    root.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #b2ceff, #ffffff)");
+    root.add(coordLabel, 0, 0);
+
   }
 
   private void buildCamera(Group worldGroup) {
