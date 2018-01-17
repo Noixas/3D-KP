@@ -107,24 +107,23 @@ private void computeSolution()
           {
               for (int i = 0; i < _listEP.size(); i++)
               {
-                  if (_listEP.get(i).x + 1 < xBound && _listEP.get(i).y + 1 < yBound && _listEP.get(i).z + 1 < zBound)//container boundaries
+                Vector3D pos = _listEP.get(i);
+                  if (pos.x + 1 < xBound && pos.y + 1 < yBound && pos.z + 1 < zBound )//container boundaries
                   {
                       int s = rnd.nextInt(_baseParcels.size());
                     //  GameObject newCube = Instantiate(pivot);
                       Parcel a = _baseParcels.get(s).clone();
+                      if(checkFit(a, pos))
+                      {
+                        _listEP.remove(i);
+                        a.setPosition(pos);
 
-                      //newCube.transform.localScale = parcelSize[s];
-                      //newCube.transform.localPosition += parcelSize[s];
-                      //newCube.transform.localPosition -= Vector3D.one;
-                      Vector3D pos = _listEP.get(i);
-                      _listEP.remove(i);
-                      a.setPosition(pos);
-                      //newCube.transform.position = pos;// + new Vector3D(.5f, .5f, .5f); ;
+                        updateEP(_solution, _listEP, a);
+                        _solution.addParcel(a);
+                        CreateParcel.createParcel(a);
+                        i = _listEP.size();
+                      }
 
-                      updateEP(_solution, _listEP, a);
-                      _solution.addParcel(a);
-                      CreateParcel.createParcel(a);
-                      i = _listEP.size();
                   }
               }
           }
@@ -280,5 +279,9 @@ public boolean canTakeProjection(Parcel newParcel, Parcel prevParcel, int axis)
     }
     return false;
 }
+  private boolean checkFit(Parcel p, Vector3D pos)
+  {
 
+    return true;
+  }
 }
