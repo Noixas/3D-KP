@@ -108,24 +108,21 @@ public class CreateParcel {
 	}
 
 	public static void createParcel(Parcel p){
-		//System.out.println(p.getSize());
 		Random rand = new Random();
-		//p.setPosition(new Vector3D(100, 50, 30));
 		int scaleConstant = 40;
 		size = p.getSize();
 		pos = p.getPosition();
 		box = new Box(size.x * scaleConstant, size.y * scaleConstant, size.z * scaleConstant);
-		/*if(p instanceof ParcelA) {
+		if(p instanceof ParcelA) {
 			box.setMaterial(getColor(Color.RED));
-		} else if(p instanceof ParcelA) {
+		} else if(p instanceof ParcelB) {
 			box.setMaterial(getColor(Color.BLUE));
 		} else if(p instanceof ParcelA) {
 			box.setMaterial(getColor(Color.GREEN));
 		} else {
 			box.setMaterial(getColor(Color.PINK));
-		}*/
-		box.setMaterial(getColor(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), .99)));
-		//box.setMaterial(getColor(Color.GREEN));
+		}
+		//box.setMaterial(getColor(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), .99)));
 		box.setTranslateX((pos.x + size.x/2)* scaleConstant);
 		box.setTranslateY((pos.y + size.y/2)* scaleConstant);
 		box.setTranslateZ((pos.z + size.z/2)* scaleConstant);

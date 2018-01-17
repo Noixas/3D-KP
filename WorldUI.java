@@ -36,7 +36,11 @@ public class WorldUI {
   private static double xCoord;
   private static double yCoord;
   private static double zCoord;
-  private static Label xLabel;
+  private static double depth;
+  private static double height;
+  private static double width;
+  private static Label coords;
+  private static Label dimensions;
   private static Label yLabel;
   private static Label zLabel;
 
@@ -62,29 +66,52 @@ public class WorldUI {
       "-fx-text-fill: #000000;" +
       "-fx-font-style: italic;");
 
-    xLabel = new Label();
-    yLabel = new Label();
-    zLabel = new Label();
+    coords = new Label();
+
+    Label dimensionLabel = new Label();
+    dimensionLabel.setText("Dimensions: ");
+    dimensionLabel.setStyle(
+      "-fx-font-size: 14px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #000000;" +
+      "-fx-font-style: italic;");
+    dimensionLabel.setTranslateY(20);
+
+    dimensions = new Label();
+    dimensions.setTranslateY(20);
 
     root.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #b2ceff, #ffffff)");
     root.add(coordLabel, 0, 0);
-    root.add(xLabel, 0, 1);
-    root.add(yLabel, 0, 2);
-    root.add(zLabel, 0, 3);
+    root.add(coords, 0, 1);
+    root.add(dimensionLabel, 0, 2);
+    root.add(dimensions, 0, 3);
 
   }
   public static void printInfo() {
-    xLabel.setText("X: " + xCoord);
-    yLabel.setText("Y: " + yCoord);
-    zLabel.setText("Z: " + zCoord);
+    coords.setText(
+      "X: " + xCoord + "\n" +
+      "Y: " + yCoord + "\n" +
+      "Z: " + zCoord);
+
+    dimensions.setText(
+      "Depth: " + depth + "\n" +
+      "Width: " + width + "\n" +
+      "Height: " + height);
   }
   public void updateCoords(MouseEvent event) {
     try {
       PickResult result = event.getPickResult();
       Node testNode = result.getIntersectedNode();
+      Box temp = (Box) testNode;
       xCoord = testNode.getTranslateX();
       yCoord = testNode.getTranslateZ();
       zCoord = testNode.getTranslateZ();
+
+      depth = temp.getDepth();
+      height = temp.getHeight();
+      width = temp.getWidth();
+
+      
     }
     catch(NullPointerException e) {}
   }
