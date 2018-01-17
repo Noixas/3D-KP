@@ -117,7 +117,7 @@ public class CreateParcel {
 			box.setMaterial(getColor(Color.RED));
 		} else if(p instanceof ParcelB) {
 			box.setMaterial(getColor(Color.BLUE));
-		} else if(p instanceof ParcelA) {
+		} else if(p instanceof ParcelC) {
 			box.setMaterial(getColor(Color.GREEN));
 		} else {
 			box.setMaterial(getColor(Color.PINK));

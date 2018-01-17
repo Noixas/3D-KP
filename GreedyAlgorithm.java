@@ -82,36 +82,39 @@ public class GreedyAlgorithm extends Algorithm {
    * @return either true or false whether if the parcel is placeable or not.
    */
   public boolean placeable(Parcel parcel) {
+    boolean checkX = true;
+    boolean checkY = true;
+    boolean checkZ = true;
     for(int i=0; i < containerSpace.length;i++) {
       for(int j=0; j < containerSpace[0].length; j++) {
         for(int k=0; k < containerSpace[0][0].length; k++) {
-          Vector3D posIndex = new Vector3D(i, j, k);
           if(containerSpace[i][j][k] == null) {
+            Vector3D posIndex = new Vector3D(i, j, k);
             //System.out.println("(" + i + ", " + j + ", " + k + ") is empty");
-            if(isNextTo(posIndex, true, true, true)) {
-              if(tryRotations(parcel, posIndex)) {
-                parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
-                parcelFits = true;
-                return true;
+            for(int u=0; u < 4; u++) {
+              if(u==0) {
+                checkX = true;
+                checkY = true;
+                checkZ = true;
+              } else if(u==1) {
+                checkX = false;
+                checkY = true;
+                checkZ = true;
+              } else if(u==2) {
+                checkX = false;
+                checkY = false;
+                checkZ = true;
+              } else if(u==3) {
+                checkX = false;
+                checkY = true;
+                checkZ = false;
               }
-            } else if(isNextTo(posIndex, false, true, true)) {
-              if(tryRotations(parcel, posIndex)) {
-                parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
-                parcelFits = true;
-                return true;
-              }
-            } else if(isNextTo(posIndex, false, false, true)) {
-              if(tryRotations(parcel, posIndex)) {
-                parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
-                parcelFits = true;
-                return true;
-              }
-            }
-            else if(isNextTo(posIndex, false, true, false)) {
-              if(tryRotations(parcel, posIndex)) {
-                parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
-                parcelFits = true;
-                return true;
+              if(isNextTo(posIndex, checkX, checkY, checkZ)) {
+                if(tryRotations(parcel, posIndex)) {
+                  parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
+                  parcelFits = true;
+                  return true;
+                }
               }
             }
           } //else {System.out.println("(" + i + ", " + j + ", " + k + ") is not empty");}
@@ -123,7 +126,7 @@ public class GreedyAlgorithm extends Algorithm {
   }
 
   /**
-   * Helper method which looks if the parcel can physically fit inside the container.
+   * Looks if the parcel can physically fit inside the container.
    * @param parcel the parcel that is getting placed in the container.
    * @param posIndex
    */
