@@ -36,6 +36,9 @@ public class WorldUI {
   private static double xCoord;
   private static double yCoord;
   private static double zCoord;
+  private static Label xLabel;
+  private static Label yLabel;
+  private static Label zLabel;
 
   public WorldUI(Group worldGroup) {
     worldGroup.getChildren().add(world);
@@ -54,14 +57,36 @@ public class WorldUI {
     Label coordLabel = new Label();
     coordLabel.setText("Coordinates: ");
     coordLabel.setStyle(
-      "-fx-font-size: 18px;" +
+      "-fx-font-size: 14px;" +
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #000000;" +
       "-fx-font-style: italic;");
 
+    xLabel = new Label();
+    yLabel = new Label();
+    zLabel = new Label();
+
     root.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #b2ceff, #ffffff)");
     root.add(coordLabel, 0, 0);
+    root.add(xLabel, 0, 1);
+    root.add(yLabel, 0, 2);
+    root.add(zLabel, 0, 3);
 
+  }
+  public static void printInfo() {
+    xLabel.setText("X: " + xCoord);
+    yLabel.setText("Y: " + yCoord);
+    zLabel.setText("Z: " + zCoord);
+  }
+  public void updateCoords(MouseEvent event) {
+    try {
+      PickResult result = event.getPickResult();
+      Node testNode = result.getIntersectedNode();
+      xCoord = testNode.getTranslateX();
+      yCoord = testNode.getTranslateZ();
+      zCoord = testNode.getTranslateZ();
+    }
+    catch(NullPointerException e) {}
   }
 
   private void buildCamera(Group worldGroup) {
@@ -87,14 +112,7 @@ public class WorldUI {
       mousePosY = me.getSceneY();
       mouseOldX = me.getSceneX();
       mouseOldY = me.getSceneY();
-      try {
-        PickResult result = me.getPickResult();
-        Node testNode = result.getIntersectedNode();
-        xCoord = testNode.getTranslateX();
-        yCoord = testNode.getTranslateZ();
-        zCoord = testNode.getTranslateZ();
-      }
-      catch(NullPointerException e) {}
+      updateCoords(me);
     });
 
     scene.setOnMouseDragged((MouseEvent me) -> {
