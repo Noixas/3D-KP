@@ -125,6 +125,7 @@ public class CreateParcel {
 			box.setMaterial(getColor(Color.PINK));
 		}*/
 		box.setMaterial(getColor(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), .99)));
+		//box.setMaterial(getColor(Color.GREEN));
 		box.setTranslateX((pos.x + size.x/2)* scaleConstant);
 		box.setTranslateY((pos.y + size.y/2)* scaleConstant);
 		box.setTranslateZ((pos.z + size.z/2)* scaleConstant);
