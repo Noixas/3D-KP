@@ -9,6 +9,8 @@ public class AlgorithmZ extends Algorithm
   private boolean _started;
   private List<Parcel> _baseParcels;
   private Random rnd;
+  private Parcel[][][] _containerSpace;
+  private int _scalingArrayConst = 2;
   ////////Temporary container boundaries from c#///////////
     public double xBound = 16.5;
     public double yBound = 2.5;
@@ -21,6 +23,7 @@ public class AlgorithmZ extends Algorithm
     xBound = _container.getSize().x;
     yBound = _container.getSize().y;
     zBound = _container.getSize().z;
+    _containerSpace = new Parcel[spaceIndex(xBound)][spaceIndex(yBound)][spaceIndex(zBound)];
     _baseParcels = new LinkedList<Parcel>();
     _baseParcels.add(new ParcelA());
     _baseParcels.add(new ParcelB());
@@ -81,55 +84,78 @@ public class AlgorithmZ extends Algorithm
   public void display(){}
 private void computeSolution()
 {
-
-
           if ( _started == false)
           {
-            //  GameObject newCube = Instantiate(pivot);
               int s = rnd.nextInt(_baseParcels.size());
-              //   Debug.Log(s);
-            //  newCube.transform.localScale = parcelSize[s];
-              //newCube.transform.position += parcelSize[s] - Vector3D.one;
               Parcel a = _baseParcels.get(s).clone();
               a.setPosition(Vector3D.getZero());
               _listEP.add(new Vector3D(a.getSize().x, 0, 0));
               _listEP.add(new Vector3D(0, a.getSize().y, 0));
               _listEP.add(new Vector3D(0, 0, a.getSize().z));
-              //newCube.transform.localPosition = Vector3D.getZero();// + new Vector3D(.5f, .5f, .5f); ;
-              //newCube.transform.localPosition += parcelSize[s];
-              //newCube.transform.localPosition -= Vector3D.one;
+              addParcelToArraySpace(a, Vector3D.getZero());
               _solution.addParcel(a);
-              // updateEP(_solution, _listEP, a);
-              _started = true;
               CreateParcel.createParcel(a);
+              _started = true;
           }
           else
           {
+            List<Parcel> randomList = randomizeBaseParcelList();
               for (int i = 0; i < _listEP.size(); i++)
               {
                 Vector3D pos = _listEP.get(i);
+              //  System.out.println(pos);
                   if (pos.x + 1 < xBound && pos.y + 1 < yBound && pos.z + 1 < zBound )//container boundaries
                   {
-                      int s = rnd.nextInt(_baseParcels.size());
-                    //  GameObject newCube = Instantiate(pivot);
-                      Parcel a = _baseParcels.get(s).clone();
-                      if(checkFit(a, pos))
+                      for(int j = 0; j < _baseParcels.size(); j++)
                       {
-                        _listEP.remove(i);
-                        a.setPosition(pos);
-
-                        updateEP(_solution, _listEP, a);
-                        _solution.addParcel(a);
-                        CreateParcel.createParcel(a);
-                        i = _listEP.size();
+                        //int s = rnd.nextInt(_baseParcels.size());
+                        int s = j;//since we want to check all kind of boxes we dont use the random but for now is there in case we want to use random
+                        Parcel a = randomList.get(s).clone();
+                        //sprintArray(_containerSpace);
+                        if(checkFit(a, pos))
+                        {
+                          //System.out.println("Parcel placed at; "+ pos);
+                          placeParcel(a,pos);
+                          _listEP.remove(i);
+                          i = _listEP.size();
+                          j = _baseParcels.size();
+                        }
+                        else if(j == _baseParcels.size()-1)//If we tried all and none fit
+                        {
+                        //  System.out.println("Box "+ a+" in pos "+ pos +" fit in EP: " + _listEP.get(i));
+                        }
                       }
-
                   }
               }
           }
 }
+private void placeParcel(Parcel pParcel, Vector3D pos)
+{
+  pParcel.setPosition(pos);
+  addParcelToArraySpace(pParcel, pos);
+  updateEP(_solution, _listEP, pParcel);
+  _solution.addParcel(pParcel);
+  CreateParcel.createParcel(pParcel);
 
+}
+private void addParcelToArraySpace(Parcel pParcel, Vector3D pos)
+{
+  int x = spaceIndex(pos.x);
+  int y = spaceIndex(pos.y);
+  int z = spaceIndex(pos.z);
+  Vector3D size = pParcel.getSize();
+    for(int i = x; i < x + spaceIndex(size.x); i++) {
+      for(int j = y; j < y + spaceIndex(size.y); j++) {
+        for(int k = z; k < z + spaceIndex(size.z); k++) {
+          _containerSpace[i][j][k] = pParcel;
+          System.out.println("Point placed at " + "X " + i + "Y " + j + "Z "+ k);
 
+          System.out.println("Point" + _containerSpace[(int)i][(int)j][(int)k]);
+        }
+      }
+    }
+
+}
     public void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newParcel)
     {
         double[] maxBound = { -100000, -10000, -1000000, -1000000, -10000, -10000};
@@ -194,35 +220,19 @@ private void computeSolution()
             }
 
         }
-        //_listEP.Clear();
-
         for (int i = 0; i < newEP.length; i++)
         {
           System.out.println("Length "+newEP.length);
           System.out.println("i: "+ i);
           System.out.println("newEP[i]: "+newEP[i]);
-
-
             if (Vector3D.getZero().equals(newEP[i]) == false && newEP[i] != null)//We dont want point 0, TODO check if it even give us this case in java Reason first was coded in c unity
             {
 
                 _listEP.add(newEP[i]);
             }
-
         }
-        //_listEP = newEP.ToList<Vector3D;
-        // System.out.println(newEP.length);
         Collections.sort(EP);
-        // EP = EP.OrderBy(v => v.x).ToList();
-        //EP = EP.OrderBy(v => v.y).ToList();
-        //EP = EP.OrderBy(v => v.z).ToList();
-        //    EP.Sort();
         _listEP = removeDuplicatedEP(EP, newParcel);
-
-
-     //   System.out.println(_listEP.Count);
-        //DONE; ordering of EP and deleting duplicated
-        //Done; can use comparable interface
     }
     /**
      * Remove elements that are duplicated in the list
@@ -281,7 +291,47 @@ public boolean canTakeProjection(Parcel newParcel, Parcel prevParcel, int axis)
 }
   private boolean checkFit(Parcel p, Vector3D pos)
   {
-
-    return true;
+    Vector3D size = p.getSize();
+    Vector3D containerSize =_container.getSize();
+    int x = spaceIndex(pos.x);
+    int y = spaceIndex(pos.y);
+    int z = spaceIndex(pos.z);
+    if( x + spaceIndex(size.x) <= spaceIndex(containerSize.x) &&
+        y + spaceIndex(size.y) <= spaceIndex(containerSize.y) &&
+        z + spaceIndex(size.z) <= spaceIndex(containerSize.z)) {
+      for(int i = x; i < x + spaceIndex(size.x); i++) {
+        for(int j = y; j < y + spaceIndex(size.y); j++) {
+          for(int k = z; k < z + spaceIndex(size.z); k++) {
+            if(_containerSpace[i][j][k] != null) {
+              System.out.println("Point in array ocuppied " + "X " + i + "Y " + j + "Z "+ k);
+              System.out.println(_containerSpace[i][j][k]);
+              return false;
+            }
+          }
+        }
+      }
+      System.out.println("can fit");
+      return true;
+    }
+    System.out.println("can't fit in container");
+    return false;
+  }
+  private int spaceIndex(double size)
+  {
+    return (int)(size * _scalingArrayConst);
+  }
+  private List<Parcel> randomizeBaseParcelList()
+  {
+    int s = rnd.nextInt(_baseParcels.size());
+    List<Parcel> newParcels = new LinkedList<Parcel>();
+    for(int i = s; i < _baseParcels.size();i++)
+    {
+      newParcels.add(_baseParcels.get(i));
+    }
+    for(int i = 0; i < s;i++)
+    {
+      newParcels.add(_baseParcels.get(i));
+    }
+    return newParcels;
   }
 }
