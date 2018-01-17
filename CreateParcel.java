@@ -14,7 +14,7 @@ public class CreateParcel {
 	private static Vector3D pos;
 	private static Box box;
 	private static boolean _cleared = false;
-	private static int width = 650;
+	private static int width = 659;
 	private static int height = 100;
 	private static int depth = 160;
 
@@ -31,6 +31,7 @@ public class CreateParcel {
 		Text x = new Text (200, 20, "X axis ->");
 		Text y = new Text (-15, 230, "Y axis ->");
 		y.setRotate(90);
+
 
 		Box boxOutline = new Box(width, 3, 3);
 		boxOutline.setMaterial(getColor(Color.BLACK));
@@ -124,6 +125,7 @@ public class CreateParcel {
 			box.setMaterial(getColor(Color.PINK));
 		}*/
 		box.setMaterial(getColor(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), .99)));
+		//box.setMaterial(getColor(Color.GREEN));
 		box.setTranslateX((pos.x + size.x/2)* scaleConstant);
 		box.setTranslateY((pos.y + size.y/2)* scaleConstant);
 		box.setTranslateZ((pos.z + size.z/2)* scaleConstant);
@@ -182,9 +184,6 @@ public static boolean getCleared()
 		Text y = new Text (-15, 230, "Y axis ->");
 		y.setRotate(90);
 
-				int width = 650;
-		int height = 100;
-		int depth = 160;
 
 		Box boxOutline = new Box(width, 3, 3);
 		boxOutline.setMaterial(getColor(Color.BLACK));

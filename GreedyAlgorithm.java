@@ -7,9 +7,9 @@ import java.util.*;
  * -The value density(value/volume) of the parcels in descending order.
  */
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 31;
-  private int amountB = 19;
-  private int amountC = 13;
+  private int amountA = 25;//31
+  private int amountB = 19;//19
+  private int amountC = 13;//13
   private double VolA;
   private double VolB;
   private double VolC;
@@ -94,26 +94,26 @@ public class GreedyAlgorithm extends Algorithm {
                 parcelFits = true;
                 return true;
               }
-            }else if(isNextTo(posIndex, false, true, true)) {
+            } else if(isNextTo(posIndex, false, true, true)) {
               if(tryRotations(parcel, posIndex)) {
                 parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
                 parcelFits = true;
                 return true;
               }
-            } /*else if(isNextTo(posIndex, false, false, true)) {
+            } else if(isNextTo(posIndex, false, false, true)) {
               if(tryRotations(parcel, posIndex)) {
                 parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
                 parcelFits = true;
                 return true;
               }
             }
-            else if(isNextTo(posIndex, false, false, false)) {
+            else if(isNextTo(posIndex, false, true, false)) {
               if(tryRotations(parcel, posIndex)) {
                 parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
                 parcelFits = true;
                 return true;
               }
-            }*/
+            }
           } //else {System.out.println("(" + i + ", " + j + ", " + k + ") is not empty");}
         }
       }
@@ -140,7 +140,6 @@ public class GreedyAlgorithm extends Algorithm {
         for(int n=yIndex; n < yIndex+arrayIndex(size.y); n++) {
           for(int o=zIndex; o < zIndex+arrayIndex(size.z); o++) {
             if(containerSpace[m][n][o] != null) {
-              //System.out.println("can't fit");
               return false;
             }
           }
