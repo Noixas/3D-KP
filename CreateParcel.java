@@ -5,6 +5,7 @@ import javafx.scene.shape.Sphere;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
+import javafx.scene.shape.DrawMode;
 import java.util.Random;
 
 public class CreateParcel {
@@ -12,6 +13,7 @@ public class CreateParcel {
 	private static Parcel parcel;
 	private static Vector3D size;
 	private static Vector3D pos;
+	private static Box box0;
 	private static Box box;
 	private static boolean _cleared = false;
 	private static int width = 659;
@@ -112,7 +114,10 @@ public class CreateParcel {
 		int scaleConstant = 40;
 		size = p.getSize();
 		pos = p.getPosition();
+		box0 = new Box(size.x * scaleConstant, size.y * scaleConstant, size.z * scaleConstant);
 		box = new Box(size.x * scaleConstant, size.y * scaleConstant, size.z * scaleConstant);
+		box0.setDrawMode(DrawMode.LINE);
+		box0.setMaterial(getColor(Color.BLACK));
 		if(p instanceof ParcelA) {
 			box.setMaterial(getColor(Color.RED));
 		} else if(p instanceof ParcelB) {
@@ -127,6 +132,10 @@ public class CreateParcel {
 		box.setTranslateY((pos.y + size.y/2)* scaleConstant);
 		box.setTranslateZ((pos.z + size.z/2)* scaleConstant);
 		parcelGroup.getChildren().addAll(box);
+		box0.setTranslateX((pos.x + size.x/2)* scaleConstant);
+		box0.setTranslateY((pos.y + size.y/2)* scaleConstant);
+		box0.setTranslateZ((pos.z + size.z/2)* scaleConstant);
+		parcelGroup.getChildren().addAll(box0);
 	}
 
 	public static void createSphere(int x, int y, int z) {
