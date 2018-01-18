@@ -44,8 +44,8 @@ public class GreedyAlgorithm extends Algorithm {
     }
     _done = true;
     parcelFits = true;
-    solution.endSolution(System.currentTimeMillis());
     makeParcelSolutionArray();
+    solution.endSolution(System.currentTimeMillis());
     display();
     System.out.println("done");
     System.out.println("Empty space: " + countEmptySpaces() + " metres cubed");
