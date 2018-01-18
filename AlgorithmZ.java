@@ -12,6 +12,10 @@ private Random rnd;
 private Parcel[][][] _containerSpace;
 private int _scalingArrayConst = 2;
 private int _wallsCount;
+private enum SetType {
+        A, B, C, AB, AC, BC, ABC, BEST, RANDOM
+}
+private SetType _type;
 ////////Temporary container boundaries from c#///////////
 public double xBound = 16.5;
 public double yBound = 2.5;
@@ -19,6 +23,7 @@ public double zBound = 4;
 ///////////////////////////////////////
 public AlgorithmZ(){
         rnd = new Random();
+        _type = SetType.A;
         _container = new Container();
         xBound = _container.getSize().x;
         yBound = _container.getSize().y;
@@ -36,26 +41,73 @@ public AlgorithmZ(){
 
 }
 public void Start(){
-        System.out.println("Algorithm Z started");
+        _type = SetType.BEST;
+        System.out.println("Algorithm Z started with SetType: "+ _type);
+        initSetType();
         createContainerWalls();
-        computeSolution(40);
+        computeSolution(20);
         displayExtremePoints();
 
 }
-public void displayExtremePoints()
+private void initSetType()
 {
-        for(int i = 0; i < _listEP.size(); i++)
-        {
-                CreateParcel.createSphere(_listEP.get(i));
-        }
-}
-public void displayParcels()
-{
-        for(int i = 0; i < _solution.getLength(); i++)
-        {
-            Parcel a = _solution.get(i);
-            if(a.getInvisible() == false)
-                CreateParcel.createParcel(a);
+        Parcel a = new ParcelA();
+        Parcel b = new ParcelB();
+        Parcel c = new ParcelC();
+        _baseParcels = new LinkedList<Parcel>();
+
+        switch(_type) {
+        case A:
+                _baseParcels.add(a);
+                break;
+        case B:
+                _baseParcels.add(b);
+                break;
+        case C:
+                _baseParcels.add(c);
+                break;
+        case AB:
+                if(a.getDensityValue() >= b.getDensityValue()) {//Put parcel a first
+                        _baseParcels.add(a);
+                        _baseParcels.add(b);
+                }
+                else{//Put parcel b first
+                        _baseParcels.add(b);
+                        _baseParcels.add(a);
+                }
+                break;
+        case AC:
+                if(a.getDensityValue() >= c.getDensityValue()) {//Put parcel a first
+                        _baseParcels.add(a);
+                        _baseParcels.add(c);
+                }
+                else{//Put parcel c first
+                        _baseParcels.add(c);
+                        _baseParcels.add(a);
+                }
+                break;
+        case BC:
+                if(b.getDensityValue() >= c.getDensityValue()) {//Put parcel a first
+                        _baseParcels.add(b);
+                        _baseParcels.add(c);
+                }
+                else{//Put parcel b first
+                        _baseParcels.add(c);
+                        _baseParcels.add(b);
+                }
+                break;
+        case BEST://TODO
+                _baseParcels.add(a);
+                _baseParcels.add(b);
+                _baseParcels.add(c);
+                break;
+        case RANDOM:
+        _baseParcels.add(a);
+        _baseParcels.add(b);
+        _baseParcels.add(c);
+        _baseParcels = randomizeBaseParcelList();
+        break;
+
         }
 }
 private void createContainerWalls()
@@ -91,19 +143,13 @@ private void createContainerWalls()
                 //  CreateParcel.createParcel(c);
         }
 }
-public void display(){
-        System.out.println("Display button pressed");
-        CreateParcel.clearAllParcels();
-        displayParcels();
-        displayExtremePoints();
-}
 private void computeSolution(int pIterations)
 {
-  if(pIterations <= 0) return;
-  for(int i = 0; i < pIterations; i++)
-  {
-    computeSolutionStep();
-  }
+        if(pIterations <= 0) return;
+        for(int i = 0; i < pIterations; i++)
+        {
+                computeSolutionStep();
+        }
 }
 private void computeSolutionStep()
 {
@@ -129,7 +175,7 @@ private void computeSolutionStep()
                         if (pos.x + 1 < xBound && pos.y + 1 < yBound && pos.z + 1 < zBound ) {//container boundaries
                                 for(int j = 0; j < _baseParcels.size(); j++) {
                                         //int s = rnd.nextInt(_baseParcels.size());
-                                        int s = j;//since we want to check all kind of boxes we dont use the random but for now is there in case we want to use random
+                                        int s = j;//since we want to check all kind of boxes for now is there in case we want to use random
                                         Parcel a = randomList.get(s).clone();
                                         if(checkFit(a, pos))
                                         {
@@ -140,30 +186,21 @@ private void computeSolutionStep()
                                         }
                                         else if(j == _baseParcels.size()-1)//Tried all the kind of parcels
                                         {
-                                          System.out.println("EP to delete "+pos);
-                                          toDeleteEp.add(pos);
-                                          if(i == _listEP.size()-1)//We went through all EP
-                                          {
-                                            System.out.println("No more boxes can be placed");
-                                          }
+                                                System.out.println("EP to delete "+pos);
+                                                toDeleteEp.add(pos);
+                                                if(i == _listEP.size()-1)//We went through all EP
+                                                {
+                                                        System.out.println("No more boxes can be placed");
+                                                }
                                         }
                                 }
                         }
                         else{ //ep out of boudaries so delete
-                          toDeleteEp.add(pos);
+                                toDeleteEp.add(pos);
                         }
                 }
                 deleteUselessEP(_listEP, toDeleteEp);
         }
-}
-private void deleteUselessEP(List<Vector3D> originalEP, List<Vector3D> toDeleteEp)
-{
-
-  for(int i = 0; i < toDeleteEp.size(); i++)
-  {
-    System.out.println("EP to delete from method "+toDeleteEp.get(i));
-    originalEP.remove(toDeleteEp.get(i));
-  }
 }
 private void placeParcel(Parcel pParcel, Vector3D pos)
 {
@@ -219,7 +256,6 @@ public void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newPar
                 if ((X.x  >= placedPos.x && X.x  < (placedPos.x + placedSize.x)) && (X.z >= placedPos.z && X.z < (placedPos.z + placedSize.z))&&(placedPos.y + placedSize.y > maxBound[0]))
                 {
                         newEP[0] = new Vector3D(X.x, placedPos.y + placedSize.y, X.z);
-                        System.out.println("Y" + (placedPos.y + placedSize.y));
                         maxBound[0] = placedPos.y + placedSize.y;
                 }
                 //Xz:
@@ -287,6 +323,15 @@ public List<Vector3D> removeDuplicatedEP(List<Vector3D> ep, Parcel p)
         ep = newList;
         return ep;
 }
+private void deleteUselessEP(List<Vector3D> originalEP, List<Vector3D> toDeleteEp)
+{
+
+        for(int i = 0; i < toDeleteEp.size(); i++)
+        {
+          //  System.out.println("EP to delete from method "+toDeleteEp.get(i));
+          originalEP.remove(toDeleteEp.get(i));
+        }
+}
 public boolean canTakeProjection(Parcel newParcel, Parcel prevParcel, int axis)
 {
         //return true;
@@ -337,7 +382,7 @@ private boolean checkFit(Parcel p, Vector3D pos)
                         for(int j = y; j < y + spaceIndex(size.y); j++) {
                                 for(int k = z; k < z + spaceIndex(size.z); k++) {
                                         if(_containerSpace[i][j][k] != null) {
-                                              //  System.out.println("Point in array ocuppied " + "X " + i + "Y " + j + "Z "+ k);
+                                                //  System.out.println("Point in array ocuppied " + "X " + i + "Y " + j + "Z "+ k);
                                                 System.out.println(_containerSpace[i][j][k]);
                                                 return false;
                                         }
@@ -349,6 +394,29 @@ private boolean checkFit(Parcel p, Vector3D pos)
         }
         //System.out.println("can't fit in container");
         return false;
+}
+public void displayExtremePoints()
+{
+        for(int i = 0; i < _listEP.size(); i++)
+        {
+                CreateParcel.createSphere(_listEP.get(i));
+        }
+}
+public void displayParcels()
+{
+        for(int i = 0; i < _solution.getLength(); i++)
+        {
+                Parcel a = _solution.get(i);
+                if(a.getInvisible() == false)
+                        CreateParcel.createParcel(a);
+        }
+}
+public void display()
+{
+        System.out.println("Display button pressed");
+        CreateParcel.clearAllParcels();
+        displayParcels();
+        displayExtremePoints();
 }
 private int spaceIndex(double size)
 {
