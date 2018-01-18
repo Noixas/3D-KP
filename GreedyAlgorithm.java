@@ -7,9 +7,9 @@ import java.util.*;
  * -The value density(value/volume) of the parcels in descending order.
  */
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 25;//31
-  private int amountB = 19;//19
-  private int amountC = 13;//13
+  private int amountA = 100;//31
+  private int amountB = 0;//19
+  private int amountC = 0;//13
   private double VolA;
   private double VolB;
   private double VolC;
@@ -31,7 +31,7 @@ public class GreedyAlgorithm extends Algorithm {
   public void Start() {
     solution = new SolutionSet(System.currentTimeMillis());
     makeLists(heuristicID);
-    orderLists();
+    sortLists();
     makeParcelList();
     for(Parcel p : parcelList) {
       System.out.println("the current parcel is: " + p.getClass());
@@ -49,6 +49,8 @@ public class GreedyAlgorithm extends Algorithm {
     display();
     System.out.println("done");
     System.out.println("Empty space: " + countEmptySpaces() + " metres cubed");
+    System.out.println("Parcel's placed: " + solution.getLength());
+    System.out.println("Total value: " + solution.getValue());
   }
 
   /**
@@ -128,7 +130,7 @@ public class GreedyAlgorithm extends Algorithm {
   /**
    * Looks if the parcel can physically fit inside the container.
    * @param parcel the parcel that is getting placed in the container.
-   * @param posIndex
+   * @param posIndex the position of the parcel within the array.
    */
   public boolean canFit(Parcel parcel, Vector3D posIndex) {
     Vector3D size = parcel.getSize();
@@ -270,9 +272,9 @@ public void makeLists(int id) {
   }
 
   /**
-   * Orders the 3 lists by the given heuristic of the parcels.
+   * Sorts the 3 lists by the given heuristic of the parcels.
    */
-  public void orderLists() {
+  public void sortLists() {
     boolean hasChanged = true;
     double heuristicBuffer;
     Parcel parcelBuffer;
@@ -350,7 +352,7 @@ public void makeLists(int id) {
   }
 
   /**
-   * This method converts the values for the coordinates and sizes of the parcels and converts them into to integer so that they can be represented in a 3D array.
+   * Converts the values for the coordinates and sizes of the parcels and converts them into to integer so that they can be represented in a 3D array.
    * @param number The number that needs to be converted into an array index.
    * @return The number converted into an array index.
    */
@@ -369,9 +371,12 @@ public void makeLists(int id) {
         }
       }
     }
-    return count/4;
+    return count/8;
   }
 
+  /**
+   * Adds the placed parcels to the solution set array.
+   */
   public void makeParcelSolutionArray() {
     for(Parcel p : parcelList) {
       if(p.getPosition() != null) {
@@ -380,10 +385,16 @@ public void makeLists(int id) {
     }
   }
 
+  /**
+   * Sets the algorithm to the heuristic wanted. Connected to the user interface.
+   */
   public void setID(int i) {
     heuristicID = i;
   }
 
+  /**
+   * Creates all of the parcels to be displayed in the 3D world.
+   */
   public void display() {
     for(int p=0; p<solution.getLength(); p++) {
       CreateParcel.createParcel(solution.get(p));
