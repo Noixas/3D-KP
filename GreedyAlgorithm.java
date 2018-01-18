@@ -7,9 +7,9 @@ import java.util.*;
  * -The value density(value/volume) of the parcels in descending order.
  */
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 8;//31
-  private int amountB = 24;//19
-  private int amountC = 22;//13
+  private int amountA;//31
+  private int amountB;//19
+  private int amountC;//13
   private double VolA;
   private double VolB;
   private double VolC;
@@ -24,33 +24,69 @@ public class GreedyAlgorithm extends Algorithm {
   private Vector3D containerSize = container.getSize();
   private Parcel[][][] containerSpace = new Parcel[arrayIndex(containerSize.x)][arrayIndex(containerSize.y)][arrayIndex(containerSize.z)];
   private SolutionSet solution;
+  private double prevsol = 0;
+  private int solA;
+  private int solB;
+  private int solC;
 
   /**
    * Start computing solution separated from constructor to be able to configure it with the UI
    */
   public void Start() {
-    solution = new SolutionSet(System.currentTimeMillis());
-    makeLists(heuristicID);
-    sortLists();
-    makeParcelList();
-    for(Parcel p : parcelList) {
-      System.out.println("the current parcel is: " + p.getClass());
-      if(parcelFits || !(p.getClass().equals(parcelList.get(parcelList.indexOf(p)-1).getClass()))) {
-        if(placeable(p)) {
-          placeInArray(p);
-          System.out.println(p.toString());
+    for(int i=0; i<100; i++) {
+      for(int j=0; j<100; j++) {
+        for(int k=0; k<100; k++) {
+          amountA = i;
+          amountB = j;
+          amountC = k;
+          //if(amountA*2 + amountB*3 + amountC*3.375 == 165){
+          if(amountA*2 + amountB*3 + amountC*3.375 <=165 && 3*amountA + 4*amountB + 5*amountC >231) {
+            solution = new SolutionSet(System.currentTimeMillis());
+            makeLists(heuristicID);
+            sortLists();
+            makeParcelList();
+            for(Parcel p : parcelList) {
+              //System.out.println("the current parcel is: " + p.getClass());
+              if(parcelFits || !(p.getClass().equals(parcelList.get(parcelList.indexOf(p)-1).getClass()))) {
+                if(placeable(p)) {
+                  placeInArray(p);
+                  System.out.println(p.toString());
+                }
+              }
+            }
+            _done = true;
+            parcelFits = true;
+            makeParcelSolutionArray();
+            solution.endSolution(System.currentTimeMillis());
+            //display();
+            System.out.println("done");
+            System.out.println("Empty space: " + countEmptySpaces() + " metres cubed");
+            System.out.println("Parcel's placed: " + solution.getLength());
+            System.out.println("Total value: " + solution.getValue());
+            System.out.println("A: " + amountA);
+            System.out.println("B: " + amountB);
+            System.out.println("C: " + amountC);
+            if(solution.getValue() > prevsol) {
+              System.out.println("solution found");
+              prevsol=solution.getValue();
+              solA=amountA;
+              solB=amountB;
+              solC=amountC;
+            }
+            parcelOrder = new Parcel[3];
+            heuristicOrder = new double[3];
+            amountOrder = new int[3];
+            parcelList = new ArrayList<Parcel>();
+            containerSpace = new Parcel[arrayIndex(containerSize.x)][arrayIndex(containerSize.y)][arrayIndex(containerSize.z)];
         }
       }
     }
-    _done = true;
-    parcelFits = true;
-    solution.endSolution(System.currentTimeMillis());
-    makeParcelSolutionArray();
-    display();
-    System.out.println("done");
-    System.out.println("Empty space: " + countEmptySpaces() + " metres cubed");
-    System.out.println("Parcel's placed: " + solution.getLength());
-    System.out.println("Total value: " + solution.getValue());
+  }
+  System.out.println("-----");
+  System.out.println(prevsol);
+  System.out.println(solA);
+  System.out.println(solB);
+  System.out.println(solC);
   }
 
   /**
@@ -60,19 +96,19 @@ public class GreedyAlgorithm extends Algorithm {
   public void placeInArray(Parcel parcel) {
     Vector3D size = parcel.getSize();
     Vector3D pos = parcel.getPosition();
-    System.out.println("position:");
+    /*System.out.println("position:");
     System.out.println(arrayIndex(pos.x));
     System.out.println(arrayIndex(pos.y));
     System.out.println(arrayIndex(pos.z));
     System.out.println("size");
     System.out.println(arrayIndex(size.x));
     System.out.println(arrayIndex(size.y));
-    System.out.println(arrayIndex(size.z));
+    System.out.println(arrayIndex(size.z));*/
     for(int i=arrayIndex(pos.x); i<arrayIndex(size.x) + arrayIndex(pos.x);i++) {
       for(int j=arrayIndex(pos.y); j<arrayIndex(size.y) + arrayIndex(pos.y); j++) {
         for(int k=arrayIndex(pos.z); k<arrayIndex(size.z) + arrayIndex(pos.z); k++) {
           containerSpace[i][j][k] = parcel;
-          System.out.println("placed at " + i + ", " + j + ", " + k);
+          //System.out.println("placed at " + i + ", " + j + ", " + k);
         }
       }
     }
@@ -140,7 +176,7 @@ public class GreedyAlgorithm extends Algorithm {
     if(xIndex+arrayIndex(size.x)<=arrayIndex(containerSize.x) &&
      yIndex+arrayIndex(size.y)<=arrayIndex(containerSize.y) &&
      zIndex+arrayIndex(size.z)<=arrayIndex(containerSize.z)) {
-      System.out.println("parcel can fit in container dimensions");
+      //System.out.println("parcel can fit in container dimensions");
       for(int m=xIndex; m < xIndex+arrayIndex(size.x); m++) {
         for(int n=yIndex; n < yIndex+arrayIndex(size.y); n++) {
           for(int o=zIndex; o < zIndex+arrayIndex(size.z); o++) {
@@ -150,10 +186,10 @@ public class GreedyAlgorithm extends Algorithm {
           }
         }
       }
-      System.out.println("can fit");
+      //System.out.println("can fit");
       return true;
     }
-    System.out.println("can't fit in container");
+    //System.out.println("can't fit in container");
     return false;
   }
 
@@ -190,7 +226,7 @@ public class GreedyAlgorithm extends Algorithm {
       }
     }
     if(xEdge && yEdge && zEdge) { //logging
-      System.out.println("is corner");
+      //System.out.println("is corner");
     } /*else {
       System.out.println("is not corner");
     }*/
@@ -238,7 +274,7 @@ public class GreedyAlgorithm extends Algorithm {
        parcel.setSize(buffer.getSize());
        return true;
      }
-     System.out.println("no possible rotation found for corner (" + posIndex.x + ", " + posIndex.y + ", " + posIndex.z + ")");
+     //System.out.println("no possible rotation found for corner (" + posIndex.x + ", " + posIndex.y + ", " + posIndex.z + ")");
      return false;
    }
 
