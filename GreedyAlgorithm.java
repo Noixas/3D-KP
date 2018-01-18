@@ -7,9 +7,9 @@ import java.util.*;
  * -The value density(value/volume) of the parcels in descending order.
  */
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 100;//31
-  private int amountB = 0;//19
-  private int amountC = 0;//13
+  private int amountA = 8;//31
+  private int amountB = 24;//19
+  private int amountC = 22;//13
   private double VolA;
   private double VolB;
   private double VolC;
