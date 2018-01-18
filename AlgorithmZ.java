@@ -123,6 +123,7 @@ private void computeSolutionStep()
         else {
                 List<Parcel> randomList = randomizeBaseParcelList();
                 randomList = _baseParcels;//comment fo random
+                List<Vector3D> toDeleteEp = new LinkedList<Vector3D>();
                 for (int i = 0; i < _listEP.size(); i++) {
                         Vector3D pos = _listEP.get(i);
                         if (pos.x + 1 < xBound && pos.y + 1 < yBound && pos.z + 1 < zBound ) {//container boundaries
@@ -137,16 +138,33 @@ private void computeSolutionStep()
                                                 i = _listEP.size();
                                                 j = _baseParcels.size();
                                         }
-                                        else if(j == _baseParcels.size()-1 && i == _listEP.size()-1)//If we tried all and none fit
+                                        else if(j == _baseParcels.size()-1)//Tried all the kind of parcels
                                         {
-                                                System.out.println("No more boxes can be placed");
+                                          System.out.println("EP to delete "+pos);
+                                          toDeleteEp.add(pos);
+                                          if(i == _listEP.size()-1)//We went through all EP
+                                          {
+                                            System.out.println("No more boxes can be placed");
+                                          }
                                         }
                                 }
                         }
+                        else{ //ep out of boudaries so delete
+                          toDeleteEp.add(pos);
+                        }
                 }
+                deleteUselessEP(_listEP, toDeleteEp);
         }
 }
+private void deleteUselessEP(List<Vector3D> originalEP, List<Vector3D> toDeleteEp)
+{
 
+  for(int i = 0; i < toDeleteEp.size(); i++)
+  {
+    System.out.println("EP to delete from method "+toDeleteEp.get(i));
+    originalEP.remove(toDeleteEp.get(i));
+  }
+}
 private void placeParcel(Parcel pParcel, Vector3D pos)
 {
         pParcel.setPosition(pos);
