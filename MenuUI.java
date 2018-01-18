@@ -14,7 +14,7 @@ import javafx.geometry.Pos;
 public class MenuUI {
   private static final int TOP_HEIGHT = 160;
   private static TextArea results;
-  private static ComboBox algorithms;
+  private static ComboBox<String> algorithms;
   private static TextField boxACntr;
   private static TextField boxBCntr;
   private static TextField boxCCntr;
@@ -185,7 +185,7 @@ public class MenuUI {
   }
 
   public void constructChoices(Pane center) {
-    algorithms = new ComboBox();
+    algorithms = new ComboBox<String>();
     algorithms.getItems().addAll(
       "Greedy Volume",
       "Greedy Density",
