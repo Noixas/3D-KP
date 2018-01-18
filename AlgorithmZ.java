@@ -11,6 +11,7 @@ private List<Parcel> _baseParcels;
 private Random rnd;
 private Parcel[][][] _containerSpace;
 private int _scalingArrayConst = 2;
+private int _wallsCount;
 ////////Temporary container boundaries from c#///////////
 public double xBound = 16.5;
 public double yBound = 2.5;
@@ -18,7 +19,6 @@ public double zBound = 4;
 ///////////////////////////////////////
 public AlgorithmZ(){
         rnd = new Random();
-
         _container = new Container();
         xBound = _container.getSize().x;
         yBound = _container.getSize().y;
@@ -38,7 +38,7 @@ public AlgorithmZ(){
 public void Start(){
         System.out.println("Algorithm Z started");
         createContainerWalls();
-        computeSolution();
+        computeSolution(40);
         displayExtremePoints();
 
 }
@@ -49,12 +49,22 @@ public void displayExtremePoints()
                 CreateParcel.createSphere(_listEP.get(i));
         }
 }
+public void displayParcels()
+{
+        for(int i = 0; i < _solution.getLength(); i++)
+        {
+            Parcel a = _solution.get(i);
+            if(a.getInvisible() == false)
+                CreateParcel.createParcel(a);
+        }
+}
 private void createContainerWalls()
 {
-        int wallsCount = 3;
-        for(int i = 0; i < wallsCount; i++)
+        _wallsCount = 3;
+        for(int i = 0; i < _wallsCount; i++)
         {
                 Parcel c = new Parcel(new Vector3D(0,0,0), 0);
+                c.setInvisible(true);
                 Vector3D pos = Vector3D.getZero();
                 Vector3D size = Vector3D.getZero();
                 switch (i)
@@ -83,8 +93,19 @@ private void createContainerWalls()
 }
 public void display(){
         System.out.println("Display button pressed");
+        CreateParcel.clearAllParcels();
+        displayParcels();
+        displayExtremePoints();
 }
-private void computeSolution()
+private void computeSolution(int pIterations)
+{
+  if(pIterations <= 0) return;
+  for(int i = 0; i < pIterations; i++)
+  {
+    computeSolutionStep();
+  }
+}
+private void computeSolutionStep()
 {
         if (_started == false)
         {
@@ -101,6 +122,7 @@ private void computeSolution()
         }
         else {
                 List<Parcel> randomList = randomizeBaseParcelList();
+                randomList = _baseParcels;//comment fo random
                 for (int i = 0; i < _listEP.size(); i++) {
                         Vector3D pos = _listEP.get(i);
                         if (pos.x + 1 < xBound && pos.y + 1 < yBound && pos.z + 1 < zBound ) {//container boundaries
@@ -124,6 +146,7 @@ private void computeSolution()
                 }
         }
 }
+
 private void placeParcel(Parcel pParcel, Vector3D pos)
 {
         pParcel.setPosition(pos);
@@ -173,7 +196,7 @@ public void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newPar
                 //Idea: check if the y +  hight of the placed Parcel is less or equal than the y of the new Parcel
 
                 //Maybe because the Parcel in unity has pivot in the middle, the x of the Parcel is 50 and not 0
-                System.out.println("X of placed Parcel" + placedPos.x);
+                //System.out.println("X of placed Parcel" + placedPos.x);
                 //Xy:
                 if ((X.x  >= placedPos.x && X.x  < (placedPos.x + placedSize.x)) && (X.z >= placedPos.z && X.z < (placedPos.z + placedSize.z))&&(placedPos.y + placedSize.y > maxBound[0]))
                 {
@@ -215,9 +238,9 @@ public void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newPar
         }
         for (int i = 0; i < newEP.length; i++)
         {
-                System.out.println("Length "+newEP.length);
-                System.out.println("i: "+ i);
-                System.out.println("newEP[i]: "+newEP[i]);
+                //System.out.println("Length "+newEP.length);
+                //System.out.println("i: "+ i);
+                //System.out.println("newEP[i]: "+newEP[i]);
                 if (Vector3D.getZero().equals(newEP[i]) == false && newEP[i] != null)//We dont want point 0, TODO check if it even give us this case in java Reason first was coded in c unity
                 {
 
@@ -296,17 +319,17 @@ private boolean checkFit(Parcel p, Vector3D pos)
                         for(int j = y; j < y + spaceIndex(size.y); j++) {
                                 for(int k = z; k < z + spaceIndex(size.z); k++) {
                                         if(_containerSpace[i][j][k] != null) {
-                                                System.out.println("Point in array ocuppied " + "X " + i + "Y " + j + "Z "+ k);
+                                              //  System.out.println("Point in array ocuppied " + "X " + i + "Y " + j + "Z "+ k);
                                                 System.out.println(_containerSpace[i][j][k]);
                                                 return false;
                                         }
                                 }
                         }
                 }
-                System.out.println("can fit");
+                //System.out.println("can fit");
                 return true;
         }
-        System.out.println("can't fit in container");
+        //System.out.println("can't fit in container");
         return false;
 }
 private int spaceIndex(double size)
