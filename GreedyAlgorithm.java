@@ -7,8 +7,8 @@ import java.util.*;
  * -The value density(value/volume) of the parcels in descending order.
  */
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 8;//31
-  private int amountB = 24;//19
+  private int amountA = 11;//31
+  private int amountB = 22;//19
   private int amountC = 22;//13
   private double VolA;
   private double VolB;
@@ -118,7 +118,7 @@ public class GreedyAlgorithm extends Algorithm {
                   return true;
                 }
               }
-            }
+            }//
           } //else {System.out.println("(" + i + ", " + j + ", " + k + ") is not empty");}
         }
       }
@@ -387,9 +387,10 @@ public void makeLists(int id) {
 
   /**
    * Sets the algorithm to the heuristic wanted. Connected to the user interface.
+   * @param id the id of the heuristic.
    */
-  public void setID(int i) {
-    heuristicID = i;
+  public void setID(int id) {
+    heuristicID = id;
   }
 
   /**

@@ -21,7 +21,7 @@ private static int height = 100;
 private static int depth = 160;
 
 public CreateParcel() {
-        /*Box xAxis = new Box(500, 3, 3);
+        Box xAxis = new Box(500, 3, 3);
            xAxis.setMaterial(getColor(Color.PINK));
 
            Box yAxis = new Box(3, 500, 3);
@@ -32,7 +32,7 @@ public CreateParcel() {
 
            Text x = new Text (200, 20, "X axis ->");
            Text y = new Text (-15, 230, "Y axis ->");
-           y.setRotate(90);*/
+           y.setRotate(90);
 
 
         Box boxOutline = new Box(width, 3, 3);
@@ -96,7 +96,7 @@ public CreateParcel() {
         boxOutline11.setTranslateY(height);
         boxOutline11.setTranslateX(width);
 
-        parcelGroup.getChildren().addAll(/*xAxis, yAxis, zAxis, x, y,*/ boxOutline, boxOutline1
+        parcelGroup.getChildren().addAll(xAxis, yAxis, zAxis, x, y, boxOutline, boxOutline1
                                                                         , boxOutline2, boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7
                                                                         , boxOutline8, boxOutline9, boxOutline10, boxOutline11);
 }
