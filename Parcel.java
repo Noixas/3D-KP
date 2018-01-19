@@ -4,6 +4,7 @@ public class Parcel{
   protected double _value;
   protected double _volume;
   protected double _densityValue;
+  protected boolean _invisible = false;
   public Parcel(Vector3D pSize, double pValue)
   {
     _size = pSize;
@@ -34,6 +35,14 @@ public class Parcel{
   public double getVolume()
   {
     return _volume;
+  }
+  public void setInvisible(boolean b)
+  {
+    _invisible = b;
+  }
+  public boolean getInvisible()
+  {
+    return _invisible;
   }
   public double getDensityValue()
   {
