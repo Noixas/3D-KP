@@ -96,9 +96,10 @@ public CreateParcel() {
         boxOutline11.setTranslateY(height);
         boxOutline11.setTranslateX(width);
 
-        parcelGroup.getChildren().addAll(/*xAxis, yAxis, zAxis, x, y,*/ boxOutline, boxOutline1
-                                                                        , boxOutline2, boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7
-                                                                        , boxOutline8, boxOutline9, boxOutline10, boxOutline11);
+        parcelGroup.getChildren().addAll(
+					/*xAxis, yAxis, zAxis, x, y,*/ boxOutline, boxOutline1, boxOutline2,
+					boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7,
+          boxOutline8, boxOutline9, boxOutline10, boxOutline11);
 }
 
 public static PhongMaterial getColor(Color color) {
