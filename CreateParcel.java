@@ -117,10 +117,8 @@ public class CreateParcel {
 			box.setMaterial(getColor(Color.RED));
 		} else if(p instanceof ParcelB) {
 			box.setMaterial(getColor(Color.BLUE));
-		} else if(p instanceof ParcelA) {
+		} else if(p instanceof ParcelC) {
 			box.setMaterial(getColor(Color.GREEN));
-		} else {
-			box.setMaterial(getColor(Color.PINK));
 		}
 		//box.setMaterial(getColor(Color.rgb(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), .99)));
 		box.setTranslateX((pos.x + size.x/2)* scaleConstant);
