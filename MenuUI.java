@@ -282,6 +282,7 @@ public class MenuUI {
       public void handle(ActionEvent calc) {
         errorCheck = 0;
         updateInput();
+        makeParcelList();
         if(errorCheck == 0) {
           if(algorithms.getValue() == null) {
             results.setText("No algorithm was selected.");
