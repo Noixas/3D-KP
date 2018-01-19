@@ -36,10 +36,10 @@ public AlgorithmZ(){
  */
 public void Start(){
         _type = SetType.BEST;
-        System.out.println("Algorithm Z started with SetType: "+ _type);
+
         initSetType();
         createContainerWalls();
-        computeSolution(20);
+        computeSolution(10);
         displayExtremePoints();
 
 }
@@ -163,10 +163,11 @@ private void computeSolutionStep()
         if (_started == false) insertFirstParcel();
         else {
                 List<Parcel> randomList = randomizeBaseParcelList();
-                randomList = _baseParcels;//comment fo random
+              if(_type != SetType.RANDOM)  randomList = _baseParcels;//comment for random
                 List<Vector3D> toDeleteEp = new LinkedList<Vector3D>();
                 for (int i = 0; i < _listEP.size(); i++) {
                         Vector3D pos = _listEP.get(i);
+                      //  pos = findBestEP();
                         if (pos.x + 1 < xBound && pos.y + 1 < yBound && pos.z + 1 < zBound ) {//container boundaries
                                 for(int j = 0; j < _baseParcels.size(); j++) {
                                         //int s = rnd.nextInt(_baseParcels.size());
@@ -180,8 +181,8 @@ private void computeSolutionStep()
                                                 j = _baseParcels.size();
                                         }
                                         else if(j == _baseParcels.size()-1) {//Tried all the kind of parcels
-                                                System.out.println("EP to delete "+pos);
-                                                toDeleteEp.add(pos);
+                                                //System.out.println("EP to delete "+pos);
+                                                //toDeleteEp.add(pos);
                                                 if(i == _listEP.size()-1) {//We went through all EP
                                                         System.out.println("No more boxes can be placed");
                                                 }
@@ -408,7 +409,7 @@ private boolean checkFit(Parcel p, Vector3D pos)
                                 for(int k = z; k < z + spaceIndex(size.z); k++) {
                                         if(_containerSpace[i][j][k] != null) {
                                                 //  System.out.println("Point in array ocuppied " + "X " + i + "Y " + j + "Z "+ k);
-                                                System.out.println(_containerSpace[i][j][k]);
+                                              //  System.out.println(_containerSpace[i][j][k]);
                                                 return false;
                                         }
                                 }
@@ -466,6 +467,7 @@ private int spaceIndex(double size)
  */
 private void insertFirstParcel()
 {
+  System.out.println("Algorithm Z first parcel inserted with SetType: " + _type);
         Parcel a = _baseParcels.get(0).clone();
         a.setPosition(Vector3D.getZero());
         _listEP.add(new Vector3D(a.getSize().x, 0, 0));
