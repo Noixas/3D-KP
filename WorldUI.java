@@ -103,6 +103,7 @@ public class WorldUI {
       PickResult result = event.getPickResult();
       Node testNode = result.getIntersectedNode();
       Box temp = (Box) testNode;
+      temp.setMaterial(CreateParcel.getColor(Color.YELLOW));
       xCoord = testNode.getTranslateX();
       yCoord = testNode.getTranslateZ();
       zCoord = testNode.getTranslateZ();
@@ -111,7 +112,7 @@ public class WorldUI {
       height = temp.getHeight();
       width = temp.getWidth();
 
-      
+
     }
     catch(NullPointerException e) {}
   }
