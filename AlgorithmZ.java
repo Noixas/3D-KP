@@ -12,9 +12,7 @@ private Random rnd;
 private Parcel[][][] _containerSpace;
 private int _scalingArrayConst = 2;
 private int _wallsCount;
-private enum SetType {
-        A, B, C, AB, AC, BC, ABC, BEST, RANDOM
-}
+private enum SetType { A, B, C, AB, AC, BC, ABC, BEST, RANDOM }
 private SetType _type;
 ////////Temporary container boundaries from c#///////////
 public double xBound = 16.5;
@@ -29,17 +27,13 @@ public AlgorithmZ(){
         yBound = _container.getSize().y;
         zBound = _container.getSize().z;
         _containerSpace = new Parcel[spaceIndex(xBound)][spaceIndex(yBound)][spaceIndex(zBound)];
-        _baseParcels = new LinkedList<Parcel>();
-        _baseParcels.add(new ParcelA());
-        _baseParcels.add(new ParcelB());
-        _baseParcels.add(new ParcelC());
-
         _started = false;
         _listEP = new LinkedList<Vector3D>();
         _solution = new SolutionSet(0);
-        //Start();
-
 }
+/**
+ * Method to be called from the UI to start calculating a solution
+ */
 public void Start(){
         _type = SetType.BEST;
         System.out.println("Algorithm Z started with SetType: "+ _type);
@@ -49,6 +43,9 @@ public void Start(){
         displayExtremePoints();
 
 }
+/**
+ * Reorders the _baseParcels depending on the kind of set that we want to compute
+ */
 private void initSetType()
 {
         Parcel a = new ParcelA();
@@ -102,14 +99,17 @@ private void initSetType()
                 _baseParcels.add(c);
                 break;
         case RANDOM:
-        _baseParcels.add(a);
-        _baseParcels.add(b);
-        _baseParcels.add(c);
-        _baseParcels = randomizeBaseParcelList();
-        break;
+                _baseParcels.add(a);
+                _baseParcels.add(b);
+                _baseParcels.add(c);
+                _baseParcels = randomizeBaseParcelList();
+                break;
 
         }
 }
+/**
+ * Creates the invisible container walls of the container in which the EP will be proyected
+ */
 private void createContainerWalls()
 {
         _wallsCount = 3;
@@ -143,6 +143,10 @@ private void createContainerWalls()
                 //  CreateParcel.createParcel(c);
         }
 }
+/**
+ * Calls the step method n times to enable faster results
+ * @param int pIterations [Amount of times that step method will be called]
+ */
 private void computeSolution(int pIterations)
 {
         if(pIterations <= 0) return;
@@ -151,21 +155,12 @@ private void computeSolution(int pIterations)
                 computeSolutionStep();
         }
 }
+/**
+ * Computes the parcel and position at which the next one will be placed
+ */
 private void computeSolutionStep()
 {
-        if (_started == false)
-        {
-                int s = rnd.nextInt(_baseParcels.size());
-                Parcel a = _baseParcels.get(s).clone();
-                a.setPosition(Vector3D.getZero());
-                _listEP.add(new Vector3D(a.getSize().x, 0, 0));
-                _listEP.add(new Vector3D(0, a.getSize().y, 0));
-                _listEP.add(new Vector3D(0, 0, a.getSize().z));
-                addParcelToArraySpace(a, Vector3D.getZero());
-                _solution.addParcel(a);
-                CreateParcel.createParcel(a);
-                _started = true;
-        }
+        if (_started == false) insertFirstParcel();
         else {
                 List<Parcel> randomList = randomizeBaseParcelList();
                 randomList = _baseParcels;//comment fo random
@@ -184,24 +179,25 @@ private void computeSolutionStep()
                                                 i = _listEP.size();
                                                 j = _baseParcels.size();
                                         }
-                                        else if(j == _baseParcels.size()-1)//Tried all the kind of parcels
-                                        {
+                                        else if(j == _baseParcels.size()-1) {//Tried all the kind of parcels
                                                 System.out.println("EP to delete "+pos);
                                                 toDeleteEp.add(pos);
-                                                if(i == _listEP.size()-1)//We went through all EP
-                                                {
+                                                if(i == _listEP.size()-1) {//We went through all EP
                                                         System.out.println("No more boxes can be placed");
                                                 }
                                         }
                                 }
                         }
-                        else{ //ep out of boudaries so delete
-                                toDeleteEp.add(pos);
-                        }
+                        else { toDeleteEp.add(pos); }//ep out of boudaries so delete
                 }
                 deleteUselessEP(_listEP, toDeleteEp);
         }
 }
+/**
+ * Process to place the parcel in 3D world, 3D array, solution set and any other related behaviour to placing a new parcel
+ * @param Parcel   pParcel [New parcel to be placed]
+ * @param Vector3D pos     [Position at which it will be placed]
+ */
 private void placeParcel(Parcel pParcel, Vector3D pos)
 {
         pParcel.setPosition(pos);
@@ -211,6 +207,11 @@ private void placeParcel(Parcel pParcel, Vector3D pos)
         CreateParcel.createParcel(pParcel);
 
 }
+/**
+ * Updates the 3D array to avoid parcels overlaping
+ * @param Parcel   pParcel [Parcel reference to be added]
+ * @param Vector3D pos     [Position from which we start adding the new parcel]
+ */
 private void addParcelToArraySpace(Parcel pParcel, Vector3D pos)
 {
         int x = spaceIndex(pos.x);
@@ -227,6 +228,12 @@ private void addParcelToArraySpace(Parcel pParcel, Vector3D pos)
                 }
         }
 }
+/**
+ * Update the EP after a new parcel has been placed by proyection the potential points, eliminating duplicated EP and sorting the new list
+ * @param SolutionSet    placedParcels [Parcels already inside the container]
+ * @param List<Vector3D> EP            [The current list of EP]
+ * @param Parcel         newParcel     [The new parcel that has been added to the container]
+ */
 public void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newParcel)
 {
         double[] maxBound = { -100000, -10000, -1000000, -1000000, -10000, -10000};
@@ -309,7 +316,7 @@ public void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newPar
  * @param List<Vector3D> ep [List of current ExtremePoints]
  */
 public List<Vector3D> removeDuplicatedEP(List<Vector3D> ep, Parcel p)
-{//TODO move it to solution set class maybe
+{
         List<Vector3D> newList = new LinkedList<Vector3D>();
         newList.add(ep.get(0));
         ep.remove(0);
@@ -323,15 +330,27 @@ public List<Vector3D> removeDuplicatedEP(List<Vector3D> ep, Parcel p)
         ep = newList;
         return ep;
 }
+/**
+ * Delete the EP that are in the to Delete list since no box can be placed at that position
+ * @param List<Vector3D> originalEP [The current list of EP]
+ * @param List<Vector3D> toDeleteEp [The list of EP that need to be deleted from the originalEP]
+ */
 private void deleteUselessEP(List<Vector3D> originalEP, List<Vector3D> toDeleteEp)
 {
 
         for(int i = 0; i < toDeleteEp.size(); i++)
         {
-          //  System.out.println("EP to delete from method "+toDeleteEp.get(i));
-          originalEP.remove(toDeleteEp.get(i));
+                //  System.out.println("EP to delete from method "+toDeleteEp.get(i));
+                originalEP.remove(toDeleteEp.get(i));
         }
 }
+/**
+ * Checks if the already set parcel can take the proyection of the potential points of the new parcel just added
+ * @param  Parcel newParcel     [New parcel just introduced into the container]
+ * @param  Parcel prevParcel    [Parcel that was already inside the container]
+ * @param  int    axis          [Axis to be checked]
+ * @return        [True if it is in the side of the proyection]
+ */
 public boolean canTakeProjection(Parcel newParcel, Parcel prevParcel, int axis)
 {
         //return true;
@@ -368,6 +387,12 @@ public boolean canTakeProjection(Parcel newParcel, Parcel prevParcel, int axis)
         }
         return false;
 }
+/**
+ * Check if the parcel fits in the 3D array at that position
+ * @param  Parcel   p             [Parcel to be tested]
+ * @param  Vector3D pos           [Position at which we want to put the parcel]
+ * @return          [True if it fits, false if it doesnt]
+ */
 private boolean checkFit(Parcel p, Vector3D pos)
 {
         Vector3D size = p.getSize();
@@ -395,6 +420,9 @@ private boolean checkFit(Parcel p, Vector3D pos)
         //System.out.println("can't fit in container");
         return false;
 }
+/**
+ * Creates the visualization of the Extreme Points in the 3D world
+ */
 public void displayExtremePoints()
 {
         for(int i = 0; i < _listEP.size(); i++)
@@ -402,6 +430,9 @@ public void displayExtremePoints()
                 CreateParcel.createSphere(_listEP.get(i));
         }
 }
+/**
+ * Createsthe visualization of the parcels in the 3D world
+ */
 public void displayParcels()
 {
         for(int i = 0; i < _solution.getLength(); i++)
@@ -411,6 +442,9 @@ public void displayParcels()
                         CreateParcel.createParcel(a);
         }
 }
+/**
+ * Creates the visual boxes and EP in the current state of the algorithm
+ */
 public void display()
 {
         System.out.println("Display button pressed");
@@ -418,10 +452,34 @@ public void display()
         displayParcels();
         displayExtremePoints();
 }
+/**
+ * Multiplies the number by a constant to enable the represantion of decimals in the 3D array
+ * @param  double size          [Number to be multiplied]
+ * @return        [The input multiplied by the constant]
+ */
 private int spaceIndex(double size)
 {
         return (int)(size * _scalingArrayConst);
 }
+/**
+ * Creates the first parcel and EP from which the rest will be derived
+ */
+private void insertFirstParcel()
+{
+        Parcel a = _baseParcels.get(0).clone();
+        a.setPosition(Vector3D.getZero());
+        _listEP.add(new Vector3D(a.getSize().x, 0, 0));
+        _listEP.add(new Vector3D(0, a.getSize().y, 0));
+        _listEP.add(new Vector3D(0, 0, a.getSize().z));
+        addParcelToArraySpace(a, Vector3D.getZero());
+        _solution.addParcel(a);
+        CreateParcel.createParcel(a);
+        _started = true;
+}
+/**
+ * Reorders randomely the base Parcels
+ * @return [returns the list of parcels randomize from which we will take a parcel]
+ */
 private List<Parcel> randomizeBaseParcelList()
 {
         int s = rnd.nextInt(_baseParcels.size());
