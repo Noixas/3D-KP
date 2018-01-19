@@ -57,7 +57,7 @@ public class GreedyAlgorithm extends Algorithm {
    * Places references to the parcel object in the 3D array which rapresents the container.
    * @param parcel the parcel that is getting placed in the container.
    */
-  public void placeInArray(Parcel parcel) {
+  private void placeInArray(Parcel parcel) {
     Vector3D size = parcel.getSize();
     Vector3D pos = parcel.getPosition();
     System.out.println("position:");
@@ -83,7 +83,7 @@ public class GreedyAlgorithm extends Algorithm {
    * @param parcel the parcel that is getting placed in the container.
    * @return either true or false whether if the parcel is placeable or not.
    */
-  public boolean placeable(Parcel parcel) {
+  private boolean placeable(Parcel parcel) {
     boolean checkX = true;
     boolean checkY = true;
     boolean checkZ = true;
@@ -132,7 +132,7 @@ public class GreedyAlgorithm extends Algorithm {
    * @param parcel the parcel that is getting placed in the container.
    * @param posIndex the position of the parcel within the array.
    */
-  public boolean canFit(Parcel parcel, Vector3D posIndex) {
+  private boolean canFit(Parcel parcel, Vector3D posIndex) {
     Vector3D size = parcel.getSize();
     int xIndex = (int)posIndex.x;
     int yIndex = (int)posIndex.y;
@@ -165,7 +165,7 @@ public class GreedyAlgorithm extends Algorithm {
    * @param z Whether to check on the z axis
    * @return Whether the given coordinates satisfy the given conditions
    */
-  public boolean isNextTo(Vector3D posIndex, boolean x, boolean y, boolean z) {
+  private boolean isNextTo(Vector3D posIndex, boolean x, boolean y, boolean z) {
     boolean xEdge = true;
     boolean yEdge = true;
     boolean zEdge = true;
@@ -203,7 +203,7 @@ public class GreedyAlgorithm extends Algorithm {
    * @param posIndex The position the parcel given as a vector.
    * @return Either true or false depending if a possible rotation can fit in the container.
    */
-   public boolean tryRotations(Parcel parcel, Vector3D posIndex) {
+   private boolean tryRotations(Parcel parcel, Vector3D posIndex) {
      Parcel buffer = parcel.clone();
      //No rotation
      if(canFit(buffer, posIndex)) { //x y z
@@ -249,7 +249,7 @@ public class GreedyAlgorithm extends Algorithm {
    * The information for each parcel can be given by their index in the arrays.
    * @param id The ID of the heuristic. 1:volume | 2:value | 3:density
    */
-public void makeLists(int id) {
+private void makeLists(int id) {
     parcelOrder[0] = new ParcelA();
     parcelOrder[1] = new ParcelB();
     parcelOrder[2] = new ParcelC();
@@ -274,7 +274,7 @@ public void makeLists(int id) {
   /**
    * Sorts the 3 lists by the given heuristic of the parcels.
    */
-  public void sortLists() {
+  private void sortLists() {
     boolean hasChanged = true;
     double heuristicBuffer;
     Parcel parcelBuffer;
@@ -307,7 +307,7 @@ public void makeLists(int id) {
   /**
    * Creates an ArrayList of Parcel objects that need to be placed into the container.
    */
-  public void makeParcelList() {
+  private void makeParcelList() {
     for(int i=0; i<3; i++) {
       for(int j=0; j<amountOrder[i]; j++) {
         parcelList.add(parcelOrder[i].clone());
@@ -319,7 +319,7 @@ public void makeLists(int id) {
    * Rotates the given parcel around the x axis by 90° degrees.
    * @param parcel the parcel that needs to be rotated.
    */
-  public void rotateX(Parcel parcel) {
+  private void rotateX(Parcel parcel) {
     Vector3D size = parcel.getSize();
     parcel.setSize(new Vector3D(size.x, size.z, size.y));
   }
@@ -328,7 +328,7 @@ public void makeLists(int id) {
    * Rotates the given parcel around the y axis by 90° degrees.
    * @param parcel the parcel that needs to be rotated.
    */
-  public void rotateY(Parcel parcel) {
+  private void rotateY(Parcel parcel) {
     Vector3D size = parcel.getSize();
     parcel.setSize(new Vector3D(size.z, size.y, size.x));
   }
@@ -337,7 +337,7 @@ public void makeLists(int id) {
    * Rotates the given parcel around the z axis by 90° degrees.
    * @param parcel the parcel that needs to be rotated.
    */
-  public void rotateZ(Parcel parcel) {
+  private void rotateZ(Parcel parcel) {
     Vector3D size = parcel.getSize();
     parcel.setSize(new Vector3D(size.y, size.x, size.z));
   }
@@ -347,7 +347,7 @@ public void makeLists(int id) {
    * @param number The number that needs to be converted into an array index.
    * @return The number converted into an array index.
    */
-  public int arrayIndex(double number) {
+  private int arrayIndex(double number) {
     return (int)(number*scalingFactor);
   }
 
@@ -356,11 +356,11 @@ public void makeLists(int id) {
    * @param number The number that needs to be converted into an array index.
    * @return The number converted into an array index.
    */
-  public double vectorValue(double number) {
+  private double vectorValue(double number) {
     return number/(double)scalingFactor;
   }
 
-  public double countEmptySpaces() {
+  private double countEmptySpaces() {
     double count = 0;
     for(int i=0; i < containerSpace.length;i++) {
       for(int j=0; j < containerSpace[0].length; j++) {
@@ -377,7 +377,7 @@ public void makeLists(int id) {
   /**
    * Adds the placed parcels to the solution set array.
    */
-  public void makeParcelSolutionArray() {
+  private void makeParcelSolutionArray() {
     for(Parcel p : parcelList) {
       if(p.getPosition() != null) {
         solution.addParcel(p);
@@ -404,19 +404,19 @@ public void makeLists(int id) {
 
 
 //logging
-  public void printArray(double[] ar) {
+  private void printArray(double[] ar) {
     for(int i = 0; i<ar.length; i++) {
       System.out.println(ar[i]);
     }
   }
 
-  public void printArray(Parcel[] ar) {
+  private void printArray(Parcel[] ar) {
     for(int i = 0; i<ar.length; i++) {
       System.out.println(ar[i].getClass());
     }
   }
 
-  public void printArray(int[] ar) {
+  private void printArray(int[] ar) {
     for(int i = 0; i<ar.length; i++) {
       System.out.println(ar[i]);
     }

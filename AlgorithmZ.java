@@ -163,11 +163,11 @@ private void computeSolutionStep()
         if (_started == false) insertFirstParcel();
         else {
                 List<Parcel> randomList = randomizeBaseParcelList();
-              if(_type != SetType.RANDOM)  randomList = _baseParcels;//comment for random
+                if(_type != SetType.RANDOM) randomList = _baseParcels; //comment for random
                 List<Vector3D> toDeleteEp = new LinkedList<Vector3D>();
                 for (int i = 0; i < _listEP.size(); i++) {
                         Vector3D pos = _listEP.get(i);
-                      //  pos = findBestEP();
+                        //  pos = findBestEP();
                         if (pos.x + 1 < xBound && pos.y + 1 < yBound && pos.z + 1 < zBound ) {//container boundaries
                                 for(int j = 0; j < _baseParcels.size(); j++) {
                                         //int s = rnd.nextInt(_baseParcels.size());
@@ -235,7 +235,7 @@ private void addParcelToArraySpace(Parcel pParcel, Vector3D pos)
  * @param List<Vector3D> EP            [The current list of EP]
  * @param Parcel         newParcel     [The new parcel that has been added to the container]
  */
-public void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newParcel)
+private void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newParcel)
 {
         double[] maxBound = { -100000, -10000, -1000000, -1000000, -10000, -10000};
         Vector3D[] newEP = new Vector3D[6];
@@ -316,7 +316,7 @@ public void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newPar
  * Remove elements that are duplicated in the list
  * @param List<Vector3D> ep [List of current ExtremePoints]
  */
-public List<Vector3D> removeDuplicatedEP(List<Vector3D> ep, Parcel p)
+private List<Vector3D> removeDuplicatedEP(List<Vector3D> ep, Parcel p)
 {
         List<Vector3D> newList = new LinkedList<Vector3D>();
         newList.add(ep.get(0));
@@ -352,7 +352,7 @@ private void deleteUselessEP(List<Vector3D> originalEP, List<Vector3D> toDeleteE
  * @param  int    axis          [Axis to be checked]
  * @return        [True if it is in the side of the proyection]
  */
-public boolean canTakeProjection(Parcel newParcel, Parcel prevParcel, int axis)
+private boolean canTakeProjection(Parcel newParcel, Parcel prevParcel, int axis)
 {
         //return true;
         Vector3D newpos = newParcel.getPosition();
@@ -409,7 +409,7 @@ private boolean checkFit(Parcel p, Vector3D pos)
                                 for(int k = z; k < z + spaceIndex(size.z); k++) {
                                         if(_containerSpace[i][j][k] != null) {
                                                 //  System.out.println("Point in array ocuppied " + "X " + i + "Y " + j + "Z "+ k);
-                                              //  System.out.println(_containerSpace[i][j][k]);
+                                                //  System.out.println(_containerSpace[i][j][k]);
                                                 return false;
                                         }
                                 }
@@ -467,7 +467,7 @@ private int spaceIndex(double size)
  */
 private void insertFirstParcel()
 {
-  System.out.println("Algorithm Z first parcel inserted with SetType: " + _type);
+        System.out.println("Algorithm Z first parcel inserted with SetType: " + _type);
         Parcel a = _baseParcels.get(0).clone();
         a.setPosition(Vector3D.getZero());
         _listEP.add(new Vector3D(a.getSize().x, 0, 0));
