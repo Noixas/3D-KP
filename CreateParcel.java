@@ -22,7 +22,7 @@ private static int height = 100;
 private static int depth = 160;
 
 public CreateParcel() {
-        /*Box xAxis = new Box(500, 3, 3);
+        Box xAxis = new Box(500, 3, 3);
            xAxis.setMaterial(getColor(Color.PINK));
 
            Box yAxis = new Box(3, 500, 3);
@@ -33,7 +33,7 @@ public CreateParcel() {
 
            Text x = new Text (200, 20, "X axis ->");
            Text y = new Text (-15, 230, "Y axis ->");
-           y.setRotate(90);*/
+           y.setRotate(90);
 
 
         Box boxOutline = new Box(width, 3, 3);
