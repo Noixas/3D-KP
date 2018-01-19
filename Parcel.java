@@ -24,6 +24,9 @@ public class Parcel{
   {
     _size = newSize;
   }
+  public void setValue(double newValue) {
+    _value = newValue;
+  }
   public Vector3D getSize()
   {
     return _size;

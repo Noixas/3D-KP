@@ -23,7 +23,7 @@ public class SceneManager {
   public SceneManager(Stage mainStage){
     BorderPane root = new BorderPane();
     Group worldGroup = new Group();
-    menuScene = new Scene(root, 640, 460);
+    menuScene = new Scene(root, 640, 700);
     worldScene = new Scene(worldGroup, 1220, 1000, true);
     worldScene.setFill(Color.WHITE);
     stage = mainStage;

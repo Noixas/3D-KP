@@ -10,28 +10,49 @@ import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import java.util.ArrayList;
 
 public class MenuUI {
-  private static final int TOP_HEIGHT = 160;
   private static TextArea results;
   private static ComboBox<String> algorithms;
-  private static TextField boxACntr;
-  private static TextField boxBCntr;
-  private static TextField boxCCntr;
-  private static TextField boxAWeight;
-  private static TextField boxBWeight;
-  private static TextField boxCWeight;
-  private static double amountBoxA;
-  private static double amountBoxB;
-  private static double amountBoxC;
-  private static double weightBoxA;
-  private static double weightBoxB;
-  private static double weightBoxC;
+
+  private static TextField parcelACntr;
+  private static TextField parcelBCntr;
+  private static TextField parcelCCntr;
+
+  private static TextField parcelAValue;
+  private static TextField parcelBValue;
+  private static TextField parcelCValue;
+
+  private static double amountParcelA;
+  private static double amountParcelB;
+  private static double amountParcelC;
+
+  private static double valueParcelA;
+  private static double valueParcelB;
+  private static double valueParcelC;
+
+  private static TextField widthA;
+  private static TextField heightA;
+  private static TextField lengthA;
+
+  private static TextField widthB;
+  private static TextField heightB;
+  private static TextField lengthB;
+
+  private static TextField widthC;
+  private static TextField heightC;
+  private static TextField lengthC;
+
   private static String chosenAlgorithm;
   private static int errorCheck;
   private static Algorithm _activeAlgorithm;
   private static GreedyAlgorithm greedy = new GreedyAlgorithm();
   private static AlgorithmZ extremePoints = new AlgorithmZ();
+  private static Vector3D vectors;
+  private static ArrayList<Parcel> listOfParcels;
+
+
 
   public MenuUI() {}
 
@@ -41,7 +62,7 @@ public class MenuUI {
     center.setPrefSize(200, 20);
     Pane top = new Pane();
     top.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #271033, #388697)");
-    top.setPrefSize(1040, TOP_HEIGHT);
+    top.setPrefSize(1040, 300);
     constructUI(center, top);
     root.setTop(top);
     root.setMargin(top, new Insets(2));
@@ -58,38 +79,87 @@ public class MenuUI {
   }
 
   public void constructInputFields(Pane top) {
-    boxACntr = new TextField();
-    boxACntr.setText("5");
-    boxACntr.setPrefSize(80, 20);
-    boxACntr.relocate(100, (TOP_HEIGHT-50) /2);
+    parcelACntr = new TextField();
+    parcelACntr.setText("5");
+    parcelACntr.setPrefSize(80, 20);
+    parcelACntr.relocate(100, 55);
 
-    boxBCntr = new TextField();
-    boxBCntr.setText("5");
-    boxBCntr.setPrefSize(80, 20);
-    boxBCntr.relocate(280, (TOP_HEIGHT-50) /2);
+    parcelBCntr = new TextField();
+    parcelBCntr.setText("5");
+    parcelBCntr.setPrefSize(80, 20);
+    parcelBCntr.relocate(280, 55);
 
-    boxCCntr = new TextField();
-    boxCCntr.setText("5");
-    boxCCntr.setPrefSize(80, 20);
-    boxCCntr.relocate(460, (TOP_HEIGHT-50) /2);
+    parcelCCntr = new TextField();
+    parcelCCntr.setText("5");
+    parcelCCntr.setPrefSize(80, 20);
+    parcelCCntr.relocate(460, 55);
 
-    boxAWeight = new TextField();
-    boxAWeight.setText("1");
-    boxAWeight.setPrefSize(80, 20);
-    boxAWeight.relocate(100, (TOP_HEIGHT+20) /2);
+    parcelAValue = new TextField();
+    parcelAValue.setText("1");
+    parcelAValue.setPrefSize(80, 20);
+    parcelAValue.relocate(100, 90);
 
-    boxBWeight = new TextField();
-    boxBWeight.setText("2");
-    boxBWeight.setPrefSize(80, 20);
-    boxBWeight.relocate(280, (TOP_HEIGHT+20) /2);
+    parcelBValue = new TextField();
+    parcelBValue.setText("2");
+    parcelBValue.setPrefSize(80, 20);
+    parcelBValue.relocate(280, 90);
 
-    boxCWeight = new TextField();
-    boxCWeight.setText("5");
-    boxCWeight.setPrefSize(80, 20);
-    boxCWeight.relocate(460, (TOP_HEIGHT+20) /2);
+    parcelCValue = new TextField();
+    parcelCValue.setText("5");
+    parcelCValue.setPrefSize(80, 20);
+    parcelCValue.relocate(460, 90);
 
-    top.getChildren().addAll(boxACntr, boxBCntr, boxCCntr, boxAWeight, boxBWeight, boxCWeight);
+    widthA = new TextField();
+    widthA.setText("5");
+    widthA.setPrefSize(80, 20);
+    widthA.relocate(100, 125);
 
+    widthB = new TextField();
+    widthB.setText("5");
+    widthB.setPrefSize(80, 20);
+    widthB.relocate(280, 125);
+
+    widthC = new TextField();
+    widthC.setText("5");
+    widthC.setPrefSize(80, 20);
+    widthC.relocate(460, 125);
+
+    heightA = new TextField();
+    heightA.setText("5");
+    heightA.setPrefSize(80, 20);
+    heightA.relocate(100, 160);
+
+    heightB = new TextField();
+    heightB.setText("5");
+    heightB.setPrefSize(80, 20);
+    heightB.relocate(280, 160);
+
+    heightC = new TextField();
+    heightC.setText("5");
+    heightC.setPrefSize(80, 20);
+    heightC.relocate(460, 160);
+
+    lengthA = new TextField();
+    lengthA.setText("5");
+    lengthA.setPrefSize(80, 20);
+    lengthA.relocate(100, 195);
+
+    lengthB = new TextField();
+    lengthB.setText("5");
+    lengthB.setPrefSize(80, 20);
+    lengthB.relocate(280, 195);
+
+    lengthC = new TextField();
+    lengthC.setText("5");
+    lengthC.setPrefSize(80, 20);
+    lengthC.relocate(460, 195);
+
+    top.getChildren().addAll(
+      parcelACntr, parcelBCntr, parcelCCntr,
+      parcelAValue, parcelBValue, parcelCValue,
+      widthA, widthB, widthC,
+      heightA, heightB, heightC,
+      lengthA, lengthB, lengthC);
   }
 
   public void constructLabels(Pane top) {
@@ -133,7 +203,7 @@ public class MenuUI {
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    amountA.relocate(35, (TOP_HEIGHT-50) / 2);
+    amountA.relocate(35, 55);
 
     Label amountB = new Label();
     amountB.setText("Amount");
@@ -142,7 +212,7 @@ public class MenuUI {
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    amountB.relocate(215, (TOP_HEIGHT-50) / 2);
+    amountB.relocate(215, 55);
 
     Label amountC = new Label();
     amountC.setText("Amount");
@@ -151,7 +221,7 @@ public class MenuUI {
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    amountC.relocate(395, (TOP_HEIGHT-50) / 2);
+    amountC.relocate(395, 55);
 
     Label weightA = new Label();
     weightA.setText("Weight");
@@ -160,7 +230,7 @@ public class MenuUI {
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    weightA.relocate(40, (TOP_HEIGHT+20) / 2);
+    weightA.relocate(40, 90);
 
     Label weightB = new Label();
     weightB.setText("Weight");
@@ -169,7 +239,7 @@ public class MenuUI {
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    weightB.relocate(215, (TOP_HEIGHT+20) / 2);
+    weightB.relocate(215, 90);
 
     Label weightC = new Label();
     weightC.setText("Weight");
@@ -178,13 +248,14 @@ public class MenuUI {
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    weightC.relocate(395, (TOP_HEIGHT+20) / 2);
+    weightC.relocate(395, 90);
+
 
     top.getChildren().addAll(
       labelBoxA, labelBoxB, labelBoxC,
       amountA, amountB, amountC,
       weightA, weightB, weightC);
-}
+  }
 
   public void constructChoices(Pane center) {
     algorithms = new ComboBox<String>();
@@ -287,44 +358,44 @@ public class MenuUI {
       }
     });
 
-  Button viewCargo = new Button();
-  viewCargo.setText("Show 3D-model");
-  viewCargo.setPrefSize(140, 20);
-  viewCargo.relocate(50, 130);
-  viewCargo.setOnAction(new EventHandler<ActionEvent>() {
-                  @Override
-                  public void handle(ActionEvent swtch) {
-                          int i = 2;
-                          SceneManager.changeScene(i);
-                  }
-          });
-  Button printResult = new Button();
-  printResult.setText("Print results");
-  printResult.setPrefSize(140, 20);
-  printResult.relocate(50, 170);
-  printResult.setOnAction(new EventHandler<ActionEvent>() {
-                  @Override
-                  public void handle(ActionEvent print) {
-                          results.setText(
-                                  "The algorithm that was used is: " + chosenAlgorithm + "\n" +
-                                  "Total amount of boxes used: " + "46" + "\n" +
-                                  "Total value of the used boxes: " + "635" + "\n" +
-                                  "Total amount of second the algorithm took: " + "1231" + "\n" +
-                                  "Total amount of different possibilities: " + "873" + "\n" + amountBoxA );
-                  }
-          });
-  Button resetWorld = new Button();
-  resetWorld.setText("Clear all parcels");
-  resetWorld.setPrefSize(140, 20);
-  resetWorld.relocate(50, 210);
-  resetWorld.setOnAction(new EventHandler<ActionEvent>() {
-                  @Override
-                  public void handle(ActionEvent clear) {
-                          CreateParcel.clearAllParcels();
-                  }
-          });
-  center.getChildren().addAll(calcButton, viewCargo, printResult, resetWorld, display);
-}
+    Button viewCargo = new Button();
+    viewCargo.setText("Show 3D-model");
+    viewCargo.setPrefSize(140, 20);
+    viewCargo.relocate(50, 130);
+    viewCargo.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent swtch) {
+                            int i = 2;
+                            SceneManager.changeScene(i);
+                    }
+            });
+    Button printResult = new Button();
+    printResult.setText("Print results");
+    printResult.setPrefSize(140, 20);
+    printResult.relocate(50, 170);
+    printResult.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent print) {
+                            results.setText(
+                                    "The algorithm that was used is: " + chosenAlgorithm + "\n" +
+                                    "Total amount of boxes used: " + "46" + "\n" +
+                                    "Total value of the used boxes: " + "635" + "\n" +
+                                    "Total amount of second the algorithm took: " + "1231" + "\n" +
+                                    "Total amount of different possibilities: " + "873" + "\n" );
+                    }
+            });
+    Button resetWorld = new Button();
+    resetWorld.setText("Clear all parcels");
+    resetWorld.setPrefSize(140, 20);
+    resetWorld.relocate(50, 210);
+    resetWorld.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent clear) {
+                            CreateParcel.clearAllParcels();
+                    }
+            });
+    center.getChildren().addAll(calcButton, viewCargo, printResult, resetWorld, display);
+  }
 
   public void constructResultField(Pane center) {
     results = new TextArea();
@@ -343,51 +414,93 @@ public class MenuUI {
 
   public void updateInput() {
     try {
-      amountBoxA = Double.parseDouble(boxACntr.getText());
+      amountParcelA = Double.parseDouble(parcelACntr.getText());
     }
     catch(NumberFormatException e) {
-      boxACntr.setText("Error");
+      parcelACntr.setText("Error");
       errorCheck = 1;
     }
 
     try {
-      amountBoxB = Double.parseDouble(boxBCntr.getText());
+      amountParcelB = Double.parseDouble(parcelBCntr.getText());
     }
     catch(NumberFormatException e) {
-      boxBCntr.setText("Error");
+      parcelBCntr.setText("Error");
       errorCheck = 1;
     }
 
     try {
-      amountBoxC = Double.parseDouble(boxCCntr.getText());
+      amountParcelC = Double.parseDouble(parcelCCntr.getText());
     }
     catch(NumberFormatException e) {
-      boxCCntr.setText("Error");
+      parcelCCntr.setText("Error");
       errorCheck = 1;
     }
 
     try {
-      weightBoxA = Double.parseDouble(boxAWeight.getText());
+      valueParcelA = Double.parseDouble(parcelAValue.getText());
     }
     catch(NumberFormatException e) {
-      boxAWeight.setText("Error");
+      parcelAValue.setText("Error");
       errorCheck = 1;
     }
 
     try {
-      weightBoxB = Double.parseDouble(boxBWeight.getText());
+      valueParcelB = Double.parseDouble(parcelBValue.getText());
     }
     catch(NumberFormatException e) {
-      boxBWeight.setText("Error");
+      parcelBValue.setText("Error");
       errorCheck = 1;
     }
 
     try {
-      weightBoxC = Double.parseDouble(boxCWeight.getText());
+      valueParcelC = Double.parseDouble(parcelCValue.getText());
     }
     catch(NumberFormatException e) {
-      boxCWeight.setText("Error");
+      parcelCValue.setText("Error");
       errorCheck = 1;
     }
+  }
+
+  public void makeParcelList() {
+    listOfParcels = new ArrayList<Parcel>();
+
+    Parcel parcelA = new ParcelA();
+    Parcel parcelB = new ParcelB();
+    Parcel parcelC = new ParcelC();
+
+    double xA = Double.parseDouble(lengthA.getText());
+    double yA = Double.parseDouble(widthA.getText());;
+    double zA = Double.parseDouble(heightA.getText());;
+
+    double xB = Double.parseDouble(lengthB.getText());;
+    double yB = Double.parseDouble(widthB.getText());;
+    double zB = Double.parseDouble(heightB.getText());;
+
+    double xC = Double.parseDouble(lengthC.getText());;
+    double yC = Double.parseDouble(widthC.getText());;
+    double zC = Double.parseDouble(heightC.getText());;
+
+    for(int i = 0; i < amountParcelA; i++) {
+      parcelA.setSize(new Vector3D(xA, yA, zA));
+      parcelA.setValue(valueParcelA);
+      listOfParcels.add(parcelA);
+    }
+
+    for(int j = 0; j < amountParcelB; j++) {
+      parcelB.setSize(new Vector3D(xB, yB, zB));
+      parcelB.setValue(valueParcelB);
+      listOfParcels.add(parcelB);
+    }
+
+    for(int k = 0; k < amountParcelC; k++) {
+      parcelC.setSize(new Vector3D(xC, yC, zC));
+      parcelC.setValue(valueParcelC);
+      listOfParcels.add(parcelC);
+    }
+  }
+
+  public ArrayList<Parcel> getParcelList() {
+    return listOfParcels;
   }
 }
