@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.shape.DrawMode;
 import java.util.Random;
+import java.util.ArrayList;
 
 public class CreateParcel {
 private static Group parcelGroup = new Group();
@@ -22,17 +23,17 @@ private static int depth = 160;
 
 public CreateParcel() {
         Box xAxis = new Box(500, 3, 3);
-           xAxis.setMaterial(getColor(Color.PINK));
+        xAxis.setMaterial(getColor(Color.PINK));
 
-           Box yAxis = new Box(3, 500, 3);
-           yAxis.setMaterial(getColor(Color.BLACK));
+        Box yAxis = new Box(3, 500, 3);
+        yAxis.setMaterial(getColor(Color.BLACK));
 
-           Box zAxis = new Box(3, 3, 500);
-           zAxis.setMaterial(getColor(Color.AQUA));
+        Box zAxis = new Box(3, 3, 500);
+        zAxis.setMaterial(getColor(Color.AQUA));
 
-           Text x = new Text (200, 20, "X axis ->");
-           Text y = new Text (-15, 230, "Y axis ->");
-           y.setRotate(90);
+        Text x = new Text (200, 20, "X axis ->");
+        Text y = new Text (-15, 230, "Y axis ->");
+        y.setRotate(90);
 
 
         Box boxOutline = new Box(width, 3, 3);
@@ -96,9 +97,11 @@ public CreateParcel() {
         boxOutline11.setTranslateY(height);
         boxOutline11.setTranslateX(width);
 
-        parcelGroup.getChildren().addAll(xAxis, yAxis, zAxis, x, y, boxOutline, boxOutline1
-                                			, boxOutline2, boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7
-                                			, boxOutline8, boxOutline9, boxOutline10, boxOutline11);
+        parcelGroup.getChildren().addAll(
+					/*xAxis, yAxis, zAxis, x, y,*/ boxOutline, boxOutline1, boxOutline2,
+					boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7,
+          boxOutline8, boxOutline9, boxOutline10, boxOutline11);
+
 }
 
 public static PhongMaterial getColor(Color color) {
@@ -134,6 +137,8 @@ public static void createParcel(Parcel p){
         box0.setTranslateY((pos.y + size.y/2)* scaleConstant);
         box0.setTranslateZ((pos.z + size.z/2)* scaleConstant);
         parcelGroup.getChildren().addAll(box0);
+				ArrayList<Node> boxList = new ArrayList<Node>();
+				boxList.add(box0);
 }
 
 public static void createSphere(int x, int y, int z) {
@@ -251,8 +256,8 @@ public static void clearAllParcels() {
         boxOutline11.setTranslateX(width);
 
         parcelGroup.getChildren().addAll(/*xAxis, yAxis, zAxis, x, y,*/ boxOutline, boxOutline1
-                                         , boxOutline2, boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7
-                                         , boxOutline8, boxOutline9, boxOutline10, boxOutline11);
+                                                                        , boxOutline2, boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7
+                                                                        , boxOutline8, boxOutline9, boxOutline10, boxOutline11);
         _cleared = true;
 }
 

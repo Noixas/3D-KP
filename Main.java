@@ -11,29 +11,29 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 
 public class Main extends Application {
-  private static Stage stage;
-  private static Stage secondStage;
+private static Stage stage;
+private static Stage secondStage;
 
-  public static void main(String[] args) {
-    launch(args);
-  }
+public static void main(String[] args) {
+        launch(args);
+}
 
-  public void start(Stage mainStage) {
-    stage = mainStage;
-    Stage infoStage = new Stage();
-    secondStage = infoStage;
-    infoStage.setTitle("Info");
-    mainStage.centerOnScreen();
-    mainStage.setTitle("Phase 3");
-    SceneManager scenemanager = new SceneManager(mainStage);
+public void start(Stage mainStage) {
+        stage = mainStage;
+        Stage infoStage = new Stage();
+        secondStage = infoStage;
+        infoStage.setTitle("Info");
+        mainStage.centerOnScreen();
+        mainStage.setTitle("Phase 3");
+        SceneManager scenemanager = new SceneManager(mainStage);
 
-    AnimationTimer timer = new AnimationTimer() {
-                                @Override
-                                public void handle(long now) {
-                                  WorldUI.printInfo();
-                                }
-                              };
-    timer.start();
-    mainStage.show();
-  }
+        AnimationTimer timer = new AnimationTimer() {
+                @Override
+                public void handle(long now) {
+                        WorldUI.printInfo();
+                }
+        };
+        timer.start();
+        mainStage.show();
+}
 }

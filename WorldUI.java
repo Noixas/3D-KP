@@ -103,6 +103,7 @@ public class WorldUI {
       PickResult result = event.getPickResult();
       Node testNode = result.getIntersectedNode();
       Box temp = (Box) testNode;
+      temp.setMaterial(CreateParcel.getColor(Color.YELLOW));
       xCoord = testNode.getTranslateX();
       yCoord = testNode.getTranslateZ();
       zCoord = testNode.getTranslateZ();
@@ -111,7 +112,7 @@ public class WorldUI {
       height = temp.getHeight();
       width = temp.getWidth();
 
-      
+
     }
     catch(NullPointerException e) {}
   }
@@ -161,38 +162,38 @@ public class WorldUI {
 }
 
 class XformWorld extends Group {
-    final Translate t = new Translate(0.0, 0.0, 0.0);
-    final Rotate rx = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
-    final Rotate ry = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
-    final Rotate rz = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
+final Translate t = new Translate(0.0, 0.0, 0.0);
+final Rotate rx = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
+final Rotate ry = new Rotate(0, 0, 0, 0, Rotate.Y_AXIS);
+final Rotate rz = new Rotate(0, 0, 0, 0, Rotate.Z_AXIS);
 
-    public XformWorld() {
+public XformWorld() {
         super();
         this.getTransforms().addAll(t, rx, ry, rz);
-    }
+}
 }
 
 class XformCamera extends Group {
-    Point3D px = new Point3D(1.0, 0.0, 0.0);
-    Point3D py = new Point3D(0.0, 1.0, 0.0);
-    Rotate r;
-    Transform t = new Rotate();
+Point3D px = new Point3D(1.0, 0.0, 0.0);
+Point3D py = new Point3D(0.0, 1.0, 0.0);
+Rotate r;
+Transform t = new Rotate();
 
-    public XformCamera() {
+public XformCamera() {
         super();
-    }
+}
 
-    public void rx(double angle) {
+public void rx(double angle) {
         r = new Rotate(angle, px);
         this.t = t.createConcatenation(r);
         this.getTransforms().clear();
         this.getTransforms().addAll(t);
-    }
+}
 
-    public void ry(double angle) {
+public void ry(double angle) {
         r = new Rotate(angle, py);
         this.t = t.createConcatenation(r);
         this.getTransforms().clear();
         this.getTransforms().addAll(t);
-    }
+}
 }
