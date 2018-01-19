@@ -16,7 +16,7 @@ private static Vector3D pos;
 private static Box box0;
 private static Box box;
 private static boolean _cleared = false;
-private static int width = 659;
+private static int width = 660;
 private static int height = 100;
 private static int depth = 160;
 
@@ -250,7 +250,7 @@ public static void clearAllParcels() {
         boxOutline11.setTranslateY(height);
         boxOutline11.setTranslateX(width);
 
-        parcelGroup.getChildren().addAll(xAxis, yAxis, zAxis, x, y, boxOutline, boxOutline1
+        parcelGroup.getChildren().addAll(/*xAxis, yAxis, zAxis, x, y,*/ boxOutline, boxOutline1
                                          , boxOutline2, boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7
                                          , boxOutline8, boxOutline9, boxOutline10, boxOutline11);
         _cleared = true;
