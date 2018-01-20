@@ -71,11 +71,20 @@ public class Parcel{
 public Parcel clone()
 {
         if(this instanceof ParcelA) {
-                return new ParcelA();
+          ParcelA clone = new ParcelA();
+          clone.setSize(this._size);
+          clone.setValue(this._value);
+                return clone;
         } else if(this instanceof ParcelB) {
-                return new ParcelB();
+          ParcelB clone = new ParcelB();
+          clone.setSize(this._size);
+          clone.setValue(this._value);
+                return clone;
         } else if(this instanceof ParcelC) {
-                return new ParcelC();
+          ParcelC clone = new ParcelC();
+          clone.setSize(this._size);
+          clone.setValue(this._value);
+                return clone;
         } else {
                 return new Parcel(_size.clone(), _value);
         }
