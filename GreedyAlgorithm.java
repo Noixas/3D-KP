@@ -7,12 +7,10 @@ import java.util.*;
  * -The value density(value/volume) of the parcels in descending order.
  */
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 14;//25
-  private int amountB = 19;//19
-  private int amountC = 18;//13
-  private double VolA;
-  private double VolB;
-  private double VolC;
+  private int amountA = 0;//25
+  private int amountB = 0;//19
+  private int amountC = 0;//13
+  private int parcelTypes = 0; //Counts how many different types of parcels are present
   private Parcel[] parcelOrder = new Parcel[3];
   private double[] heuristicOrder = new double[3];
   private int[] amountOrder = new int[3];
@@ -28,11 +26,13 @@ public class GreedyAlgorithm extends Algorithm {
   /**
    * Start computing solution separated from constructor to be able to configure it with the UI
    */
-  public void Start() {
+  public void Start(List<Parcel> list) {
     solution = new SolutionSet(System.currentTimeMillis());
+    parcelList = (ArrayList<Parcel>)list;
+    countParcels();
     makeLists(heuristicID);
     sortLists();
-    makeParcelList();
+    makeOrderedParcelList();
     for(Parcel p : parcelList) {
       System.out.println("the current parcel is: " + p.getClass());
       if(parcelFits || !(p.getClass().equals(parcelList.get(parcelList.indexOf(p)-1).getClass()))) {
@@ -47,6 +47,9 @@ public class GreedyAlgorithm extends Algorithm {
     makeParcelSolutionArray();
     solution.endSolution(System.currentTimeMillis());
     display();
+    amountA=0;
+    amountB=0;
+    amountC=0;
     System.out.println("done");
     System.out.println("Empty space: " + countEmptySpaces() + " metres cubed");
     System.out.println("Parcel's placed: " + solution.getLength());
@@ -243,6 +246,20 @@ public class GreedyAlgorithm extends Algorithm {
      return false;
    }
 
+   /**
+    *
+    */
+    private void countParcels() {
+      for(Parcel p : parcelList) {
+        if(p instanceof ParcelA) {
+          amountA++;
+        } else if(p instanceof ParcelB) {
+          amountB++;
+        } else if(p instanceof ParcelC) {
+          amountC++;
+        }
+      }
+    }
 
 
   /**
@@ -251,23 +268,38 @@ public class GreedyAlgorithm extends Algorithm {
    * @param id The ID of the heuristic. 1:volume | 2:value | 3:density
    */
 private void makeLists(int id) {
-    parcelOrder[0] = new ParcelA();
-    parcelOrder[1] = new ParcelB();
-    parcelOrder[2] = new ParcelC();
+  if(amountA != 0) {
+    parcelOrder[0] = parcelList.get(0).clone();
+  }
+  System.out.println("1");
+  if(amountB != 0) {
+    parcelOrder[1] = parcelList.get(amountA).clone();
+  }
+  System.out.println("2");
+  if(amountC != 0) {
+    parcelOrder[2] = parcelList.get(amountA + amountB).clone();
+  }
+  System.out.println("3");
     amountOrder[0] = amountA;
     amountOrder[1] = amountB;
     amountOrder[2] = amountC;
     if(id == 1) {
       for(int i=0; i<3; i++) {
-        heuristicOrder[i] = parcelOrder[i].getVolume();
+        if(parcelOrder[i] != null) {
+          heuristicOrder[i] = parcelOrder[i].getVolume();
+        }
       }
     } else if(id == 2) {
       for(int i=0; i<3; i++) {
-        heuristicOrder[i] = parcelOrder[i].getValue();
+        if(parcelOrder[i] != null) {
+          heuristicOrder[i] = parcelOrder[i].getValue();
+        }
       }
     } else if(id == 3) {
       for(int i=0; i<3; i++) {
-        heuristicOrder[i] = parcelOrder[i].getDensityValue();
+        if(parcelOrder[i] != null) {
+          heuristicOrder[i] = parcelOrder[i].getDensityValue();
+        }
       }
     }
   }
@@ -308,7 +340,8 @@ private void makeLists(int id) {
   /**
    * Creates an ArrayList of Parcel objects that need to be placed into the container.
    */
-  private void makeParcelList() {
+  private void makeOrderedParcelList() {
+  parcelList.clear();
     for(int i=0; i<3; i++) {
       for(int j=0; j<amountOrder[i]; j++) {
         parcelList.add(parcelOrder[i].clone());
@@ -426,4 +459,6 @@ private void makeLists(int id) {
       System.out.println(ar[i]);
     }
   }
+
+  public void Start(){}
 }
