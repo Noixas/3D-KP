@@ -7,9 +7,9 @@ import java.util.*;
  * -The value density(value/volume) of the parcels in descending order.
  */
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 11;//31
-  private int amountB = 22;//19
-  private int amountC = 22;//13
+  private int amountA = 14;//25
+  private int amountB = 19;//19
+  private int amountC = 18;//13
   private double VolA;
   private double VolB;
   private double VolC;
@@ -87,13 +87,14 @@ public class GreedyAlgorithm extends Algorithm {
     boolean checkX = true;
     boolean checkY = true;
     boolean checkZ = true;
+    for(int u=1; u < 4; u++) {
     for(int i=0; i < containerSpace.length;i++) {
       for(int j=0; j < containerSpace[0].length; j++) {
         for(int k=0; k < containerSpace[0][0].length; k++) {
           if(containerSpace[i][j][k] == null) {
             Vector3D posIndex = new Vector3D(i, j, k);
             //System.out.println("(" + i + ", " + j + ", " + k + ") is empty");
-            for(int u=0; u < 4; u++) {
+
               if(u==0) {
                 checkX = true;
                 checkY = true;
@@ -400,6 +401,10 @@ private void makeLists(int id) {
     for(int p=0; p<solution.getLength(); p++) {
       CreateParcel.createParcel(solution.get(p));
     }
+  }
+
+  public SolutionSet getSolutionSet() {
+    return solution;
   }
 
 
