@@ -24,14 +24,6 @@ public class MenuUI {
   private static TextField parcelBValue;
   private static TextField parcelCValue;
 
-  private static double amountParcelA;
-  private static double amountParcelB;
-  private static double amountParcelC;
-
-  private static double valueParcelA;
-  private static double valueParcelB;
-  private static double valueParcelC;
-
   private static TextField widthA;
   private static TextField heightA;
   private static TextField lengthA;
@@ -43,6 +35,34 @@ public class MenuUI {
   private static TextField widthC;
   private static TextField heightC;
   private static TextField lengthC;
+
+  private static TextField containerX;
+  private static TextField containerY;
+  private static TextField containerZ;
+
+  private static double amountParcelA;
+  private static double amountParcelB;
+  private static double amountParcelC;
+
+  private static double valueParcelA;
+  private static double valueParcelB;
+  private static double valueParcelC;
+
+  private static double xA;
+  private static double yA;
+  private static double zA;
+
+  private static double xB;
+  private static double yB;
+  private static double zB;
+
+  private static double xC;
+  private static double yC;
+  private static double zC;
+
+  private static double contX;
+  private static double contY;
+  private static double contZ;
 
   private static String chosenAlgorithm;
   private static int errorCheck;
@@ -59,26 +79,32 @@ public class MenuUI {
   public MenuUI(BorderPane root) {
     Pane center = new Pane();
     center.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #fffd77, #fa8334)");
-    center.setPrefSize(200, 20);
+    center.setPrefSize(640, 300);
     Pane top = new Pane();
     top.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #271033, #388697)");
-    top.setPrefSize(1040, 300);
-    constructUI(center, top);
+    top.setPrefSize(640, 250);
+    Pane bottom = new Pane();
+    bottom.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #388697, #271033)");
+    bottom.setPrefSize(640, 110);
+
+    constructUI(center, top, bottom);
     root.setTop(top);
     root.setMargin(top, new Insets(2));
-    root.setCenter(center);
+    root.setCenter(bottom);
     root.setMargin(center, new Insets(2));
+    root.setBottom(center);
+    root.setMargin(bottom, new Insets(2));
   }
 
-  public void constructUI(Pane center, Pane top) {
-    constructInputFields(top);
-    constructLabels(top);
+  public void constructUI(Pane center, Pane top, Pane bottom) {
+    constructInputFields(top, bottom);
+    constructLabels(top, bottom);
     constructButtons(center);
     constructChoices(center);
     constructResultField(center);
   }
 
-  public void constructInputFields(Pane top) {
+  public void constructInputFields(Pane top, Pane bottom) {
     parcelACntr = new TextField();
     parcelACntr.setText("5");
     parcelACntr.setPrefSize(80, 20);
@@ -154,15 +180,32 @@ public class MenuUI {
     lengthC.setPrefSize(80, 20);
     lengthC.relocate(460, 195);
 
+    containerX = new TextField();
+    containerX.setText("16.5");
+    containerX.setPrefSize(80, 20);
+    containerX.relocate(100, 55);
+
+    containerY = new TextField();
+    containerY.setText("2.5");
+    containerY.setPrefSize(80, 20);
+    containerY.relocate(280, 55);
+
+    containerZ = new TextField();
+    containerZ.setText("4");
+    containerZ.setPrefSize(80, 20);
+    containerZ.relocate(460, 55);
+
     top.getChildren().addAll(
       parcelACntr, parcelBCntr, parcelCCntr,
       parcelAValue, parcelBValue, parcelCValue,
       widthA, widthB, widthC,
       heightA, heightB, heightC,
       lengthA, lengthB, lengthC);
+
+    bottom.getChildren().addAll(containerX, containerY, containerZ);
   }
 
-  public void constructLabels(Pane top) {
+  public void constructLabels(Pane top, Pane bottom) {
     Label labelBoxA = new Label();
     labelBoxA.setText("Box A");
     labelBoxA.setStyle(
@@ -304,8 +347,6 @@ public class MenuUI {
       "-fx-font-style: italic;");
     lengthC.relocate(395, 160);
 
-
-
     Label heightA = new Label();
     heightA.setText("Height");
     heightA.setStyle(
@@ -333,6 +374,43 @@ public class MenuUI {
       "-fx-font-style: italic;");
     heightC.relocate(395, 195);
 
+    Label containerLabel = new Label();
+    containerLabel.setText("Container Size");
+    containerLabel.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    containerLabel.relocate(105, 20);
+
+
+    Label containerHeight = new Label();
+    containerHeight.setText("Height");
+    containerHeight.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    containerHeight.relocate(215, 55);
+
+    Label containerWidth = new Label();
+    containerWidth.setText("Width");
+    containerWidth.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    containerWidth.relocate(35, 55);
+
+    Label containerLength = new Label();
+    containerLength.setText("Length");
+    containerLength.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    containerLength.relocate(395, 55);
+
 
     top.getChildren().addAll(
       labelBoxA, labelBoxB, labelBoxC,
@@ -341,6 +419,10 @@ public class MenuUI {
       widthA, widthB, widthC,
       lengthA, lengthB, lengthC,
       heightA, heightB, heightC);
+
+    bottom.getChildren().addAll(
+      containerLabel, containerWidth,
+      containerHeight, containerLength);
   }
 
   public void constructChoices(Pane center) {
@@ -503,49 +585,30 @@ public class MenuUI {
   public void updateInput() {
     try {
       amountParcelA = Double.parseDouble(parcelACntr.getText());
-    }
-    catch(NumberFormatException e) {
-      parcelACntr.setText("Error");
-      errorCheck = 1;
-    }
-
-    try {
       amountParcelB = Double.parseDouble(parcelBCntr.getText());
-    }
-    catch(NumberFormatException e) {
-      parcelBCntr.setText("Error");
-      errorCheck = 1;
-    }
-
-    try {
       amountParcelC = Double.parseDouble(parcelCCntr.getText());
-    }
-    catch(NumberFormatException e) {
-      parcelCCntr.setText("Error");
-      errorCheck = 1;
-    }
 
-    try {
       valueParcelA = Double.parseDouble(parcelAValue.getText());
-    }
-    catch(NumberFormatException e) {
-      parcelAValue.setText("Error");
-      errorCheck = 1;
-    }
-
-    try {
       valueParcelB = Double.parseDouble(parcelBValue.getText());
-    }
-    catch(NumberFormatException e) {
-      parcelBValue.setText("Error");
-      errorCheck = 1;
-    }
-
-    try {
       valueParcelC = Double.parseDouble(parcelCValue.getText());
+
+      xA = Double.parseDouble(lengthA.getText());
+      yA = Double.parseDouble(widthA.getText());;
+      zA = Double.parseDouble(heightA.getText());;
+
+      xB = Double.parseDouble(lengthB.getText());;
+      yB = Double.parseDouble(widthB.getText());;
+      zB = Double.parseDouble(heightB.getText());;
+
+      xC = Double.parseDouble(lengthC.getText());;
+      yC = Double.parseDouble(widthC.getText());;
+      zC = Double.parseDouble(heightC.getText());;
+
+      contX = Double.parseDouble(containerX.getText());
+      contY = Double.parseDouble(containerY.getText());
+      contZ = Double.parseDouble(containerZ.getText());
     }
     catch(NumberFormatException e) {
-      parcelCValue.setText("Error");
       errorCheck = 1;
     }
   }
@@ -556,19 +619,7 @@ public class MenuUI {
     Parcel parcelA = new ParcelA();
     Parcel parcelB = new ParcelB();
     Parcel parcelC = new ParcelC();
-
-    double xA = Double.parseDouble(lengthA.getText());
-    double yA = Double.parseDouble(widthA.getText());;
-    double zA = Double.parseDouble(heightA.getText());;
-
-    double xB = Double.parseDouble(lengthB.getText());;
-    double yB = Double.parseDouble(widthB.getText());;
-    double zB = Double.parseDouble(heightB.getText());;
-
-    double xC = Double.parseDouble(lengthC.getText());;
-    double yC = Double.parseDouble(widthC.getText());;
-    double zC = Double.parseDouble(heightC.getText());;
-
+  
     for(int i = 0; i < amountParcelA; i++) {
       parcelA.setSize(new Vector3D(xA, yA, zA));
       parcelA.setValue(valueParcelA);
