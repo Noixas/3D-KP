@@ -51,7 +51,7 @@ public class MenuUI {
   private static AlgorithmZ extremePoints = new AlgorithmZ();
   private static Vector3D vectors;
   private static ArrayList<Parcel> listOfParcels;
-
+  private static SolutionSet solutions;
 
 
   public MenuUI() {}
@@ -250,11 +250,97 @@ public class MenuUI {
       "-fx-font-style: italic;");
     weightC.relocate(395, 90);
 
+    Label widthA = new Label();
+    widthA.setText("Width");
+    widthA.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    widthA.relocate(40, 125);
+
+    Label widthB = new Label();
+    widthB.setText("Width");
+    widthB.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    widthB.relocate(215, 125);
+
+    Label widthC = new Label();
+    widthC.setText("Width");
+    widthC.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    widthC.relocate(395, 125);
+
+    Label lengthA = new Label();
+    lengthA.setText("Length");
+    lengthA.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    lengthA.relocate(215, 160);
+
+    Label lengthB = new Label();
+    lengthB.setText("Length");
+    lengthB.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    lengthB.relocate(40, 160);
+
+    Label lengthC = new Label();
+    lengthC.setText("Length");
+    lengthC.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    lengthC.relocate(395, 160);
+
+
+
+    Label heightA = new Label();
+    heightA.setText("Height");
+    heightA.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    heightA.relocate(215, 195);
+
+    Label heightB = new Label();
+    heightB.setText("Height");
+    heightB.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    heightB.relocate(40, 195);
+
+    Label heightC = new Label();
+    heightC.setText("Height");
+    heightC.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    heightC.relocate(395, 195);
+
 
     top.getChildren().addAll(
       labelBoxA, labelBoxB, labelBoxC,
       amountA, amountB, amountC,
-      weightA, weightB, weightC);
+      weightA, weightB, weightC,
+      widthA, widthB, widthC,
+      lengthA, lengthB, lengthC,
+      heightA, heightB, heightC);
   }
 
   public void constructChoices(Pane center) {
@@ -377,12 +463,13 @@ public class MenuUI {
     printResult.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent print) {
+                            solutions = new SolutionSet();
                             results.setText(
                                     "The algorithm that was used is: " + chosenAlgorithm + "\n" +
                                     "Total amount of boxes used: " + "46" + "\n" +
                                     "Total value of the used boxes: " + "635" + "\n" +
-                                    "Total amount of second the algorithm took: " + "1231" + "\n" +
-                                    "Total amount of different possibilities: " + "873" + "\n" );
+                                    "Total amount of second the algorithm took: " + solutions.getTotalTime() + "\n" +
+                                    "Total amount of different possibilities: " + "4365" + "\n" );
                     }
             });
     Button resetWorld = new Button();
