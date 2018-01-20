@@ -72,17 +72,17 @@ public Parcel clone()
 {
         if(this instanceof ParcelA) {
           ParcelA clone = new ParcelA();
-          clone.setSize(this._size);
+          clone.setSize(this._size.clone());
           clone.setValue(this._value);
                 return clone;
         } else if(this instanceof ParcelB) {
           ParcelB clone = new ParcelB();
-          clone.setSize(this._size);
+          clone.setSize(this._size.clone());
           clone.setValue(this._value);
                 return clone;
         } else if(this instanceof ParcelC) {
           ParcelC clone = new ParcelC();
-          clone.setSize(this._size);
+          clone.setSize(this._size.clone());
           clone.setValue(this._value);
                 return clone;
         } else {
