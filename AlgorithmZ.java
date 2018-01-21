@@ -1,18 +1,20 @@
 import java.util.*;
 import java.util.LinkedList;
 import java.util.Collections;
+import java.lang.Exception;
 public class AlgorithmZ extends Algorithm
 {
 private Container _container;
 private SolutionSet _solution;
-private List<Vector3D> _listEP;
+private List<ExtremePoint> _listEP;
 private boolean _started;
 private List<Parcel> _baseParcels;
 private Random rnd;
 private Parcel[][][] _containerSpace;
 private int _scalingArrayConst = 2;
 private int _wallsCount;
-private enum SetType { A, B, C, AB, AC, BC, ABC, BEST, RANDOM }
+private enum SetType { A, B, C, AB, AC, BC, ABC, BEST, RANDOM, DEBUG }
+private enum Axis { X, Y, Z }
 private SetType _type;
 ////////Temporary container boundaries from c#///////////
 public double xBound = 16.5;
@@ -28,26 +30,34 @@ public AlgorithmZ(){
         zBound = _container.getSize().z;
         _containerSpace = new Parcel[spaceIndex(xBound)][spaceIndex(yBound)][spaceIndex(zBound)];
         _started = false;
-        _listEP = new LinkedList<Vector3D>();
+        _listEP = new LinkedList<ExtremePoint>();
         _solution = new SolutionSet(0);
 }
 /**
  * Method to be called from the UI to start calculating a solution
  */
 public void Start(){
-        _type = SetType.BEST;
+        _type = SetType.DEBUG;
 
         initSetType();
         createContainerWalls();
-        computeSolution(10);
+        //computeSolution(10);
+        debugTest();
         displayExtremePoints();
 
+}
+private void debugTest()
+{
+        Parcel test = _baseParcels.get(0);
+        rotateParcel(test, Axis.Z);
+        computeSolutionStep();
 }
 /**
  * Reorders the _baseParcels depending on the kind of set that we want to compute
  */
 private void initSetType()
 {
+        if(_started) return; //Dont initiate multiple times
         Parcel a = new ParcelA();
         Parcel b = new ParcelB();
         Parcel c = new ParcelC();
@@ -103,6 +113,9 @@ private void initSetType()
                 _baseParcels.add(b);
                 _baseParcels.add(c);
                 _baseParcels = randomizeBaseParcelList();
+                break;
+        case DEBUG:
+                _baseParcels.add(a);
                 break;
 
         }
@@ -163,10 +176,10 @@ private void computeSolutionStep()
         if (_started == false) insertFirstParcel();
         else {
                 List<Parcel> randomList = randomizeBaseParcelList();
-                if(_type != SetType.RANDOM) randomList = _baseParcels; //comment for random
-                List<Vector3D> toDeleteEp = new LinkedList<Vector3D>();
+                if(_type != SetType.RANDOM) randomList = _baseParcels; //comment this for random
+                List<ExtremePoint> toDeleteEp = new LinkedList<ExtremePoint>();
                 for (int i = 0; i < _listEP.size(); i++) {
-                        Vector3D pos = _listEP.get(i);
+                        ExtremePoint pos = _listEP.get(i);
                         //  pos = findBestEP();
                         if (pos.x + 1 < xBound && pos.y + 1 < yBound && pos.z + 1 < zBound ) {//container boundaries
                                 for(int j = 0; j < _baseParcels.size(); j++) {
@@ -203,7 +216,7 @@ private void placeParcel(Parcel pParcel, Vector3D pos)
 {
         pParcel.setPosition(pos);
         addParcelToArraySpace(pParcel, pos);
-        updateEP(_solution, _listEP, pParcel);
+        updateEP(_solution, pParcel);
         _solution.addParcel(pParcel);
         CreateParcel.createParcel(pParcel);
 
@@ -235,10 +248,10 @@ private void addParcelToArraySpace(Parcel pParcel, Vector3D pos)
  * @param List<Vector3D> EP            [The current list of EP]
  * @param Parcel         newParcel     [The new parcel that has been added to the container]
  */
-private void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newParcel)
+private void updateEP(SolutionSet placedParcels, Parcel newParcel)
 {
         double[] maxBound = { -100000, -10000, -1000000, -1000000, -10000, -10000};
-        Vector3D[] newEP = new Vector3D[6];
+        ExtremePoint[] newEP = new ExtremePoint[6];
 
         Vector3D newParcelPos = newParcel.getPosition();
         Vector3D newParcelSize = newParcel.getSize();
@@ -263,37 +276,37 @@ private void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newPa
                 //Xy:
                 if ((X.x  >= placedPos.x && X.x  < (placedPos.x + placedSize.x)) && (X.z >= placedPos.z && X.z < (placedPos.z + placedSize.z))&&(placedPos.y + placedSize.y > maxBound[0]))
                 {
-                        newEP[0] = new Vector3D(X.x, placedPos.y + placedSize.y, X.z);
+                        newEP[0] = new ExtremePoint(X.x, placedPos.y + placedSize.y, X.z);
                         maxBound[0] = placedPos.y + placedSize.y;
                 }
                 //Xz:
                 if ((X.x >= placedPos.x && X.x < (placedPos.x + placedSize.x)) && (X.y >= placedPos.y && X.y < (placedPos.y + placedSize.y)) && (placedPos.z + placedSize.z > maxBound[1]))
                 {
-                        newEP[1] = new Vector3D(X.x, X.y, placedPos.z + placedSize.z);
+                        newEP[1] = new ExtremePoint(X.x, X.y, placedPos.z + placedSize.z);
                         maxBound[1] = placedPos.z + placedSize.z;
                 }
                 //Yx:
                 if ((Y.y >= placedPos.y && Y.y < (placedPos.y + placedSize.y)) && (Y.z >= placedPos.z && Y.z < (placedPos.z + placedSize.z)) && (placedPos.x + placedSize.x > maxBound[2]))
                 {
-                        newEP[2] = new Vector3D(placedPos.x + placedSize.x, Y.y, Y.z);
+                        newEP[2] = new ExtremePoint(placedPos.x + placedSize.x, Y.y, Y.z);
                         maxBound[2] = placedPos.x + placedSize.x;
                 }
                 //Yz:
                 if ((Y.y >= placedPos.y && Y.y < (placedPos.y + placedSize.y)) && (Y.x >= placedPos.x && Y.x < (placedPos.x + placedSize.x)) && (placedPos.z + placedSize.z > maxBound[3]))
                 {
-                        newEP[3] = new Vector3D(Y.x, Y.y, placedPos.z + placedSize.z);
+                        newEP[3] = new ExtremePoint(Y.x, Y.y, placedPos.z + placedSize.z);
                         maxBound[3] = placedPos.z + placedSize.z;
                 }
                 //Zx:
                 if ((Z.z >= placedPos.z && Z.z < (placedPos.z + placedSize.z)) && (Z.y >= placedPos.y && Z.y < (placedPos.y + placedSize.y)) && (placedPos.x + placedSize.x > maxBound[4]))
                 {
-                        newEP[4] = new Vector3D(placedPos.x + placedSize.x, Z.y, Z.z);
+                        newEP[4] = new ExtremePoint(placedPos.x + placedSize.x, Z.y, Z.z);
                         maxBound[4] = placedPos.x + placedSize.x;
                 }
                 //Zy:
                 if ((Z.z >= placedPos.z && Z.z < (placedPos.z + placedSize.z)) && (Z.x >= placedPos.x && Z.x < (placedPos.x + placedSize.x)) && (placedPos.y + placedSize.y > maxBound[5]))
                 {
-                        newEP[5] = new Vector3D(Z.x, placedPos.y + placedSize.y, Z.z);
+                        newEP[5] = new ExtremePoint(Z.x, placedPos.y + placedSize.y, Z.z);
                         maxBound[5] = placedPos.y + placedSize.y;
                 }
 
@@ -305,25 +318,98 @@ private void updateEP(SolutionSet placedParcels, List<Vector3D> EP, Parcel newPa
                 //System.out.println("newEP[i]: "+newEP[i]);
                 if (Vector3D.getZero().equals(newEP[i]) == false && newEP[i] != null)//We dont want point 0, TODO check if it even give us this case in java Reason first was coded in c unity
                 {
+                        if(calculateResidualSpace(newEP[i]))
+                                _listEP.add(newEP[i]);
 
-                        _listEP.add(newEP[i]);
                 }
         }
-        Collections.sort(EP);
-        _listEP = removeDuplicatedEP(EP, newParcel);
+        Collections.sort(_listEP);
+        _listEP = removeDuplicatedEP(_listEP, newParcel);
+
 }
+private boolean calculateResidualSpace(ExtremePoint pEP)
+{
+        int x = spaceIndex(pEP.x);
+        int y = spaceIndex(pEP.y);
+        int z = spaceIndex(pEP.z);
+        Vector3D residualSpace = Vector3D.getZero();
+        int temporalx = spaceIndex(xBound);
+        int temporaly = spaceIndex(yBound);
+        int temporalz = spaceIndex(zBound);
+        if(x >= xBound || y >= yBound || z >= zBound)//Out of boundaries so useless, will be deleted later in the process
+        {
+                System.out.println("Useless EP found");
+                pEP.setRS(new Vector3D(999999,99999,99999));// set huge RS since we always want to minimize the difference between Parcel size and RS size
+                return false;
+        }  try{
+                for(int i = x; i < temporalx; i++) {
+                        for(int j = y; j < temporaly; j++) {
+                                for(int k = z; k < temporalz; k++) {
+                                        if(_containerSpace[x][y][k] != null) {
+                                                residualSpace.z = undoSpaceIndex(k) - pEP.z;
+                                                System.out.println("The z where the ep is placed is not empty z: " + k);
+                                        }
+                                        else if(k == temporalz- 1)
+                                        {
+                                                residualSpace.z = undoSpaceIndex(k) - pEP.z;
+                                                System.out.println("Container limit is the z Residual size: " + k + " in normal units: " + undoSpaceIndex(k));
+                                        }
+                                }
+                                if(_containerSpace[x][j][z] != null)
+                                {
+                                        residualSpace.y = undoSpaceIndex(j) - pEP.y;
+                                        System.out.println("The y where the ep is placed is not empty y: " + j);
+                                }
+                                else if(j == temporaly - 1 )
+                                {
+                                        residualSpace.y = undoSpaceIndex(j) - pEP.y;
+                                        System.out.println("Container limit is the y Residual size: " + j + " in normal units: " + undoSpaceIndex(j));
+                                }
+                                //else
+                                //System.out.println("J else "+j + " Y boundarie: " + yBound);
+                        }
+                        if(_containerSpace[i][y][z] != null) {
+
+                                residualSpace.x = undoSpaceIndex(i) - pEP.x;
+                                System.out.println("The x where the ep is placed is not empty x: " + i);
+                        }
+                        else if(i == temporalx - 1)
+                        {
+                                residualSpace.x = undoSpaceIndex(i) - pEP.x;
+                                System.out.println("Container limit is the x Residual size: " + i + " in normal units: " + undoSpaceIndex(i));
+                        }
+                      //  else
+                        //System.out.println("i else " + i + " x boundarie: " + xBound);
+                }
+        }
+        catch(Exception e)
+        {
+          System.out.println(e.toString());
+          System.out.println("x: " + x + " y: " + y + " z: " + z + "\n");
+        }
+        System.out.println("RS size: " + residualSpace);
+        return true;
+}
+private void updateResidualSpace(Parcel pParcel, List<ExtremePoint> pEP)
+{
+        for(int i = 0; i < pEP.size(); i++)
+        {
+                //  if()
+        }
+}
+
 /**
  * Remove elements that are duplicated in the list
  * @param List<Vector3D> ep [List of current ExtremePoints]
  */
-private List<Vector3D> removeDuplicatedEP(List<Vector3D> ep, Parcel p)
+private List<ExtremePoint> removeDuplicatedEP(List<ExtremePoint> ep, Parcel p)
 {
-        List<Vector3D> newList = new LinkedList<Vector3D>();
+        List<ExtremePoint> newList = new LinkedList<ExtremePoint>();
         newList.add(ep.get(0));
         ep.remove(0);
         while(ep.size() != 0)
         {
-                Vector3D v = ep.get(0);
+                ExtremePoint v = ep.get(0);
                 if(newList.get(0).equals(v) == false && p.contains(v) == false) //if its not repeated and doesnt overlap a point then add
                         newList.add(v);
                 ep.remove(0);
@@ -336,7 +422,7 @@ private List<Vector3D> removeDuplicatedEP(List<Vector3D> ep, Parcel p)
  * @param List<Vector3D> originalEP [The current list of EP]
  * @param List<Vector3D> toDeleteEp [The list of EP that need to be deleted from the originalEP]
  */
-private void deleteUselessEP(List<Vector3D> originalEP, List<Vector3D> toDeleteEp)
+private void deleteUselessEP(List<ExtremePoint> originalEP, List<ExtremePoint> toDeleteEp)
 {
 
         for(int i = 0; i < toDeleteEp.size(); i++)
@@ -462,6 +548,10 @@ private int spaceIndex(double size)
 {
         return (int)(size * _scalingArrayConst);
 }
+private double undoSpaceIndex(double pPos)
+{
+        return (pPos / _scalingArrayConst);
+}
 /**
  * Creates the first parcel and EP from which the rest will be derived
  */
@@ -470,13 +560,35 @@ private void insertFirstParcel()
         System.out.println("Algorithm Z first parcel inserted with SetType: " + _type);
         Parcel a = _baseParcels.get(0).clone();
         a.setPosition(Vector3D.getZero());
-        _listEP.add(new Vector3D(a.getSize().x, 0, 0));
-        _listEP.add(new Vector3D(0, a.getSize().y, 0));
-        _listEP.add(new Vector3D(0, 0, a.getSize().z));
+        _listEP.add(new ExtremePoint(a.getSize().x, 0, 0));
+        _listEP.add(new ExtremePoint(0, a.getSize().y, 0));
+        _listEP.add(new ExtremePoint(0, 0, a.getSize().z));
         addParcelToArraySpace(a, Vector3D.getZero());
         _solution.addParcel(a);
         CreateParcel.createParcel(a);
         _started = true;
+}
+/**
+ * Rotate a parcel in an axis by 90° degrees.
+ * @param Parcel pParcel [Parcel to be rotated]
+ * @param Axis   pAxis   [Axis in which it will be rotated]
+ */
+private void rotateParcel(Parcel pParcel, Axis pAxis)
+{
+        Vector3D size = pParcel.getSize();
+        switch(pAxis)
+        {
+        case X:
+                pParcel.setSize(new Vector3D(size.x, size.z, size.y));
+                System.out.println("X Rotation");
+                break;
+        case Y:
+                pParcel.setSize(new Vector3D(size.z, size.y, size.x));
+                break;
+        case Z:
+                pParcel.setSize(new Vector3D(size.y, size.x, size.z));
+                break;
+        }
 }
 /**
  * Reorders randomely the base Parcels
@@ -496,5 +608,6 @@ private List<Parcel> randomizeBaseParcelList()
         }
         return newParcels;
 }
-public void Start(List<Parcel> list){}
+public void Start(List<Parcel> list){
+}
 }
