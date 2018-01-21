@@ -2,6 +2,7 @@ import java.util.*;
 import java.util.LinkedList;
 import java.util.Collections;
 import java.lang.Exception;
+import  java.lang.Math.*;
 public class AlgorithmZ extends Algorithm
 {
 private Container _container;
@@ -325,6 +326,10 @@ private void updateEP(SolutionSet placedParcels, Parcel newParcel)
         }
         Collections.sort(_listEP);
         _listEP = removeDuplicatedEP(_listEP, newParcel);
+        for(int i = 0; i < _listEP.size(); i++)
+        {
+          calculateResidualSpace(_listEP.get(i));
+        }
 
 }
 private boolean calculateResidualSpace(ExtremePoint pEP)
@@ -336,68 +341,58 @@ private boolean calculateResidualSpace(ExtremePoint pEP)
         int temporalx = spaceIndex(xBound);
         int temporaly = spaceIndex(yBound);
         int temporalz = spaceIndex(zBound);
-        if(x >= xBound || y >= yBound || z >= zBound)//Out of boundaries so useless, will be deleted later in the process
+        if(x >= spaceIndex(xBound) || y >= spaceIndex(yBound) || z >= spaceIndex(zBound))//Out of boundaries so useless, will be deleted later in the process
         {
                 System.out.println("Useless EP found");
                 pEP.setRS(new Vector3D(999999,99999,99999));// set huge RS since we always want to minimize the difference between Parcel size and RS size
                 return false;
-        }  try{
+        }
+        try{
                 for(int i = x; i < temporalx; i++) {
                         for(int j = y; j < temporaly; j++) {
                                 for(int k = z; k < temporalz; k++) {
-                                        if(_containerSpace[x][y][k] != null) {
-                                                residualSpace.z = undoSpaceIndex(k) - pEP.z;
+                                        if(_containerSpace[x][y][k] != null) {//If never triggered should be safe to say that we should delete it
+                                                residualSpace.z = undoSpaceIndex(temporalz -z);
                                                 System.out.println("The z where the ep is placed is not empty z: " + k);
                                         }
-                                        else if(k == temporalz- 1)
+                                        else if(k == temporalz - 1)
                                         {
-                                                residualSpace.z = undoSpaceIndex(k) - pEP.z;
-                                                System.out.println("Container limit is the z Residual size: " + k + " in normal units: " + undoSpaceIndex(k));
+                                                residualSpace.z = undoSpaceIndex(temporalz - z);
+                                                //System.out.println("Container limit is the z Residual size: " + k + " in normal units: " + undoSpaceIndex(k));
                                         }
                                 }
-                                if(_containerSpace[x][j][z] != null)
+                                if(_containerSpace[x][j][z] != null)//If never triggered should be safe to say that we should delete it
                                 {
-                                        residualSpace.y = undoSpaceIndex(j) - pEP.y;
+                                        residualSpace.y = undoSpaceIndex(temporaly - y);
                                         System.out.println("The y where the ep is placed is not empty y: " + j);
                                 }
                                 else if(j == temporaly - 1 )
                                 {
-                                        residualSpace.y = undoSpaceIndex(j) - pEP.y;
-                                        System.out.println("Container limit is the y Residual size: " + j + " in normal units: " + undoSpaceIndex(j));
+                                        residualSpace.y = undoSpaceIndex(temporaly - y);
+                                        //System.out.println("Container limit is the y Residual size: " + j + " in normal units: " + undoSpaceIndex(j));
                                 }
-                                //else
-                                //System.out.println("J else "+j + " Y boundarie: " + yBound);
                         }
-                        if(_containerSpace[i][y][z] != null) {
+                        if(_containerSpace[i][y][z] != null) {//If never triggered should be safe to say that we should delete it
 
-                                residualSpace.x = undoSpaceIndex(i) - pEP.x;
+                                residualSpace.x = undoSpaceIndex(temporalx - x);
                                 System.out.println("The x where the ep is placed is not empty x: " + i);
                         }
                         else if(i == temporalx - 1)
                         {
-                                residualSpace.x = undoSpaceIndex(i) - pEP.x;
-                                System.out.println("Container limit is the x Residual size: " + i + " in normal units: " + undoSpaceIndex(i));
+                                residualSpace.x = undoSpaceIndex(temporalx - x);
+                                //System.out.println("Container limit is the x Residual size: " + i + " in normal units: " + undoSpaceIndex(i));
                         }
-                      //  else
-                        //System.out.println("i else " + i + " x boundarie: " + xBound);
                 }
         }
         catch(Exception e)
         {
           System.out.println(e.toString());
-          System.out.println("x: " + x + " y: " + y + " z: " + z + "\n");
+          System.out.println("Coordinates pos x: " + x + " y: " + y + " z: " + z + "\n");
         }
-        System.out.println("RS size: " + residualSpace);
+        //System.out.println("RS size: " + residualSpace);
+        pEP.setRS(residualSpace);
         return true;
 }
-private void updateResidualSpace(Parcel pParcel, List<ExtremePoint> pEP)
-{
-        for(int i = 0; i < pEP.size(); i++)
-        {
-                //  if()
-        }
-}
-
 /**
  * Remove elements that are duplicated in the list
  * @param List<Vector3D> ep [List of current ExtremePoints]
@@ -538,6 +533,10 @@ public void display()
         CreateParcel.clearAllParcels();
         displayParcels();
         displayExtremePoints();
+        for(int i = 0; i < _listEP.size(); i++)
+        {
+        System.out.println("Residual Space of: " + _listEP.get(i) );
+        }
 }
 /**
  * Multiplies the number by a constant to enable the represantion of decimals in the 3D array
