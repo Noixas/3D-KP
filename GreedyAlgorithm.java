@@ -11,17 +11,17 @@ public class GreedyAlgorithm extends Algorithm {
   private int amountB = 0;//19
   private int amountC = 0;//13
   private int parcelTypes = 0; //Counts how many different types of parcels are present
-  private Parcel[] parcelOrder = new Parcel[3];
-  private double[] heuristicOrder = new double[3];
-  private int[] amountOrder = new int[3];
-  private ArrayList<Parcel> parcelList = new ArrayList<Parcel>();
-  private int scalingFactor = 2;
+  private Parcel[] parcelOrder = new Parcel[3]; //Array used for setting up the order of the parcels
+  private double[] heuristicOrder = new double[3]; //Array used for determining the order of the parcels
+  private int[] amountOrder = new int[3]; //Array used to save the amounts available of each parcel used
+  private ArrayList<Parcel> parcelList = new ArrayList<Parcel>(); //List of all the parcels that can be used
+  private int scalingFactor = 2; //Scaling factor to convert from the Vector3D to the array index
   private boolean parcelFits = true;
-  private int heuristicID = 1;
-  private Container container = new Container();
-  private Vector3D containerSize = container.getSize();
-  private Parcel[][][] containerSpace = new Parcel[arrayIndex(containerSize.x)][arrayIndex(containerSize.y)][arrayIndex(containerSize.z)];
-  private SolutionSet solution;
+  private int heuristicID; //The ID of the heuristic used
+  private Container container = new Container(); //The container used
+  private Vector3D containerSize = container.getSize(); //The container's size
+  private Parcel[][][] containerSpace = new Parcel[arrayIndex(containerSize.x)][arrayIndex(containerSize.y)][arrayIndex(containerSize.z)]; //Array representation of the container
+  private SolutionSet solution; //The solution found
 
   /**
    * Start computing solution separated from constructor to be able to configure it with the UI
@@ -97,7 +97,6 @@ public class GreedyAlgorithm extends Algorithm {
           if(containerSpace[i][j][k] == null) {
             Vector3D posIndex = new Vector3D(i, j, k);
             //System.out.println("(" + i + ", " + j + ", " + k + ") is empty");
-
               if(u==0) {
                 checkX = true;
                 checkY = true;
@@ -115,14 +114,14 @@ public class GreedyAlgorithm extends Algorithm {
                 checkY = true;
                 checkZ = false;
               }
-              if(isNextTo(posIndex, checkX, checkY, checkZ)) {
+              //if(isNextTo(posIndex, checkX, checkY, checkZ)) {
                 if(tryRotations(parcel, posIndex)) {
                   parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
                   parcelFits = true;
                   return true;
                 }
-              }
-            }//
+              //}
+            }
           } //else {System.out.println("(" + i + ", " + j + ", " + k + ") is not empty");}
         }
       }
