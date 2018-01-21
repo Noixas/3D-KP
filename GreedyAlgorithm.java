@@ -270,15 +270,12 @@ private void makeLists(int id) {
   if(amountA != 0) {
     parcelOrder[0] = parcelList.get(0).clone();
   }
-  System.out.println("1");
   if(amountB != 0) {
     parcelOrder[1] = parcelList.get(amountA).clone();
   }
-  System.out.println("2");
   if(amountC != 0) {
     parcelOrder[2] = parcelList.get(amountA + amountB).clone();
   }
-  System.out.println("3");
     amountOrder[0] = amountA;
     amountOrder[1] = amountB;
     amountOrder[2] = amountC;
@@ -340,7 +337,7 @@ private void makeLists(int id) {
    * Creates an ArrayList of Parcel objects that need to be placed into the container.
    */
   private void makeOrderedParcelList() {
-  parcelList.clear();
+    parcelList.clear();
     for(int i=0; i<3; i++) {
       for(int j=0; j<amountOrder[i]; j++) {
         parcelList.add(parcelOrder[i].clone());
@@ -433,10 +430,6 @@ private void makeLists(int id) {
     for(int p=0; p<solution.getLength(); p++) {
       CreateParcel.createParcel(solution.get(p));
     }
-  }
-
-  public SolutionSet getSolutionSet() {
-    return solution;
   }
 
 
