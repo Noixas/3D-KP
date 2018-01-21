@@ -51,7 +51,7 @@ public class GreedyAlgorithm extends Algorithm {
     amountB=0;
     amountC=0;
     System.out.println("done");
-    System.out.println("Empty space: " + countEmptySpaces() + " metres cubed");
+    System.out.println("Occupied space: " + countOccupiedSpace() + " metres cubed");
     System.out.println("Parcel's placed: " + solution.getLength());
     System.out.println("Total value: " + solution.getValue());
   }
@@ -390,12 +390,12 @@ private void makeLists(int id) {
     return number/(double)scalingFactor;
   }
 
-  private double countEmptySpaces() {
+  private double countOccupiedSpace() {
     double count = 0;
     for(int i=0; i < containerSpace.length;i++) {
       for(int j=0; j < containerSpace[0].length; j++) {
         for(int k=0; k < containerSpace[0][0].length; k++) {
-          if(containerSpace[i][j][k] == null) {
+          if(containerSpace[i][j][k] != null) {
             count++;
           }
         }
