@@ -1,7 +1,9 @@
 import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Point3D;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.DepthTest;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
@@ -46,6 +48,9 @@ public class WorldUI {
   private static Label resultPrint;
   private static MenuUI menuRef = new MenuUI();
   private static String resultString;
+  private static Box temp = new Box();
+  private static Button resetView;
+  private static Button nextStep;
 
   public WorldUI(Group worldGroup) {
     worldGroup.getChildren().add(world);
@@ -96,6 +101,28 @@ public class WorldUI {
     resultPrint.setText("okay");
     resultPrint.setTranslateY(40);
 
+    nextStep = new Button();
+    nextStep.setText("Next Step");
+    nextStep.setPrefSize(140, 20);
+    nextStep.setTranslateY(60);
+    nextStep.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent step) {
+
+      }
+    });
+
+    resetView = new Button();
+    resetView.setText("Reset View");
+    resetView.setPrefSize(140, 20);
+    resetView.setTranslateY(80);
+    resetView.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent step) {
+
+      }
+    });
+
     root.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #b2ceff, #ffffff)");
     root.add(coordLabel, 0, 0);
     root.add(coords, 0, 1);
@@ -103,6 +130,8 @@ public class WorldUI {
     root.add(dimensions, 0, 3);
     root.add(resultsLabel, 0, 4);
     root.add(resultPrint, 0, 5);
+    root.add(nextStep, 0, 6);
+    root.add(resetView, 0, 7);
 
   }
   public static void printInfo() {
@@ -135,9 +164,11 @@ public class WorldUI {
 
   public void updateCoords(MouseEvent event) {
     try {
+      Box temp1 = temp;
+      temp1.setMaterial(CreateParcel.getColor(Color.BLACK));
       PickResult result = event.getPickResult();
       Node testNode = result.getIntersectedNode();
-      Box temp = (Box) testNode;
+      temp = (Box) testNode;
       temp.setMaterial(CreateParcel.getColor(Color.YELLOW));
       xCoord = testNode.getTranslateX();
       yCoord = testNode.getTranslateZ();
@@ -146,10 +177,10 @@ public class WorldUI {
       depth = temp.getDepth();
       height = temp.getHeight();
       width = temp.getWidth();
-
-      //resultString = menuRef.getResultText();
     }
-    catch(NullPointerException e) {}
+    catch(NullPointerException e) {
+      temp = new Box();
+    }
   }
 
   private void buildCamera(Group worldGroup) {
