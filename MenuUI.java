@@ -71,7 +71,7 @@ public class MenuUI {
   private static AlgorithmZ extremePoints = new AlgorithmZ();
   private static Vector3D vectors;
   private static ArrayList<Parcel> listOfParcels;
-  private static SolutionSet solutions = new SolutionSet();
+  private static SolutionSet solutions;
 
 
   public MenuUI() {}
@@ -439,7 +439,6 @@ public class MenuUI {
     algorithms.setPrefSize(140, 20);
     algorithms.relocate(50, 50);
     algorithms.setValue("Greedy Volume");
-    _activeAlgorithm = greedy;
     center.getChildren().addAll(algorithms);
   }
 
@@ -653,7 +652,7 @@ public class MenuUI {
   public String getResultText() {
     String resultString =
       "The algorithm that was used is: " + chosenAlgorithm + "\n" +
-      "Total amount of boxes used: " + "46" + "\n" +
+      "Total amount of boxes used: " + solutions.getLength() + "\n" +
       "Total value of the used boxes: " + "\n" +
       "Total amount of second the algorithm took: " + solutions.getTotalTime() + "\n" +
       "Total amount of different possibilities: " + "4365";
