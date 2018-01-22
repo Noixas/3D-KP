@@ -519,7 +519,7 @@ public class MenuUI {
         else {
           results.setText("There was an input-error detected.");
         }
-
+        if(_activeAlgorithm.getSolutions() != null)
         solutions = _activeAlgorithm.getSolutions().get(0);
         infoTimer.start();
         results.setText(getResultText());
