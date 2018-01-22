@@ -1,3 +1,4 @@
+import javafx.animation.AnimationTimer;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
@@ -72,7 +73,7 @@ public class MenuUI {
   private static Vector3D vectors;
   private static ArrayList<Parcel> listOfParcels;
   private static SolutionSet solutions;
-
+  private static AnimationTimer timer;
 
   public MenuUI() {}
 
@@ -94,6 +95,14 @@ public class MenuUI {
     root.setMargin(center, new Insets(2));
     root.setBottom(center);
     root.setMargin(bottom, new Insets(2));
+
+    timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                    WorldUI.printInfo();
+                    //WorldUI.printResults();
+            }
+    };
   }
 
   public void constructUI(Pane center, Pane top, Pane bottom) {
@@ -487,6 +496,7 @@ public class MenuUI {
         }
 
         solutions = _activeAlgorithm.getSolutions().get(0);
+        timer.start();
         results.setText(getResultText());
       }
     });
