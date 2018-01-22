@@ -501,48 +501,6 @@ public class MenuUI {
       }
     });
 
-    Button display = new Button();
-    display.setText("Display solution");
-    display.setPrefSize(140, 20);
-    display.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent display) {
-        errorCheck = 0;
-        updateInput();
-        if(errorCheck == 0) {
-          if(algorithms.getValue() == null) {
-            results.setText("No algorithm was selected.");
-          }
-          else if(algorithms.getValue() == "Greedy Volume") {
-            chosenAlgorithm = algorithms.getValue().toString();
-            greedy.setID(1);
-            greedy.display();
-          }
-          else if(algorithms.getValue() == "Greedy Density") {
-            chosenAlgorithm = algorithms.getValue().toString();
-            greedy.setID(3);
-            greedy.display();
-          }
-          else if(algorithms.getValue() == "Greedy Value") {
-            chosenAlgorithm = algorithms.getValue().toString();
-            greedy.setID(2);
-            greedy.display();
-          }
-          else if(algorithms.getValue() == "Extreme Points") {
-            results.setText("Algorithm B has started calculating the possibilities.");
-            chosenAlgorithm = algorithms.getValue().toString();
-            extremePoints.display();
-          }
-          else if(algorithms.getValue() == "Algorithm C") {
-            chosenAlgorithm = algorithms.getValue().toString();
-          }
-        }
-        else {
-          results.setText("There was an input-error detected.");
-        }
-      }
-    });
-
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
     viewCargo.setPrefSize(140, 20);
@@ -565,16 +523,24 @@ public class MenuUI {
                     }
             });
     Button resetWorld = new Button();
-    resetWorld.setText("Clear all parcels");
+    resetWorld.setText("Reset");
     resetWorld.setPrefSize(140, 20);
     resetWorld.relocate(50, 210);
     resetWorld.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent clear) {
                             CreateParcel.clearAllParcels();
+                            if(_activeAlgorithm == greedy) {
+                              greedy = new GreedyAlgorithm();
+                              _activeAlgorithm = greedy;
+                            }
+                            else {
+                              extremePoints = new AlgorithmZ();
+                              _activeAlgorithm = extremePoints;
+                            }
                     }
             });
-    center.getChildren().addAll(calcButton, viewCargo, printResult, resetWorld, display);
+    center.getChildren().addAll(calcButton, viewCargo, printResult, resetWorld);
   }
 
   public void constructResultField(Pane center) {
