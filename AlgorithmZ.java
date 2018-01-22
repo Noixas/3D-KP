@@ -42,7 +42,7 @@ public void Start(List<Parcel> list) {
         initSetType();
         _parcelList = getOrderParcels(0,list);
         createContainerWalls();
-        computeSolution(1000);
+        computeSolution(2);
         //debugTest();
         displayExtremePoints();
         _solution.calculateCurrentValue();
