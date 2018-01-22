@@ -42,7 +42,7 @@ public void Start(List<Parcel> list) {
         initSetType();
         _parcelList = getOrderParcels(0,list);
         createContainerWalls();
-        computeSolution(2);
+        computeSolution(1);
         //debugTest();
         displayExtremePoints();
         _solution.calculateCurrentValue();
@@ -51,11 +51,13 @@ public void Start(List<Parcel> list) {
 }
 public void nextStep()
 {
-  computeSolution(2);
-  displayExtremePoints();
+
+  computeSolution(1);
   _solution.calculateCurrentValue();
   System.out.println("Current container value: " + _solution.getValue());
   _solutions.add(_solution);
+    CreateParcel.clearAllParcels();
+  display();
 
 }
 private List<Parcel> getOrderParcels(int pOrderingType, List<Parcel> pList)
@@ -263,23 +265,34 @@ private void computeSolutionStep()
                 }
                 ExtremePoint pos = _listEP.get(i);
                 //  pos = findBestEP();
-                //if (pos.x + 1 < xBound && pos.y + 1 < yBound && pos.z + 1 < zBound ) {//container boundaries
-                if (pos.x <= xBound && pos.y  <= yBound && pos.z <= zBound ) {        //container boundaries
+                if (pos.x  < xBound && pos.y  < yBound && pos.z  < zBound ) {//container boundaries
+              //  if (pos.x <= xBound && pos.y  <= yBound && pos.z <= zBound ) {        //container boundaries
                         //for(int j = 0; j < _baseParcels.size(); j++) {
                         //int s = rnd.nextInt(_baseParcels.size());
                         //int s = j;//since we want to check all kind of boxes for now is there in case we want to use random
                         //Parcel a = randomList.get(s).clone();
+                        //P
+
                         if(checkFit(b, pos))
                         {
+
                                 placeParcel(b,pos);
+                                printEextremePoints();
+                                System.out.println("after placeParcel");
+                                System.out.println("PlacedPOS " + pos);
                                 _listEP.remove(i);
+                                Collections.sort(_listEP);
+                                removeDuplicatedEP(_listEP, b);
+                                updateResidualSpace();
+                                Collections.sort(_listEP);
                                 _parcelList.remove(0);
                                 //i = _listEP.size();
                                 //j = _baseParcels.size();
                         }
                         else{
-                          System.out.println(b + " Doesnt fit in pos " + pos );
+                          System.out.println("DOESNT FIT "+b + " Doesnt fit in pos " + pos );
                         }
+
                         //  else if(j == _baseParcels.size()-1) {//Tried all the kind of parcels
                         //System.out.println("EP to delete "+pos);
                         //toDeleteEp.add(pos);
@@ -289,23 +302,28 @@ private void computeSolutionStep()
                         //}
                         //  }
                 }
-                else { toDeleteEp.add(pos); }        //ep out of boudaries so delete
+               else {
+                 //System.out.println("To delete EP : " + pos + "\n");
+                 toDeleteEp.add(pos); }        //ep out of boudaries so delete
 
                 deleteUselessEP(_listEP, toDeleteEp);
+
         }
 }
 private int[] findBestEP(Parcel pParcel)
 {
+
         int[] result = new int[2];
         if(_listEP.size() == 0)
         {
                 result[0] = -1;
                 return result;
         }
+        Collections.sort(_listEP);
         int bestEpIndex = 0;
         int rotation = 0;
         int MAXROTATION = 6;
-        double difference = Double.MAX_VALUE;
+        double difference = 0;
         double currentDiff = 0;
         int unusableAxis = 0;
         Vector3D sizeParcel = pParcel.getSize();
@@ -321,12 +339,12 @@ private int[] findBestEP(Parcel pParcel)
         //TODO: (2) then the smallest difference which is >= smallestSide of any parcel in the list
         //TODO: (3) and finally if all leave unasable space then choose the smallest one
         for (int i = 0; i < _listEP.size(); i++) {
-                for(int j = 3; j < MAXROTATION; j++) {
+                for(int j = 0; j < MAXROTATION; j++) {
                         Parcel rotatedParcel = getRotated(pParcel, j);
                         unusableAxis = 0;
                         currentDiff = calculateDifferenceRsAndParcel(rotatedParcel, _listEP.get(i));
                         unusableAxis = checkMakesUnusableSpace(rotatedParcel, _listEP.get(i), sizeParcel);
-                        if(currentDiff <= difference && currentDiff >= 0)
+                        if(currentDiff > difference && currentDiff >= 0 && checkFit(rotatedParcel, _listEP.get(i)))
                         {
                                 if(unusableAxis > 0 && currentDiff <= differenceWithUnusableAxis) {
                                         differenceWithUnusableAxis = currentDiff;
@@ -350,7 +368,7 @@ private int[] findBestEP(Parcel pParcel)
                                 //System.out.println("Current min diff is " + difference);
                         }
                 }
-        }
+        }/*
         for (int i = 0; i < _listEP.size(); i++) {
                 for(int j = 0; j < 3; j++) {
                         Parcel rotatedParcel = getRotated(pParcel, j);
@@ -381,7 +399,7 @@ private int[] findBestEP(Parcel pParcel)
                                 //System.out.println("Current min diff is " + difference);
                         }
                 }
-        }
+        }*/
         //If all options leave unusable spaces then choose the smallest one
         if(leaveUsableSpace == false)
         {
@@ -390,7 +408,7 @@ private int[] findBestEP(Parcel pParcel)
                 rotation = bestRotationWithUnusableAxis;
                 result[0] = bestEpIndex;
                 result[1] = rotation;
-                System.out.println("We will leave unusable space");
+              //  System.out.println("We will leave unusable space");
         }
         return result;
 }
@@ -514,6 +532,7 @@ private void updateEP(SolutionSet placedParcels, Parcel newParcel)
                 //Zy:
                 if ((Z.z >= placedPos.z && Z.z < (placedPos.z + placedSize.z)) && (Z.x >= placedPos.x && Z.x < (placedPos.x + placedSize.x)) && (placedPos.y + placedSize.y > maxBound[5]))
                 {
+
                         newEP[5] = new ExtremePoint(Z.x, placedPos.y + placedSize.y, Z.z);
                         maxBound[5] = placedPos.y + placedSize.y;
                 }
@@ -523,15 +542,12 @@ private void updateEP(SolutionSet placedParcels, Parcel newParcel)
         {
                 if (Vector3D.getZero().equals(newEP[i]) == false && newEP[i] != null)//We dont want point 0, TODO check if it even give us this case in java Reason first was coded in c unity
                 {
-                        if(calculateResidualSpace(newEP[i])) //If no residual space then it is overlapping so will not add it
+                        calculateResidualSpace(newEP[i]); //If no residual space then it is overlapping so will not add it
                                 _listEP.add(newEP[i]);
 
                 }
         }
-        Collections.sort(_listEP);
-        removeDuplicatedEP(_listEP, newParcel);
-        updateResidualSpace();
-        Collections.sort(_listEP);
+
 
 }
 private void updateResidualSpace()
@@ -602,7 +618,6 @@ private boolean calculateResidualSpace(ExtremePoint pEP)
         catch(Exception e)
         {
                 System.out.println(e.toString());
-                System.out.println("Coordinates pos x: " + x + " y: " + y + " z: " + z + "\n");
         }
         //System.out.println("RS size: " + residualSpace);
         pEP.setRS(residualSpace);
@@ -622,7 +637,16 @@ private List<ExtremePoint> removeDuplicatedEP(List<ExtremePoint> ep, Parcel p)
                 ExtremePoint v = ep.get(0);
                 if(newList.get(0).equals(v) == false && p.contains(v) == false) //if its not repeated and doesnt overlap a point then add
                         newList.add(v);
+                else{
+                //  System.out.println("EP to be removed "+ ep.get(0));
+                //  System.out.println("P contains  "+ v);
+                //  System.out.println("Boolean "+newList.get(0).equals(v)+"\n");
+                }
                 ep.remove(0);
+        }
+        for(int i = 0; i < newList.size(); i++)
+        {
+        //  System.out.println("EP number is " +i+ " values are" + newList.get(i));
         }
         ep = newList;
         _listEP = ep;
@@ -716,7 +740,13 @@ private boolean checkFit(Parcel p, Vector3D pos)
                 //System.out.println("can fit");
                 return true;
         }
-        //System.out.println("can't fit in container");
+        if( x + spaceIndex(size.x) > spaceIndex(containerSize.x) )
+        System.out.println("Cant fit in x side");
+          if(y + spaceIndex(size.y) > spaceIndex(containerSize.y))
+            System.out.println("Cant fit in y side: first number " + (y + spaceIndex(size.y)) + " second number: "+ spaceIndex(containerSize.y) );
+          if(   z + spaceIndex(size.z) > spaceIndex(containerSize.z))
+            System.out.println("Cant fit in z side");
+        System.out.println("can't fit in container");
         return false;
 }
 /**
@@ -752,7 +782,7 @@ public void display()
         displayExtremePoints();
         for(int i = 0; i < _listEP.size(); i++)
         {
-                System.out.println("Residual Space of: " + _listEP.get(i) );
+                //System.out.println("Residual Space of: " + _listEP.get(i) );
         }
 }
 /**
@@ -776,6 +806,7 @@ private void insertFirstParcel()
         _listEP.add(new ExtremePoint(0,0,0));
         System.out.println("Algorithm Z first parcel inserted with SetType: " + _type);
         _started = true;
+
 }
 private Parcel getRotated(Parcel pParcel, int pID)
 {
@@ -907,5 +938,11 @@ public void Start(){
         System.out.println("Current container value: " + _solution.getValue());
 
         _solutions.add(_solution);
+}
+private void printEextremePoints(){
+  for(int j = 0; j < _listEP.size(); j++)
+  {
+    System.out.println("\n  EP number is " +j+ " values are" + _listEP.get(j));
+  }
 }
 }

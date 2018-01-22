@@ -53,7 +53,7 @@ public int compareTo(Vector3D o) {
         } else if (z == o.z) {
                 if (y > o.y) {
                         return 1;
-                } else if (y == o.y) {
+                } else if (y == y) {
                         if (x > o.x) {
                                 return 1;
                         } else if (x == o.x) {
