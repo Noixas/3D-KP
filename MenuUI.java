@@ -509,6 +509,7 @@ public class MenuUI {
           }
           else if(algorithms.getValue() == "Extreme Points") {
             chosenAlgorithm = algorithms.getValue().toString();
+            _activeAlgorithm = extremePoints;
             extremePoints.Start(listOfParcels);
           }
           else if(algorithms.getValue() == "Algorithm C") {
@@ -616,6 +617,7 @@ public class MenuUI {
           }
           else if(algorithms.getValue() == "Extreme Points") {
             results.setText("Algorithm B has started calculating the possibilities.");
+            _activeAlgorithm = extremePoints;
             chosenAlgorithm = algorithms.getValue().toString();
             extremePoints.display();
           }

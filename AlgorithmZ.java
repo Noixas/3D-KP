@@ -37,137 +37,80 @@ public AlgorithmZ(){
 }
 public void Start(List<Parcel> list) {
 
-  _type = SetType.B;
- //_solution = new SolutionSet(System.currentTimeMillis());
-
-  initSetType();
- _parcelList = list;
- _parcelList = getOrderParcels(0);
-  createContainerWalls();
-  computeSolution(1000);
-  //debugTest();
-  displayExtremePoints();
-  _solution.calculateCurrentValue();
-  System.out.println("Current container value: " + _solution.getValue());
-
-_solutions.add(_solution);
-
-
-}
-/**
- * Method to be called from the UI to start calculating a solution
- */
-public void Start(){
         _type = SetType.B;
-
+        //_solution = new SolutionSet(System.currentTimeMillis());
         initSetType();
+        _parcelList = getOrderParcels(0,list);
         createContainerWalls();
-        computeSolution(80);
+        computeSolution(1000);
         //debugTest();
         displayExtremePoints();
         _solution.calculateCurrentValue();
         System.out.println("Current container value: " + _solution.getValue());
-        //System.out.println("Amount of empty spaces: "+ getEmptySpaces());
-
         _solutions.add(_solution);
 }
-private List<Parcel> getOrderParcels(int pOrderingType)
+private List<Parcel> getOrderParcels(int pOrderingType, List<Parcel> pList)
 {
-  List<Parcel> aList  = new LinkedList<Parcel>();
-  List<Parcel> bList  = new LinkedList<Parcel>();
-  List<Parcel> cList  = new LinkedList<Parcel>();
-  List<Parcel> newOrderedList  = new LinkedList<Parcel>();
-  double aValue = 0;
-  double bValue = 0;
-  double cValue = 0;
-  double[] orderValues = new double[3];
-  if(pOrderingType == 0)//Order by value
-  {
-    for(int i = 0; i < _parcelList.size(); i++)
-    {
-      Parcel p = _parcelList.get(i);
-      if(p instanceof ParcelA)
-      {
-        aList.add(p);
-        aValue = p.getValue();
-      }
-      else if(p instanceof ParcelB)
-      {
-        bList.add(p);
-          bValue = p.getValue();
-      }
-      else if(p instanceof ParcelC)
-      {
-        cList.add(p);
-          cValue = p.getValue();
-      }
-    }
-    if(aValue < bValue)
-    {
-      if(bValue < cValue)
+        List<Parcel> aList  = new LinkedList<Parcel>();
+        List<Parcel> bList  = new LinkedList<Parcel>();
+        List<Parcel> cList  = new LinkedList<Parcel>();
+        List<Parcel> newOrderedList  = new LinkedList<Parcel>();
+        double aValue = 0;
+        double bValue = 0;
+        double cValue = 0;
+        Vector3D parcelValues = new Vector3D(aValue, bValue, cValue);
+        double[] orderValues ;
+        if(pOrderingType == 0)//Order by value
         {
-          orderValues[0] = 3; //Highest val is Parcel C
-          orderValues[1] = 2;
-          orderValues[2] = 1;//Smallest Val is parcel A
-        }
-        else if(aValue < cValue)
-        {
-          orderValues[0] = 2; //Highest val is Parcel B
-          orderValues[1] = 3;
-          orderValues[2] = 1;//Smallest Val is parcel A
-        }
-        else{
-          orderValues[0] = 2; //Highest val is Parcel B
-          orderValues[1] = 1;
-          orderValues[2] = 3;//Smallest Val is parcel C
-        }
-    }
-    else if(aValue < cValue)
-    {
-      orderValues[0] = 3; //Highest val is Parcel C
-      orderValues[1] = 1;
-      orderValues[2] = 2;//Smallest Val is parcel B
-    }
-    else if(bValue < cValue)
-    {
-      orderValues[0] = 1; //Highest val is Parcel C
-      orderValues[1] = 3;
-      orderValues[2] = 2;//Smallest Val is parcel A
-    }
-    else{
-      orderValues[0] = 1; //Highest val is Parcel C
-      orderValues[1] = 2;
-      orderValues[2] = 3;//Smallest Val is parcel A
-    }
-    for(int i = 0; i < orderValues.length; i++)
-    {
-      if(orderValues[i] == 1)
-        for(int j = 0; j < aList.size(); j++)
-        {
-          newOrderedList.add(aList.get(j));
-        }
-        if(orderValues[i] == 2)
-        {
-          for(int j = 0; j < bList.size(); j++)
-          {
-            newOrderedList.add(bList.get(j));
-          }
-        }
-        if(orderValues[i] == 3)
-        {
-          for(int j = 0; j < cList.size(); j++)
-          {
-            newOrderedList.add(cList.get(j));
-          }
-        }
+                for(int i = 0; i < pList.size(); i++)
+                {
+                        Parcel p = pList.get(i);
+                        if(p instanceof ParcelA)
+                        {
+                                aList.add(p);
+                                aValue = p.getValue();
+                        }
+                        else if(p instanceof ParcelB)
+                        {
+                                bList.add(p);
+                                bValue = p.getValue();
+                        }
+                        else if(p instanceof ParcelC)
+                        {
+                                cList.add(p);
+                                cValue = p.getValue();
+                        }
+                }
+                orderValues = calculateOrderValue(parcelValues);
+                for(int i = 0; i < orderValues.length; i++)
+                {
+                        if(orderValues[i] == 1)
+                                for(int j = 0; j < aList.size(); j++)
+                                {
+                                        newOrderedList.add(aList.get(j));
+                                }
+                        if(orderValues[i] == 2)
+                        {
+                                for(int j = 0; j < bList.size(); j++)
+                                {
+                                        newOrderedList.add(bList.get(j));
+                                }
+                        }
+                        if(orderValues[i] == 3)
+                        {
+                                for(int j = 0; j < cList.size(); j++)
+                                {
+                                        newOrderedList.add(cList.get(j));
+                                }
+                        }
 
-    }
-  }
-return newOrderedList;
+                }
+        }
+        return newOrderedList;
 }
 private void debugTest()
 {
-  if(_parcelList.size() == 0) return;
+        if(_parcelList.size() == 0) return;
         Parcel test = _parcelList.get(0);
         rotateParcel(test, Axis.Z);
         computeSolutionStep();
@@ -293,12 +236,12 @@ private void computeSolution(int pIterations)
  */
 private void computeSolutionStep()
 {
-  if(_parcelList.size() == 0) return; //No more parcels to be placed
+        if(_parcelList.size() == 0) return; //No more parcels to be placed
         if (_started == false) insertFirstParcel();
         else {
                 List<Parcel> randomList = randomizeBaseParcelList();
                 randomList = _parcelList;
-              //  if(_type != SetType.RANDOM) randomList = _baseParcels; //comment this for random
+                //  if(_type != SetType.RANDOM) randomList = _baseParcels; //comment this for random
                 List<ExtremePoint> toDeleteEp = new LinkedList<ExtremePoint>();
                 Parcel b = _parcelList.get(0).clone();
                 int[] bestInfo = findBestEP(b);
@@ -355,7 +298,7 @@ private int[] findBestEP(Parcel pParcel)
         int unusableAxis = 0;
         Vector3D sizeParcel = pParcel.getSize();
         boolean leaveUsableSpace = false;
-      //double smallestSize = Math.min(Math.min(sizeParcel.x,sizeParcel.y),sizeParcel.z);
+        //double smallestSize = Math.min(Math.min(sizeParcel.x,sizeParcel.y),sizeParcel.z);
 
         int bestEpWithUnusableAxis = 0;
         int bestRotationWithUnusableAxis = 0;
@@ -412,7 +355,7 @@ private int[] findBestEP(Parcel pParcel)
  */
 private int checkMakesUnusableSpace(Parcel pParcel, ExtremePoint pEp, Vector3D pMinAxis)
 {
-  //TODO: maybe try all rotations of the size
+        //TODO: maybe try all rotations of the size
         int amount = 0;
         Vector3D size = pParcel.getSize();
         Vector3D EpSize = pEp.getRS();
@@ -784,14 +727,6 @@ private void insertFirstParcel()
 {
         _listEP.add(new ExtremePoint(0,0,0));
         System.out.println("Algorithm Z first parcel inserted with SetType: " + _type);
-        /*  Parcel a = _baseParcels.get(0).clone();
-           a.setPosition(Vector3D.getZero());
-           _listEP.add(new ExtremePoint(a.getSize().x, 0, 0));
-           _listEP.add(new ExtremePoint(0, a.getSize().y, 0));
-           _listEP.add(new ExtremePoint(0, 0, a.getSize().z));
-           addParcelToArraySpace(a, Vector3D.getZero());
-           _solution.addParcel(a);
-           CreateParcel.createParcel(a);*/
         _started = true;
 }
 private Parcel getRotated(Parcel pParcel, int pID)
@@ -843,13 +778,59 @@ private void rotateParcel(Parcel pParcel, Axis pAxis)
                 break;
         }
 }
+
+private double[] calculateOrderValue(Vector3D pValues)
+{
+  double aValue = pValues.x;
+  double bValue = pValues.y;
+  double cValue = pValues.z;
+  double[] orderValues = new double[3];
+  if(aValue < bValue)
+  {
+          if(bValue < cValue)
+          {
+                  orderValues[0] = 3; //Highest val is Parcel C
+                  orderValues[1] = 2;
+                  orderValues[2] = 1;//Smallest Val is parcel A
+          }
+          else if(aValue < cValue)
+          {
+                  orderValues[0] = 2; //Highest val is Parcel B
+                  orderValues[1] = 3;
+                  orderValues[2] = 1;//Smallest Val is parcel A
+          }
+          else{
+                  orderValues[0] = 2; //Highest val is Parcel B
+                  orderValues[1] = 1;
+                  orderValues[2] = 3;//Smallest Val is parcel C
+          }
+  }
+  else if(aValue < cValue)
+  {
+          orderValues[0] = 3; //Highest val is Parcel C
+          orderValues[1] = 1;
+          orderValues[2] = 2;//Smallest Val is parcel B
+  }
+  else if(bValue < cValue)
+  {
+          orderValues[0] = 1; //Highest val is Parcel C
+          orderValues[1] = 3;
+          orderValues[2] = 2;//Smallest Val is parcel A
+  }
+  else{
+          orderValues[0] = 1; //Highest val is Parcel C
+          orderValues[1] = 2;
+          orderValues[2] = 3;//Smallest Val is parcel A
+  }
+  return orderValues;
+}
 /**
  * Reorders randomely the base Parcels
  * @return [returns the list of parcels randomize from which we will take a parcel]
  */
 private List<Parcel> randomizeBaseParcelList()
 {
-  if(_baseParcels == null || _baseParcels.size() == 0) return  new LinkedList<Parcel>();
+        if(_baseParcels == null || _baseParcels.size() == 0) return new LinkedList<Parcel>();
         int s = rnd.nextInt(_baseParcels.size());
         List<Parcel> newParcels = new LinkedList<Parcel>();
         for(int i = s; i < _baseParcels.size(); i++)
@@ -862,21 +843,21 @@ private List<Parcel> randomizeBaseParcelList()
         }
         return newParcels;
 }
-private int getEmptySpaces()
-{
-        int count = 0;
-        int countNonEmpty = 0;
-        for(int i = 0; i < _containerSpace.length; i++) {
-                for(int j = 0; j < _containerSpace[0].length; j++) {
-                        for(int k = 0; k < _containerSpace[0][0].length; k++) {
-                                if(_containerSpace[i][j][k] == null) {
-                                        count++;
-                                }
-                                else countNonEmpty++;
-                        }
-                }
-        }
-        System.out.println(countNonEmpty);
-        return count;
+
+/**
+ * Method to be called from the UI to start calculating a solution
+ */
+public void Start(){
+        _type = SetType.B;
+
+        initSetType();
+        createContainerWalls();
+        computeSolution(80);
+        //debugTest();
+        displayExtremePoints();
+        _solution.calculateCurrentValue();
+        System.out.println("Current container value: " + _solution.getValue());
+
+        _solutions.add(_solution);
 }
 }
