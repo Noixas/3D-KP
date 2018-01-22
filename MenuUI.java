@@ -457,7 +457,7 @@ public class MenuUI {
       "Extreme Points",
       "Algorithm C");
     algorithms.setPrefSize(140, 20);
-    algorithms.relocate(50, 50);
+    algorithms.relocate(50, 20);
     algorithms.setValue("Greedy Volume");
 
     presets = new ComboBox<String>();
@@ -471,7 +471,7 @@ public class MenuUI {
       "B and C",
       "Highest value/volume");
     presets.setPrefSize(140, 20);
-    presets.relocate(50, 90);
+    presets.relocate(50, 60);
     presets.setValue("Manual");
     center.getChildren().addAll(presets, algorithms);
   }
@@ -480,7 +480,7 @@ public class MenuUI {
     Button calcButton = new Button();
     calcButton.setText("Calculate");
     calcButton.setPrefSize(140, 20);
-    calcButton.relocate(50, 130);
+    calcButton.relocate(50, 100);
     calcButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent calc) {
@@ -508,7 +508,6 @@ public class MenuUI {
             greedy.Start(listOfParcels);
           }
           else if(algorithms.getValue() == "Extreme Points") {
-            results.setText("Algorithm B has started calculating the possibilities.");
             chosenAlgorithm = algorithms.getValue().toString();
             extremePoints.Start(listOfParcels);
           }
@@ -519,7 +518,7 @@ public class MenuUI {
         else {
           results.setText("There was an input-error detected.");
         }
-        if(_activeAlgorithm.getSolutions() != null)
+
         solutions = _activeAlgorithm.getSolutions().get(0);
         infoTimer.start();
         results.setText(getResultText());
@@ -529,7 +528,7 @@ public class MenuUI {
     Button reset = new Button();
     reset.setText("Reset");
     reset.setPrefSize(140, 20);
-    reset.relocate(50, 210);
+    reset.relocate(50, 180);
     reset.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent display) {
@@ -549,7 +548,7 @@ public class MenuUI {
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
     viewCargo.setPrefSize(140, 20);
-    viewCargo.relocate(50, 170);
+    viewCargo.relocate(50, 140);
     viewCargo.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent swtch) {
@@ -587,7 +586,61 @@ public class MenuUI {
                     }
             });
 
-    center.getChildren().addAll(calcButton, viewCargo, reset);
+    Button display = new Button();
+    display.setText("Display solution");
+    display.setPrefSize(140, 20);
+    display.relocate(50, 220);
+    display.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent display) {
+        errorCheck = 0;
+        updateInput();
+        if(errorCheck == 0) {
+          if(algorithms.getValue() == null) {
+            results.setText("No algorithm was selected.");
+          }
+          else if(algorithms.getValue() == "Greedy Volume") {
+            chosenAlgorithm = algorithms.getValue().toString();
+            greedy.setID(1);
+            greedy.display();
+          }
+          else if(algorithms.getValue() == "Greedy Density") {
+            chosenAlgorithm = algorithms.getValue().toString();
+            greedy.setID(3);
+            greedy.display();
+          }
+          else if(algorithms.getValue() == "Greedy Value") {
+            chosenAlgorithm = algorithms.getValue().toString();
+            greedy.setID(2);
+            greedy.display();
+          }
+          else if(algorithms.getValue() == "Extreme Points") {
+            results.setText("Algorithm B has started calculating the possibilities.");
+            chosenAlgorithm = algorithms.getValue().toString();
+            extremePoints.display();
+          }
+          else if(algorithms.getValue() == "Algorithm C") {
+            chosenAlgorithm = algorithms.getValue().toString();
+          }
+        }
+        else {
+          results.setText("There was an input-error detected.");
+        }
+      }
+    });
+
+    Button clearParcels = new Button();
+    clearParcels.setText("Clear All Parcels");
+    clearParcels.setPrefSize(140, 20);
+    clearParcels.relocate(50, 260);
+    clearParcels.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent display) {
+        CreateParcel.clearAllParcels();
+      }
+    });
+
+    center.getChildren().addAll(calcButton, viewCargo, reset, display, clearParcels);
   }
 
   public void constructResultField(Pane center) {
