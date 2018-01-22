@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class MenuUI {
   private static TextArea results;
@@ -541,6 +542,7 @@ public class MenuUI {
           extremePoints = new AlgorithmZ();
           _activeAlgorithm = extremePoints;
         }
+        results.setText("");
       }
     });
 
@@ -675,8 +677,8 @@ public class MenuUI {
       "The algorithm that was used is: " + chosenAlgorithm + "\n" +
       "Total amount of boxes used: " + solutions.getLength() + "\n" +
       "Total value of the used boxes: " + solutions.getValue() + "\n" +
-      "Total amount of second the algorithm took: " + solutions.getTotalTime() + "\n" +
-      "Total amount of different possibilities: " + "4365";
+      "Total amount of seconds the algorithm took: " + solutions.getTotalTime() + "\n" +
+      "Total amount of different possibilities: " + _activeAlgorithm.getSolutions().size();
     return resultString;
 
   }
