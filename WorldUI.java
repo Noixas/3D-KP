@@ -28,7 +28,7 @@ public class WorldUI {
 
   final XformWorld world = new XformWorld();
   final PerspectiveCamera camera = new PerspectiveCamera(true);
-  final XformCamera cameraXform = new XformCamera();
+  static final XformCamera cameraXform = new XformCamera();
   final CreateParcel parcels = new CreateParcel();
   private static final double CAMERA_INITIAL_DISTANCE = -2000;
   private static final double CAMERA_NEAR_CLIP = 0.1;
@@ -137,7 +137,8 @@ public class WorldUI {
     resetView.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent step) {
-
+        cameraXform.ry(40);
+        cameraXform.rx(40);
       }
     });
 
