@@ -33,7 +33,7 @@ public AlgorithmZ(){
         _containerSpace = new Parcel[spaceIndex(xBound)][spaceIndex(yBound)][spaceIndex(zBound)];
         _started = false;
         _listEP = new LinkedList<ExtremePoint>();
-        _solution = new SolutionSet(0);
+        _solution = new SolutionSet(System.currentTimeMillis());
 }
 public void Start(List<Parcel> list) {
 
@@ -50,7 +50,7 @@ public void Start(List<Parcel> list) {
   _solution.calculateCurrentValue();
   System.out.println("Current container value: " + _solution.getValue());
 
-
+_solutions.add(_solution);
 
 
 }
@@ -69,6 +69,7 @@ public void Start(){
         System.out.println("Current container value: " + _solution.getValue());
         //System.out.println("Amount of empty spaces: "+ getEmptySpaces());
 
+        _solutions.add(_solution);
 }
 private List<Parcel> getOrderParcels(int pOrderingType)
 {

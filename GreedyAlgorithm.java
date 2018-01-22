@@ -51,10 +51,11 @@ public class GreedyAlgorithm extends Algorithm {
     amountA=0;
     amountB=0;
     amountC=0;
-    /*System.out.println("Done");
+    System.out.println("Done");
     System.out.println("Occupied space: " + countOccupiedSpace() + " metres cubed");
     System.out.println("Parcel's placed: " + solution.getLength());
-    System.out.println("Total value: " + solution.getValue());*/
+    System.out.println("Total value: " + solution.getValue());
+    System.out.println(solution.getTotalTime());
   }
 
   /**
