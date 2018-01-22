@@ -3,11 +3,12 @@ import java.util.LinkedList;
 
 public class SolutionSet {
 private List<Parcel> _solution;
-private double _startTime;
+private long _startTime;
 private double _value;
-private double _endTime;
-private double _totalTime;
-public SolutionSet(double pStartTime){
+private long _endTime;
+private long _totalTime;
+public SolutionSet(long pStartTime){
+        _startTime = pStartTime;
         _solution = new LinkedList<Parcel>();
         _value = 0;
 }
@@ -39,7 +40,7 @@ public double getValue()
 {
         return _value;
 }
-public void endSolution(double pEndTime)
+public void endSolution(long pEndTime)
 {
         _endTime = pEndTime;
         _totalTime = _endTime - _startTime;
@@ -56,7 +57,7 @@ public void calculateCurrentValue()
           _value += _solution.get(i).getValue();
   }
 }
-public double getTotalTime()
+public long getTotalTime()
 {
         return _totalTime;
 }
