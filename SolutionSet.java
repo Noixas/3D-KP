@@ -48,6 +48,14 @@ public void endSolution(double pEndTime)
                 _value += _solution.get(i).getValue();
         }
 }
+public void calculateCurrentValue()
+{
+  _value = 0;
+  for(int i = 0; i<_solution.size(); i++)
+  {
+          _value += _solution.get(i).getValue();
+  }
+}
 public double getTotalTime()
 {
         return _totalTime;

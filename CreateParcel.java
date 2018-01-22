@@ -20,6 +20,7 @@ private static boolean _cleared = false;
 private static int width = 660;
 private static int height = 100;
 private static int depth = 160;
+private static boolean axisDisplay = true;
 
 public CreateParcel() {
         Box xAxis = new Box(500, 3, 3);
@@ -97,10 +98,12 @@ public CreateParcel() {
         boxOutline11.setTranslateY(height);
         boxOutline11.setTranslateX(width);
 
+        if(axisDisplay)
+                parcelGroup.getChildren().addAll(xAxis, yAxis, zAxis, x, y);
         parcelGroup.getChildren().addAll(
-					/*xAxis, yAxis, zAxis, x, y,*/ boxOutline, boxOutline1, boxOutline2,
-					boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7,
-          boxOutline8, boxOutline9, boxOutline10, boxOutline11);
+                boxOutline, boxOutline1, boxOutline2,
+                boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7,
+                boxOutline8, boxOutline9, boxOutline10, boxOutline11);
 
 }
 
@@ -137,8 +140,8 @@ public static void createParcel(Parcel p){
         box0.setTranslateY((pos.y + size.y/2)* scaleConstant);
         box0.setTranslateZ((pos.z + size.z/2)* scaleConstant);
         parcelGroup.getChildren().addAll(box0);
-				ArrayList<Node> boxList = new ArrayList<Node>();
-				boxList.add(box0);
+        ArrayList<Node> boxList = new ArrayList<Node>();
+        boxList.add(box0);
 }
 
 public static void createSphere(int x, int y, int z) {
@@ -255,9 +258,11 @@ public static void clearAllParcels() {
         boxOutline11.setTranslateY(height);
         boxOutline11.setTranslateX(width);
 
-        parcelGroup.getChildren().addAll(/*xAxis, yAxis, zAxis, x, y,*/ boxOutline, boxOutline1
-                                                                        , boxOutline2, boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7
-                                                                        , boxOutline8, boxOutline9, boxOutline10, boxOutline11);
+        if(axisDisplay)
+                parcelGroup.getChildren().addAll(xAxis, yAxis, zAxis, x, y);
+        parcelGroup.getChildren().addAll(boxOutline, boxOutline1
+                                         , boxOutline2, boxOutline3, boxOutline4, boxOutline5, boxOutline6, boxOutline7
+                                         , boxOutline8, boxOutline9, boxOutline10, boxOutline11);
         _cleared = true;
 }
 

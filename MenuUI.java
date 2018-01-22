@@ -106,27 +106,27 @@ public class MenuUI {
 
   public void constructInputFields(Pane top, Pane bottom) {
     parcelACntr = new TextField();
-    parcelACntr.setText("5");
+    parcelACntr.setText("0");
     parcelACntr.setPrefSize(80, 20);
     parcelACntr.relocate(100, 55);
 
     parcelBCntr = new TextField();
-    parcelBCntr.setText("5");
+    parcelBCntr.setText("0");
     parcelBCntr.setPrefSize(80, 20);
     parcelBCntr.relocate(280, 55);
 
     parcelCCntr = new TextField();
-    parcelCCntr.setText("5");
+    parcelCCntr.setText("0");
     parcelCCntr.setPrefSize(80, 20);
     parcelCCntr.relocate(460, 55);
 
     parcelAValue = new TextField();
-    parcelAValue.setText("1");
+    parcelAValue.setText("3");
     parcelAValue.setPrefSize(80, 20);
     parcelAValue.relocate(100, 90);
 
     parcelBValue = new TextField();
-    parcelBValue.setText("2");
+    parcelBValue.setText("4");
     parcelBValue.setPrefSize(80, 20);
     parcelBValue.relocate(280, 90);
 
@@ -135,50 +135,53 @@ public class MenuUI {
     parcelCValue.setPrefSize(80, 20);
     parcelCValue.relocate(460, 90);
 
-    widthA = new TextField();
-    widthA.setText("5");
-    widthA.setPrefSize(80, 20);
-    widthA.relocate(100, 125);
-
-    widthB = new TextField();
-    widthB.setText("5");
-    widthB.setPrefSize(80, 20);
-    widthB.relocate(280, 125);
-
-    widthC = new TextField();
-    widthC.setText("5");
-    widthC.setPrefSize(80, 20);
-    widthC.relocate(460, 125);
-
-    heightA = new TextField();
-    heightA.setText("5");
-    heightA.setPrefSize(80, 20);
-    heightA.relocate(100, 160);
-
-    heightB = new TextField();
-    heightB.setText("5");
-    heightB.setPrefSize(80, 20);
-    heightB.relocate(280, 160);
-
-    heightC = new TextField();
-    heightC.setText("5");
-    heightC.setPrefSize(80, 20);
-    heightC.relocate(460, 160);
-
+//x
     lengthA = new TextField();
-    lengthA.setText("5");
+    lengthA.setText("1");
     lengthA.setPrefSize(80, 20);
-    lengthA.relocate(100, 195);
+    lengthA.relocate(100, 125);
 
     lengthB = new TextField();
-    lengthB.setText("5");
+    lengthB.setText("1");
     lengthB.setPrefSize(80, 20);
-    lengthB.relocate(280, 195);
+    lengthB.relocate(280, 125);
 
     lengthC = new TextField();
-    lengthC.setText("5");
+    lengthC.setText("1.5");
     lengthC.setPrefSize(80, 20);
-    lengthC.relocate(460, 195);
+    lengthC.relocate(460, 125);
+
+//y
+    widthA = new TextField();
+    widthA.setText("1");
+    widthA.setPrefSize(80, 20);
+    widthA.relocate(100, 160);
+
+    widthB = new TextField();
+    widthB.setText("1.5");
+    widthB.setPrefSize(80, 20);
+    widthB.relocate(280, 160);
+
+    widthC = new TextField();
+    widthC.setText("1.5");
+    widthC.setPrefSize(80, 20);
+    widthC.relocate(460, 160);
+
+//z
+    heightA = new TextField();
+    heightA.setText("2");
+    heightA.setPrefSize(80, 20);
+    heightA.relocate(100, 195);
+
+    heightB = new TextField();
+    heightB.setText("2");
+    heightB.setPrefSize(80, 20);
+    heightB.relocate(280, 195);
+
+    heightC = new TextField();
+    heightC.setText("1.5");
+    heightC.setPrefSize(80, 20);
+    heightC.relocate(460, 195);
 
     containerX = new TextField();
     containerX.setText("16.5");
@@ -207,7 +210,7 @@ public class MenuUI {
 
   public void constructLabels(Pane top, Pane bottom) {
     Label labelBoxA = new Label();
-    labelBoxA.setText("Box A");
+    labelBoxA.setText("Parcel A");
     labelBoxA.setStyle(
       "-fx-font-size: 18px;" +
       "-fx-font-weight: bold;" +
@@ -218,7 +221,7 @@ public class MenuUI {
     labelBoxA.setWrapText(true);
 
     Label labelBoxB = new Label();
-    labelBoxB.setText("Box B");
+    labelBoxB.setText("Parcel B");
     labelBoxB.setStyle(
       "-fx-font-size: 18px;" +
       "-fx-font-weight: bold;" +
@@ -229,7 +232,7 @@ public class MenuUI {
     labelBoxB.setWrapText(true);
 
     Label labelBoxC = new Label();
-    labelBoxC.setText("Box C");
+    labelBoxC.setText("Parcel C");
     labelBoxC.setStyle(
       "-fx-font-size: 18px;" +
       "-fx-font-weight: bold;" +
@@ -267,7 +270,7 @@ public class MenuUI {
     amountC.relocate(395, 55);
 
     Label weightA = new Label();
-    weightA.setText("Weight");
+    weightA.setText("Value");
     weightA.setStyle(
       "-fx-font-size: 15px;" +
       "-fx-font-weight: bold;" +
@@ -276,7 +279,7 @@ public class MenuUI {
     weightA.relocate(40, 90);
 
     Label weightB = new Label();
-    weightB.setText("Weight");
+    weightB.setText("Value");
     weightB.setStyle(
       "-fx-font-size: 15px;" +
       "-fx-font-weight: bold;" +
@@ -285,40 +288,13 @@ public class MenuUI {
     weightB.relocate(215, 90);
 
     Label weightC = new Label();
-    weightC.setText("Weight");
+    weightC.setText("Value");
     weightC.setStyle(
       "-fx-font-size: 15px;" +
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
     weightC.relocate(395, 90);
-
-    Label widthA = new Label();
-    widthA.setText("Width");
-    widthA.setStyle(
-      "-fx-font-size: 15px;" +
-      "-fx-font-weight: bold;" +
-      "-fx-text-fill: #ffe882;" +
-      "-fx-font-style: italic;");
-    widthA.relocate(40, 125);
-
-    Label widthB = new Label();
-    widthB.setText("Width");
-    widthB.setStyle(
-      "-fx-font-size: 15px;" +
-      "-fx-font-weight: bold;" +
-      "-fx-text-fill: #ffe882;" +
-      "-fx-font-style: italic;");
-    widthB.relocate(215, 125);
-
-    Label widthC = new Label();
-    widthC.setText("Width");
-    widthC.setStyle(
-      "-fx-font-size: 15px;" +
-      "-fx-font-weight: bold;" +
-      "-fx-text-fill: #ffe882;" +
-      "-fx-font-style: italic;");
-    widthC.relocate(395, 125);
 
     Label lengthA = new Label();
     lengthA.setText("Length");
@@ -327,7 +303,7 @@ public class MenuUI {
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    lengthA.relocate(215, 160);
+    lengthA.relocate(40, 125);
 
     Label lengthB = new Label();
     lengthB.setText("Length");
@@ -336,7 +312,7 @@ public class MenuUI {
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    lengthB.relocate(40, 160);
+    lengthB.relocate(215, 125);
 
     Label lengthC = new Label();
     lengthC.setText("Length");
@@ -345,7 +321,34 @@ public class MenuUI {
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    lengthC.relocate(395, 160);
+    lengthC.relocate(395, 125);
+
+    Label widthA = new Label();
+    widthA.setText("Width");
+    widthA.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    widthA.relocate(40, 160);
+
+    Label widthB = new Label();
+    widthB.setText("Width");
+    widthB.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    widthB.relocate(215, 160);
+
+    Label widthC = new Label();
+    widthC.setText("Width");
+    widthC.setStyle(
+      "-fx-font-size: 15px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #ffe882;" +
+      "-fx-font-style: italic;");
+    widthC.relocate(395, 160);
 
     Label heightA = new Label();
     heightA.setText("Height");
@@ -384,14 +387,14 @@ public class MenuUI {
     containerLabel.relocate(105, 20);
 
 
-    Label containerHeight = new Label();
-    containerHeight.setText("Height");
-    containerHeight.setStyle(
+    Label containerLength = new Label();
+    containerLength.setText("Length");
+    containerLength.setStyle(
       "-fx-font-size: 15px;" +
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    containerHeight.relocate(215, 55);
+    containerLength.relocate(35, 55);
 
     Label containerWidth = new Label();
     containerWidth.setText("Width");
@@ -400,16 +403,16 @@ public class MenuUI {
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    containerWidth.relocate(35, 55);
+    containerWidth.relocate(215, 55);
 
-    Label containerLength = new Label();
-    containerLength.setText("Length");
-    containerLength.setStyle(
+    Label containerHeight = new Label();
+    containerHeight.setText("Height");
+    containerHeight.setStyle(
       "-fx-font-size: 15px;" +
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    containerLength.relocate(395, 55);
+    containerHeight.relocate(395, 55);
 
 
     top.getChildren().addAll(
@@ -458,17 +461,17 @@ public class MenuUI {
           else if(algorithms.getValue() == "Greedy Volume") {
             chosenAlgorithm = algorithms.getValue().toString();
             greedy.setID(1);
-            greedy.Start();
+            greedy.Start(getParcelList());
           }
           else if(algorithms.getValue() == "Greedy Density") {
             chosenAlgorithm = algorithms.getValue().toString();
             greedy.setID(3);
-            greedy.Start();
+            greedy.Start(getParcelList());
           }
           else if(algorithms.getValue() == "Greedy Value") {
             chosenAlgorithm = algorithms.getValue().toString();
             greedy.setID(2);
-            greedy.Start();
+            greedy.Start(getParcelList());
           }
           else if(algorithms.getValue() == "Extreme Points") {
             results.setText("Algorithm B has started calculating the possibilities.");
@@ -617,22 +620,23 @@ public class MenuUI {
     Parcel parcelB = new ParcelB();
     Parcel parcelC = new ParcelC();
 
+    parcelA.setSize(new Vector3D(xA, yA, zA));
+    parcelA.setValue(valueParcelA);
+    parcelB.setSize(new Vector3D(xB, yB, zB));
+    parcelB.setValue(valueParcelB);
+    parcelC.setSize(new Vector3D(xC, yC, zC));
+    parcelC.setValue(valueParcelC);
+
     for(int i = 0; i < amountParcelA; i++) {
-      parcelA.setSize(new Vector3D(xA, yA, zA));
-      parcelA.setValue(valueParcelA);
-      listOfParcels.add(parcelA);
+      listOfParcels.add(parcelA.clone());
     }
 
     for(int j = 0; j < amountParcelB; j++) {
-      parcelB.setSize(new Vector3D(xB, yB, zB));
-      parcelB.setValue(valueParcelB);
-      listOfParcels.add(parcelB);
+      listOfParcels.add(parcelB.clone());
     }
 
     for(int k = 0; k < amountParcelC; k++) {
-      parcelC.setSize(new Vector3D(xC, yC, zC));
-      parcelC.setValue(valueParcelC);
-      listOfParcels.add(parcelC);
+      listOfParcels.add(parcelC.clone());
     }
   }
 
