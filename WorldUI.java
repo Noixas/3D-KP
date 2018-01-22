@@ -43,6 +43,9 @@ public class WorldUI {
   private static Label dimensions;
   private static Label yLabel;
   private static Label zLabel;
+  private static Label resultPrint;
+  private static MenuUI menuRef = new MenuUI();
+  private static String resultString;
 
   public WorldUI(Group worldGroup) {
     worldGroup.getChildren().add(world);
@@ -80,11 +83,26 @@ public class WorldUI {
     dimensions = new Label();
     dimensions.setTranslateY(20);
 
+    Label resultsLabel = new Label();
+    resultsLabel.setText("Results: ");
+    resultsLabel.setStyle(
+      "-fx-font-size: 14px;" +
+      "-fx-font-weight: bold;" +
+      "-fx-text-fill: #000000;" +
+      "-fx-font-style: italic;");
+    resultsLabel.setTranslateY(40);
+
+    resultPrint = new Label();
+    resultPrint.setText("okay");
+    resultPrint.setTranslateY(40);
+
     root.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #b2ceff, #ffffff)");
     root.add(coordLabel, 0, 0);
     root.add(coords, 0, 1);
     root.add(dimensionLabel, 0, 2);
     root.add(dimensions, 0, 3);
+    root.add(resultsLabel, 0, 4);
+    root.add(resultPrint, 0, 5);
 
   }
   public static void printInfo() {
@@ -97,7 +115,24 @@ public class WorldUI {
       "Depth: " + depth + "\n" +
       "Width: " + width + "\n" +
       "Height: " + height);
+
+    resultPrint.setText(menuRef.getResultText());
   }
+
+  public static void printResults() {
+    try {
+      //resultString = (String) menuRef.getResultText();
+      resultPrint.setText("The algorithm that was used is: " + "chosenAlgorithm" + "\n" +
+      "Total amount of boxes used: " + "46" + "\n" +
+      "Total value of the used boxes: " + "635" + "\n" +
+      "Total amount of second the algorithm took: " + "twer" + "\n" +
+      "Total amount of different possibilities: " + "4365");
+    }
+    catch(NullPointerException e) {
+      resultPrint.setText("error");
+    }
+  }
+
   public void updateCoords(MouseEvent event) {
     try {
       PickResult result = event.getPickResult();
@@ -112,7 +147,7 @@ public class WorldUI {
       height = temp.getHeight();
       width = temp.getWidth();
 
-
+      //resultString = menuRef.getResultText();
     }
     catch(NullPointerException e) {}
   }

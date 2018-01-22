@@ -1,3 +1,4 @@
+import javafx.animation.AnimationTimer;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Label;
@@ -60,11 +61,11 @@ public class MenuUI {
   private static double yC;
   private static double zC;
 
-  private static double contX;
-  private static double contY;
-  private static double contZ;
+  private static double contX = 16.5;
+  private static double contY = 2.5;
+  private static double contZ = 4;
 
-  private static String chosenAlgorithm;
+  private static String chosenAlgorithm = "Empty";
   private static int errorCheck;
   private static Algorithm _activeAlgorithm;
   private static GreedyAlgorithm greedy = new GreedyAlgorithm();
@@ -72,7 +73,7 @@ public class MenuUI {
   private static Vector3D vectors;
   private static ArrayList<Parcel> listOfParcels;
   private static SolutionSet solutions;
-
+  private static AnimationTimer timer;
 
   public MenuUI() {}
 
@@ -94,6 +95,14 @@ public class MenuUI {
     root.setMargin(center, new Insets(2));
     root.setBottom(center);
     root.setMargin(bottom, new Insets(2));
+
+    timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                    WorldUI.printInfo();
+                    //WorldUI.printResults();
+            }
+    };
   }
 
   public void constructUI(Pane center, Pane top, Pane bottom) {
@@ -439,7 +448,6 @@ public class MenuUI {
     algorithms.setPrefSize(140, 20);
     algorithms.relocate(50, 50);
     algorithms.setValue("Greedy Volume");
-    _activeAlgorithm = greedy;
     center.getChildren().addAll(algorithms);
   }
 
@@ -460,23 +468,24 @@ public class MenuUI {
           }
           else if(algorithms.getValue() == "Greedy Volume") {
             chosenAlgorithm = algorithms.getValue().toString();
+            _activeAlgorithm = greedy;
             greedy.setID(1);
-            greedy.Start(getParcelList());
+            greedy.Start(listOfParcels);
           }
           else if(algorithms.getValue() == "Greedy Density") {
             chosenAlgorithm = algorithms.getValue().toString();
             greedy.setID(3);
-            greedy.Start(getParcelList());
+            greedy.Start(listOfParcels);
           }
           else if(algorithms.getValue() == "Greedy Value") {
             chosenAlgorithm = algorithms.getValue().toString();
             greedy.setID(2);
-            greedy.Start(getParcelList());
+            greedy.Start(listOfParcels);
           }
           else if(algorithms.getValue() == "Extreme Points") {
             results.setText("Algorithm B has started calculating the possibilities.");
             chosenAlgorithm = algorithms.getValue().toString();
-            extremePoints.Start(getParcelList());
+            extremePoints.Start(listOfParcels);
           }
           else if(algorithms.getValue() == "Algorithm C") {
             chosenAlgorithm = algorithms.getValue().toString();
@@ -485,6 +494,10 @@ public class MenuUI {
         else {
           results.setText("There was an input-error detected.");
         }
+
+        solutions = _activeAlgorithm.getSolutions().get(0);
+        timer.start();
+        results.setText(getResultText());
       }
     });
 
@@ -548,13 +561,7 @@ public class MenuUI {
     printResult.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent print) {
-                            solutions = new SolutionSet();
-                            results.setText(
-                                    "The algorithm that was used is: " + chosenAlgorithm + "\n" +
-                                    "Total amount of boxes used: " + "46" + "\n" +
-                                    "Total value of the used boxes: " + "635" + "\n" +
-                                    "Total amount of second the algorithm took: " + solutions.getTotalTime() + "\n" +
-                                    "Total amount of different possibilities: " + "4365" + "\n" );
+
                     }
             });
     Button resetWorld = new Button();
@@ -645,5 +652,21 @@ public class MenuUI {
 
   public ArrayList<Parcel> getParcelList() {
     return listOfParcels;
+  }
+
+  public Vector3D getContainerSize() {
+    Vector3D tempVector = new Vector3D(contX, contY, contZ);
+    return tempVector;
+  }
+
+  public String getResultText() {
+    String resultString =
+      "The algorithm that was used is: " + chosenAlgorithm + "\n" +
+      "Total amount of boxes used: " + solutions.getLength() + "\n" +
+      "Total value of the used boxes: " + "\n" +
+      "Total amount of second the algorithm took: " + solutions.getTotalTime() + "\n" +
+      "Total amount of different possibilities: " + "4365";
+    return resultString;
+
   }
 }
