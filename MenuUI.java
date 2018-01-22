@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class MenuUI {
   private static TextArea results;
   private static ComboBox<String> algorithms;
+  private static ComboBox<String> presets;
 
   private static TextField parcelACntr;
   private static TextField parcelBCntr;
@@ -144,7 +145,7 @@ public class MenuUI {
     parcelCValue.setPrefSize(80, 20);
     parcelCValue.relocate(460, 90);
 
-//x
+    //x
     lengthA = new TextField();
     lengthA.setText("1");
     lengthA.setPrefSize(80, 20);
@@ -160,7 +161,7 @@ public class MenuUI {
     lengthC.setPrefSize(80, 20);
     lengthC.relocate(460, 125);
 
-//y
+    //y
     widthA = new TextField();
     widthA.setText("1");
     widthA.setPrefSize(80, 20);
@@ -176,7 +177,7 @@ public class MenuUI {
     widthC.setPrefSize(80, 20);
     widthC.relocate(460, 160);
 
-//z
+    //z
     heightA = new TextField();
     heightA.setText("2");
     heightA.setPrefSize(80, 20);
@@ -448,14 +449,26 @@ public class MenuUI {
     algorithms.setPrefSize(140, 20);
     algorithms.relocate(50, 50);
     algorithms.setValue("Greedy Volume");
-    center.getChildren().addAll(algorithms);
+
+    presets = new ComboBox<String>();
+    presets.getItems().addAll(
+      "All parcel A",
+      "All parcel B",
+      "All parcel C",
+      "A and B",
+      "A and C",
+      "B and C");
+    presets.setPrefSize(140, 20);
+    presets.relocate(50, 90);
+    presets.setValue("Presets");
+    center.getChildren().addAll(presets, algorithms);
   }
 
   public void constructButtons(Pane center) {
     Button calcButton = new Button();
     calcButton.setText("Calculate");
     calcButton.setPrefSize(140, 20);
-    calcButton.relocate(50, 90);
+    calcButton.relocate(50, 130);
     calcButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent calc) {
@@ -504,7 +517,7 @@ public class MenuUI {
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
     viewCargo.setPrefSize(140, 20);
-    viewCargo.relocate(50, 130);
+    viewCargo.relocate(50, 170);
     viewCargo.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent swtch) {
@@ -512,16 +525,7 @@ public class MenuUI {
                             SceneManager.changeScene(i);
                     }
             });
-    Button printResult = new Button();
-    printResult.setText("Print results");
-    printResult.setPrefSize(140, 20);
-    printResult.relocate(50, 170);
-    printResult.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent print) {
 
-                    }
-            });
     Button resetWorld = new Button();
     resetWorld.setText("Reset");
     resetWorld.setPrefSize(140, 20);
@@ -540,7 +544,7 @@ public class MenuUI {
                             }
                     }
             });
-    center.getChildren().addAll(calcButton, viewCargo, printResult, resetWorld);
+    center.getChildren().addAll(calcButton, viewCargo, resetWorld);
   }
 
   public void constructResultField(Pane center) {
