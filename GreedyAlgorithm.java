@@ -46,6 +46,7 @@ public class GreedyAlgorithm extends Algorithm {
     parcelFits = true;
     makeParcelSolutionArray();
     solution.endSolution(System.currentTimeMillis());
+    _solutions.add(solution);
     display();
     amountA=0;
     amountB=0;

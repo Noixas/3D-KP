@@ -31,7 +31,7 @@ public void start(Stage mainStage) {
                 @Override
                 public void handle(long now) {
                         WorldUI.printInfo();
-                        WorldUI.printResults();
+                        //WorldUI.printResults();
                 }
         };
         timer.start();

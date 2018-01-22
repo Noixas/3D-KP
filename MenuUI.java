@@ -71,7 +71,7 @@ public class MenuUI {
   private static AlgorithmZ extremePoints = new AlgorithmZ();
   private static Vector3D vectors;
   private static ArrayList<Parcel> listOfParcels;
-  private static SolutionSet solutions;
+  private static SolutionSet solutions = new SolutionSet();
 
 
   public MenuUI() {}
@@ -460,6 +460,7 @@ public class MenuUI {
           }
           else if(algorithms.getValue() == "Greedy Volume") {
             chosenAlgorithm = algorithms.getValue().toString();
+            _activeAlgorithm = greedy;
             greedy.setID(1);
             greedy.Start(listOfParcels);
           }
@@ -486,7 +487,7 @@ public class MenuUI {
           results.setText("There was an input-error detected.");
         }
 
-        solutions = new SolutionSet();
+        solutions = _activeAlgorithm.getSolutions().get(0);
         results.setText(getResultText());
       }
     });
@@ -653,7 +654,7 @@ public class MenuUI {
     String resultString =
       "The algorithm that was used is: " + chosenAlgorithm + "\n" +
       "Total amount of boxes used: " + "46" + "\n" +
-      "Total value of the used boxes: " + "635" + "\n" +
+      "Total value of the used boxes: " + "\n" +
       "Total amount of second the algorithm took: " + solutions.getTotalTime() + "\n" +
       "Total amount of different possibilities: " + "4365";
     return resultString;

@@ -44,7 +44,7 @@ public class WorldUI {
   private static Label yLabel;
   private static Label zLabel;
   private static Label resultPrint;
-  private static MenuUI menuRef;
+  private static MenuUI menuRef = new MenuUI();
   private static String resultString;
 
   public WorldUI(Group worldGroup) {
@@ -116,7 +116,7 @@ public class WorldUI {
       "Width: " + width + "\n" +
       "Height: " + height);
 
-    //resultPrint.setText(resultString);
+    resultPrint.setText(menuRef.getResultText());
   }
 
   public static void printResults() {
