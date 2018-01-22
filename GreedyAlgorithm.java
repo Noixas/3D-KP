@@ -16,7 +16,7 @@ public class GreedyAlgorithm extends Algorithm {
   private int[] amountOrder = new int[3]; //Array used to save the amounts available of each parcel used
   private ArrayList<Parcel> parcelList = new ArrayList<Parcel>(); //List of all the parcels that can be used
   private int scalingFactor = 2; //Scaling factor to convert from the Vector3D to the array index
-  private boolean parcelFits = true;
+  private boolean parcelFits = true; //Tells if the previous parcels could fit in the container
   private int heuristicID; //The ID of the heuristic used
   private Container container = new Container(); //The container used
   private Vector3D containerSize = container.getSize(); //The container's size
@@ -35,7 +35,7 @@ public class GreedyAlgorithm extends Algorithm {
     makeOrderedParcelList();
     for(Parcel p : parcelList) {
       //System.out.println("the current parcel is: " + p.getClass());
-      if(parcelFits || !(p.getClass().equals(parcelList.get(parcelList.indexOf(p)-1).getClass()))) {
+      if(parcelFits || !(p.getClass().equals(parcelList.get(parcelList.indexOf(p)-1).getClass()))) { //Checks if the current one is the same size as the previous one and whether it was placed or not (used for optimization)
         if(placeable(p)) {
           placeInArray(p);
           System.out.println(p.toString());
@@ -134,9 +134,13 @@ public class GreedyAlgorithm extends Algorithm {
    */
    private boolean tryRotations(Parcel parcel, Vector3D posIndex) {
      Parcel buffer = parcel.clone();
+     Vector3D size = parcel.getSize();
      //No rotation
      if(canFit(buffer, posIndex)) { //x y z
        return true;
+     }
+     if(size.x != size.y || size.x != size.z) {
+
      }
      rotateX(buffer);
      if(canFit(buffer, posIndex)) { //x z y
@@ -353,26 +357,6 @@ private void makeLists(int id) {
   public void display() {
     for(int p=0; p<solution.getLength(); p++) {
       CreateParcel.createParcel(solution.get(p));
-    }
-  }
-
-
-//logging
-  private void printArray(double[] ar) {
-    for(int i = 0; i<ar.length; i++) {
-      System.out.println(ar[i]);
-    }
-  }
-
-  private void printArray(Parcel[] ar) {
-    for(int i = 0; i<ar.length; i++) {
-      System.out.println(ar[i].getClass());
-    }
-  }
-
-  private void printArray(int[] ar) {
-    for(int i = 0; i<ar.length; i++) {
-      System.out.println(ar[i]);
     }
   }
 
