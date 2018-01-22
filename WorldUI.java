@@ -28,7 +28,7 @@ public class WorldUI {
 
   final XformWorld world = new XformWorld();
   final PerspectiveCamera camera = new PerspectiveCamera(true);
-  final XformCamera cameraXform = new XformCamera();
+  static final XformCamera cameraXform = new XformCamera();
   final CreateParcel parcels = new CreateParcel();
   private static final double CAMERA_INITIAL_DISTANCE = -2000;
   private static final double CAMERA_NEAR_CLIP = 0.1;
@@ -52,6 +52,9 @@ public class WorldUI {
   private static Button resetView;
   private static Button nextStep;
   private static Button computeAll;
+  private static double deltaRX = 0;
+  private static double deltaRY = 0;
+
 
   public WorldUI(Group worldGroup) {
     worldGroup.getChildren().add(world);
@@ -137,7 +140,10 @@ public class WorldUI {
     resetView.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent step) {
-
+        cameraXform.ry(-deltaRY);
+        cameraXform.rx(-deltaRX);
+        deltaRY = 0;
+        deltaRX = 0;
       }
     });
 
@@ -238,6 +244,10 @@ public class WorldUI {
       if (me.isPrimaryButtonDown()) {
         cameraXform.ry(mouseDeltaX * 180.0 / scene.getWidth());
         cameraXform.rx(-mouseDeltaY * 180.0 / scene.getHeight());
+
+        deltaRY = deltaRY + mouseDeltaX * 180.0 / scene.getWidth();
+        deltaRX = deltaRX + -mouseDeltaY * 180.0 / scene.getHeight();
+        System.out.println(deltaRX + "test");
       }
       else if (me.isSecondaryButtonDown()) {
         camera.setTranslateZ(camera.getTranslateZ() + mouseDeltaY);
