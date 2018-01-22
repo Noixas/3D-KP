@@ -915,4 +915,8 @@ public class MenuUI {
       containerZ.setText("4");
     }
   }
+
+  public Algorithm getAlgorithm() {
+    return _activeAlgorithm;
+  }
 }
