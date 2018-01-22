@@ -42,6 +42,7 @@ public void Start(List<Parcel> list) {
 
   initSetType();
  _parcelList = list;
+ _parcelList = getOrderParcels(0);
   createContainerWalls();
   computeSolution(1000);
   //debugTest();
@@ -68,6 +69,100 @@ public void Start(){
         System.out.println("Current container value: " + _solution.getValue());
         //System.out.println("Amount of empty spaces: "+ getEmptySpaces());
 
+}
+private List<Parcel> getOrderParcels(int pOrderingType)
+{
+  List<Parcel> aList  = new LinkedList<Parcel>();
+  List<Parcel> bList  = new LinkedList<Parcel>();
+  List<Parcel> cList  = new LinkedList<Parcel>();
+  List<Parcel> newOrderedList  = new LinkedList<Parcel>();
+  double aValue = 0;
+  double bValue = 0;
+  double cValue = 0;
+  double[] orderValues = new double[3];
+  if(pOrderingType == 0)//Order by value
+  {
+    for(int i = 0; i < _parcelList.size(); i++)
+    {
+      Parcel p = _parcelList.get(i);
+      if(p instanceof ParcelA)
+      {
+        aList.add(p);
+        aValue = p.getValue();
+      }
+      else if(p instanceof ParcelB)
+      {
+        bList.add(p);
+          bValue = p.getValue();
+      }
+      else if(p instanceof ParcelC)
+      {
+        cList.add(p);
+          cValue = p.getValue();
+      }
+    }
+    if(aValue < bValue)
+    {
+      if(bValue < cValue)
+        {
+          orderValues[0] = 3; //Highest val is Parcel C
+          orderValues[1] = 2;
+          orderValues[2] = 1;//Smallest Val is parcel A
+        }
+        else if(aValue < cValue)
+        {
+          orderValues[0] = 2; //Highest val is Parcel B
+          orderValues[1] = 3;
+          orderValues[2] = 1;//Smallest Val is parcel A
+        }
+        else{
+          orderValues[0] = 2; //Highest val is Parcel B
+          orderValues[1] = 1;
+          orderValues[2] = 3;//Smallest Val is parcel C
+        }
+    }
+    else if(aValue < cValue)
+    {
+      orderValues[0] = 3; //Highest val is Parcel C
+      orderValues[1] = 1;
+      orderValues[2] = 2;//Smallest Val is parcel B
+    }
+    else if(bValue < cValue)
+    {
+      orderValues[0] = 1; //Highest val is Parcel C
+      orderValues[1] = 3;
+      orderValues[2] = 2;//Smallest Val is parcel A
+    }
+    else{
+      orderValues[0] = 1; //Highest val is Parcel C
+      orderValues[1] = 2;
+      orderValues[2] = 3;//Smallest Val is parcel A
+    }
+    for(int i = 0; i < orderValues.length; i++)
+    {
+      if(orderValues[i] == 1)
+        for(int j = 0; j < aList.size(); j++)
+        {
+          newOrderedList.add(aList.get(j));
+        }
+        if(orderValues[i] == 2)
+        {
+          for(int j = 0; j < bList.size(); j++)
+          {
+            newOrderedList.add(bList.get(j));
+          }
+        }
+        if(orderValues[i] == 3)
+        {
+          for(int j = 0; j < cList.size(); j++)
+          {
+            newOrderedList.add(cList.get(j));
+          }
+        }
+
+    }
+  }
+return newOrderedList;
 }
 private void debugTest()
 {
