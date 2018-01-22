@@ -38,7 +38,7 @@ public class GreedyAlgorithm extends Algorithm {
       if(parcelFits || !(p.getClass().equals(parcelList.get(parcelList.indexOf(p)-1).getClass()))) { //Checks if the current one is the same size as the previous one and whether it was placed or not (used for optimization)
         if(placeable(p)) {
           placeInArray(p);
-          System.out.println(p.toString());
+          //System.out.println(p.toString());
         }
       }
     }
@@ -51,10 +51,10 @@ public class GreedyAlgorithm extends Algorithm {
     amountA=0;
     amountB=0;
     amountC=0;
-    System.out.println("Done");
+    /*System.out.println("Done");
     System.out.println("Occupied space: " + countOccupiedSpace() + " metres cubed");
     System.out.println("Parcel's placed: " + solution.getLength());
-    System.out.println("Total value: " + solution.getValue());
+    System.out.println("Total value: " + solution.getValue());*/
   }
 
   /**
