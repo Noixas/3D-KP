@@ -461,22 +461,22 @@ public class MenuUI {
           else if(algorithms.getValue() == "Greedy Volume") {
             chosenAlgorithm = algorithms.getValue().toString();
             greedy.setID(1);
-            greedy.Start();
+            greedy.Start(listOfParcels);
           }
           else if(algorithms.getValue() == "Greedy Density") {
             chosenAlgorithm = algorithms.getValue().toString();
             greedy.setID(3);
-            greedy.Start();
+            greedy.Start(listOfParcels);
           }
           else if(algorithms.getValue() == "Greedy Value") {
             chosenAlgorithm = algorithms.getValue().toString();
             greedy.setID(2);
-            greedy.Start();
+            greedy.Start(listOfParcels);
           }
           else if(algorithms.getValue() == "Extreme Points") {
             results.setText("Algorithm B has started calculating the possibilities.");
             chosenAlgorithm = algorithms.getValue().toString();
-            extremePoints.Start();
+            extremePoints.Start(listOfParcels);
           }
           else if(algorithms.getValue() == "Algorithm C") {
             chosenAlgorithm = algorithms.getValue().toString();
