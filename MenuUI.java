@@ -476,7 +476,7 @@ public class MenuUI {
           else if(algorithms.getValue() == "Extreme Points") {
             results.setText("Algorithm B has started calculating the possibilities.");
             chosenAlgorithm = algorithms.getValue().toString();
-            extremePoints.Start();
+            extremePoints.Start(getParcelList());
           }
           else if(algorithms.getValue() == "Algorithm C") {
             chosenAlgorithm = algorithms.getValue().toString();

@@ -54,7 +54,7 @@ public int compareTo(Vector3D o) {
                 if (y > o.y) {
                         return 1;
                 } else if (y == y) {
-                        if (x > x) {
+                        if (x > o.x) {
                                 return 1;
                         } else if (x == x) {
                                 return 0;

@@ -10,6 +10,7 @@ private SolutionSet _solution;
 private List<ExtremePoint> _listEP;
 private boolean _started;
 private List<Parcel> _baseParcels;
+private List<Parcel> _parcelList;
 private Random rnd;
 private Parcel[][][] _containerSpace;
 private int _scalingArrayConst = 2;
@@ -34,25 +35,44 @@ public AlgorithmZ(){
         _listEP = new LinkedList<ExtremePoint>();
         _solution = new SolutionSet(0);
 }
+public void Start(List<Parcel> list) {
+
+  _type = SetType.B;
+ //_solution = new SolutionSet(System.currentTimeMillis());
+
+  initSetType();
+ _parcelList = list;
+  createContainerWalls();
+  computeSolution(1000);
+  //debugTest();
+  displayExtremePoints();
+  _solution.calculateCurrentValue();
+  System.out.println("Current container value: " + _solution.getValue());
+
+
+
+
+}
 /**
  * Method to be called from the UI to start calculating a solution
  */
 public void Start(){
-        _type = SetType.A;
+        _type = SetType.B;
 
         initSetType();
         createContainerWalls();
-        computeSolution(20);
+        computeSolution(80);
         //debugTest();
         displayExtremePoints();
         _solution.calculateCurrentValue();
         System.out.println("Current container value: " + _solution.getValue());
-        System.out.println("Amount of empty spaces: "+ getEmptySpaces());
+        //System.out.println("Amount of empty spaces: "+ getEmptySpaces());
 
 }
 private void debugTest()
 {
-        Parcel test = _baseParcels.get(0);
+  if(_parcelList.size() == 0) return;
+        Parcel test = _parcelList.get(0);
         rotateParcel(test, Axis.Z);
         computeSolutionStep();
 }
@@ -177,12 +197,14 @@ private void computeSolution(int pIterations)
  */
 private void computeSolutionStep()
 {
+  if(_parcelList.size() == 0) return; //No more parcels to be placed
         if (_started == false) insertFirstParcel();
         else {
                 List<Parcel> randomList = randomizeBaseParcelList();
-                if(_type != SetType.RANDOM) randomList = _baseParcels; //comment this for random
+                randomList = _parcelList;
+              //  if(_type != SetType.RANDOM) randomList = _baseParcels; //comment this for random
                 List<ExtremePoint> toDeleteEp = new LinkedList<ExtremePoint>();
-                Parcel b = _baseParcels.get(0).clone();
+                Parcel b = _parcelList.get(0).clone();
                 int[] bestInfo = findBestEP(b);
                 int i = bestInfo[0];
                 int rotation = bestInfo[1];
@@ -203,6 +225,7 @@ private void computeSolutionStep()
                         {
                                 placeParcel(b,pos);
                                 _listEP.remove(i);
+                                _parcelList.remove(0);
                                 //i = _listEP.size();
                                 //j = _baseParcels.size();
                         }
@@ -233,26 +256,77 @@ private int[] findBestEP(Parcel pParcel)
         int MAXROTATION = 6;
         double difference = Double.MAX_VALUE;
         double currentDiff = 0;
+        int unusableAxis = 0;
+        Vector3D sizeParcel = pParcel.getSize();
+        boolean leaveUsableSpace = false;
+      //double smallestSize = Math.min(Math.min(sizeParcel.x,sizeParcel.y),sizeParcel.z);
+
+        int bestEpWithUnusableAxis = 0;
+        int bestRotationWithUnusableAxis = 0;
+        double differenceWithUnusableAxis = Double.MAX_VALUE;
+        //TODO: check if it will leave a side with unable space
+        //TODO: Instead of keeping the smallest difference, grade them with importance of:
+        //TODO: (1) diff == 0 is the best,
+        //TODO: (2) then the smallest difference which is >= smallestSide of any parcel in the list
+        //TODO: (3) and finally if all leave unasable space then choose the smallest one
         for (int i = 0; i < _listEP.size(); i++) {
                 for(int j = 0; j < MAXROTATION; j++) {
-                        currentDiff = calculateDifferenceRsAndParcel(getRotated(pParcel, j), _listEP.get(i));
+                        Parcel rotatedParcel = getRotated(pParcel, j);
+                        unusableAxis = 0;
+                        currentDiff = calculateDifferenceRsAndParcel(rotatedParcel, _listEP.get(i));
+                        unusableAxis = checkMakesUnusableSpace(rotatedParcel, _listEP.get(i), sizeParcel);
                         if(currentDiff <= difference && currentDiff >= 0)
                         {
-                                difference = currentDiff;
-                                bestEpIndex = i;
-                                rotation = j;
-                                result[0] = bestEpIndex;
-                                result[1] = rotation;
+                                if(unusableAxis > 0 && currentDiff <= differenceWithUnusableAxis) {
+                                        differenceWithUnusableAxis = currentDiff;
+                                        bestEpWithUnusableAxis = i;
+                                        bestRotationWithUnusableAxis = j;
+                                }
+                                else if(unusableAxis == 0) {
+                                        leaveUsableSpace = true;
+                                        difference = currentDiff;
+                                        bestEpIndex = i;
+                                        rotation = j;
+                                        result[0] = bestEpIndex;
+                                        result[1] = rotation;
+                                }
+                                //We found a perfect match so no need to keep searching
                                 //System.out.println("Current min diff is " + difference);
-                        }
-                        else if(currentDiff < 0)
-                        {
-                                //  System.out.println("Negative difference, overlapping... skip");
                         }
                 }
         }
-
+        //If all options leave unusable spaces then choose the smallest one
+        if(leaveUsableSpace == false)
+        {
+                difference = differenceWithUnusableAxis;
+                bestEpIndex = bestEpWithUnusableAxis;
+                rotation = bestRotationWithUnusableAxis;
+                result[0] = bestEpIndex;
+                result[1] = rotation;
+                System.out.println("We will leave unusable space");
+        }
         return result;
+}
+/**
+ * Check if placing a Parcel in an Ep will leave unasable space in an axis
+ * @param  Parcel       pParcel       [Parcel to be placed]
+ * @param  ExtremePoint pEp           [Ep where the parcel will be placed]
+ * @param  Vector3D     pMinAxis      [Sizes of the smallest box]
+ * @return              [description]
+ */
+private int checkMakesUnusableSpace(Parcel pParcel, ExtremePoint pEp, Vector3D pMinAxis)
+{
+  //TODO: maybe try all rotations of the size
+        int amount = 0;
+        Vector3D size = pParcel.getSize();
+        Vector3D EpSize = pEp.getRS();
+        if((EpSize.x - size.x) < pMinAxis.x)
+                amount++;
+        if((EpSize.y - size.y) < pMinAxis.y)
+                amount++;
+        if((EpSize.z - size.z) < pMinAxis.z)
+                amount++;
+        return amount;
 }
 private double calculateDifferenceRsAndParcel(Parcel pParcel, ExtremePoint pEp)
 {
@@ -679,6 +753,7 @@ private void rotateParcel(Parcel pParcel, Axis pAxis)
  */
 private List<Parcel> randomizeBaseParcelList()
 {
+  if(_baseParcels == null || _baseParcels.size() == 0) return  new LinkedList<Parcel>();
         int s = rnd.nextInt(_baseParcels.size());
         List<Parcel> newParcels = new LinkedList<Parcel>();
         for(int i = s; i < _baseParcels.size(); i++)
@@ -690,9 +765,6 @@ private List<Parcel> randomizeBaseParcelList()
                 newParcels.add(_baseParcels.get(i));
         }
         return newParcels;
-}
-public void Start(List<Parcel> list){
-
 }
 private int getEmptySpaces()
 {
