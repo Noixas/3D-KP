@@ -155,7 +155,6 @@ public class MenuUI {
     parcelCValue.relocate(460, 90);
 
     //x
-//x
     lengthA = new TextField();
     lengthA.setText("1");
     lengthA.setPrefSize(80, 20);
@@ -172,7 +171,6 @@ public class MenuUI {
     lengthC.relocate(460, 125);
 
     //y
-//y
     widthA = new TextField();
     widthA.setText("1");
     widthA.setPrefSize(80, 20);
@@ -189,7 +187,6 @@ public class MenuUI {
     widthC.relocate(460, 160);
 
     //z
-//z
     heightA = new TextField();
     heightA.setText("2");
     heightA.setPrefSize(80, 20);
@@ -461,7 +458,6 @@ public class MenuUI {
     algorithms.setPrefSize(140, 20);
     algorithms.relocate(50, 50);
     algorithms.setValue("Greedy Volume");
-<<<<<<< HEAD
 
     presets = new ComboBox<String>();
     presets.getItems().addAll(
@@ -477,9 +473,6 @@ public class MenuUI {
     presets.relocate(50, 90);
     presets.setValue("Manual");
     center.getChildren().addAll(presets, algorithms);
-=======
-    center.getChildren().addAll(algorithms);
->>>>>>> 558f5af77ed7e11560df935b8f045f8929f15b57
   }
 
   public void constructButtons(Pane center) {
@@ -487,7 +480,6 @@ public class MenuUI {
     calcButton.setText("Calculate");
     calcButton.setPrefSize(140, 20);
     calcButton.relocate(50, 130);
-    calcButton.relocate(50, 90);
     calcButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent calc) {
@@ -533,44 +525,21 @@ public class MenuUI {
       }
     });
 
-    Button display = new Button();
-    display.setText("Display solution");
-    display.setPrefSize(140, 20);
-    display.setOnAction(new EventHandler<ActionEvent>() {
+    Button reset = new Button();
+    reset.setText("Reset");
+    reset.setPrefSize(140, 20);
+    reset.relocate(50, 210);
+    reset.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent display) {
-        errorCheck = 0;
-        updateInput();
-        if(errorCheck == 0) {
-          if(algorithms.getValue() == null) {
-            results.setText("No algorithm was selected.");
-          }
-          else if(algorithms.getValue() == "Greedy Volume") {
-            chosenAlgorithm = algorithms.getValue().toString();
-            greedy.setID(1);
-            greedy.display();
-          }
-          else if(algorithms.getValue() == "Greedy Density") {
-            chosenAlgorithm = algorithms.getValue().toString();
-            greedy.setID(3);
-            greedy.display();
-          }
-          else if(algorithms.getValue() == "Greedy Value") {
-            chosenAlgorithm = algorithms.getValue().toString();
-            greedy.setID(2);
-            greedy.display();
-          }
-          else if(algorithms.getValue() == "Extreme Points") {
-            results.setText("Algorithm B has started calculating the possibilities.");
-            chosenAlgorithm = algorithms.getValue().toString();
-            extremePoints.display();
-          }
-          else if(algorithms.getValue() == "Algorithm C") {
-            chosenAlgorithm = algorithms.getValue().toString();
-          }
+        CreateParcel.clearAllParcels();
+        if(_activeAlgorithm == greedy) {
+          greedy = new GreedyAlgorithm();
+          _activeAlgorithm = greedy;
         }
         else {
-          results.setText("There was an input-error detected.");
+          extremePoints = new AlgorithmZ();
+          _activeAlgorithm = extremePoints;
         }
       }
     });
@@ -579,7 +548,6 @@ public class MenuUI {
     viewCargo.setText("Show 3D-model");
     viewCargo.setPrefSize(140, 20);
     viewCargo.relocate(50, 170);
-    viewCargo.relocate(50, 130);
     viewCargo.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent swtch) {
@@ -616,8 +584,8 @@ public class MenuUI {
                             }
                     }
             });
-    center.getChildren().addAll(calcButton, viewCargo, resetWorld);
-    center.getChildren().addAll(calcButton, viewCargo, printResult, resetWorld, display);
+
+    center.getChildren().addAll(calcButton, viewCargo, reset);
   }
 
   public void constructResultField(Pane center) {
