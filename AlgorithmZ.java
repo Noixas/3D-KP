@@ -49,6 +49,15 @@ public void Start(List<Parcel> list) {
         System.out.println("Current container value: " + _solution.getValue());
         _solutions.add(_solution);
 }
+public void nextStep()
+{
+  computeSolution(2);
+  displayExtremePoints();
+  _solution.calculateCurrentValue();
+  System.out.println("Current container value: " + _solution.getValue());
+  _solutions.add(_solution);
+
+}
 private List<Parcel> getOrderParcels(int pOrderingType, List<Parcel> pList)
 {
         List<Parcel> aList  = new LinkedList<Parcel>();
