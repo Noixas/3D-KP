@@ -51,12 +51,12 @@ public int compareTo(Vector3D o) {
         if (z > o.z) {
                 return 1;
         } else if (z == o.z) {
-                if (y > o.y) {
+                if (x > o.x) {
                         return 1;
-                } else if (y == y) {
-                        if (x > o.x) {
+                } else if (x == x) {
+                        if (y > o.y) {
                                 return 1;
-                        } else if (x == x) {
+                        } else if (y == o.y) {
                                 return 0;
                         } else {
                                 return -1;

@@ -264,7 +264,7 @@ private void computeSolutionStep()
                 ExtremePoint pos = _listEP.get(i);
                 //  pos = findBestEP();
                 //if (pos.x + 1 < xBound && pos.y + 1 < yBound && pos.z + 1 < zBound ) {//container boundaries
-                if (pos.x < xBound && pos.y  < yBound && pos.z < zBound ) {        //container boundaries
+                if (pos.x <= xBound && pos.y  <= yBound && pos.z <= zBound ) {        //container boundaries
                         //for(int j = 0; j < _baseParcels.size(); j++) {
                         //int s = rnd.nextInt(_baseParcels.size());
                         //int s = j;//since we want to check all kind of boxes for now is there in case we want to use random
@@ -276,6 +276,9 @@ private void computeSolutionStep()
                                 _parcelList.remove(0);
                                 //i = _listEP.size();
                                 //j = _baseParcels.size();
+                        }
+                        else{
+                          System.out.println(b + " Doesnt fit in pos " + pos );
                         }
                         //  else if(j == _baseParcels.size()-1) {//Tried all the kind of parcels
                         //System.out.println("EP to delete "+pos);
@@ -318,7 +321,7 @@ private int[] findBestEP(Parcel pParcel)
         //TODO: (2) then the smallest difference which is >= smallestSide of any parcel in the list
         //TODO: (3) and finally if all leave unasable space then choose the smallest one
         for (int i = 0; i < _listEP.size(); i++) {
-                for(int j = 0; j < MAXROTATION; j++) {
+                for(int j = 3; j < MAXROTATION; j++) {
                         Parcel rotatedParcel = getRotated(pParcel, j);
                         unusableAxis = 0;
                         currentDiff = calculateDifferenceRsAndParcel(rotatedParcel, _listEP.get(i));
@@ -338,6 +341,42 @@ private int[] findBestEP(Parcel pParcel)
                                         result[0] = bestEpIndex;
                                         result[1] = rotation;
                                 }
+                                difference = currentDiff;
+                                bestEpIndex = i;
+                                rotation = j;
+                                result[0] = bestEpIndex;
+                                result[1] = rotation;
+                                //We found a perfect match so no need to keep searching
+                                //System.out.println("Current min diff is " + difference);
+                        }
+                }
+        }
+        for (int i = 0; i < _listEP.size(); i++) {
+                for(int j = 0; j < 3; j++) {
+                        Parcel rotatedParcel = getRotated(pParcel, j);
+                        unusableAxis = 0;
+                        currentDiff = calculateDifferenceRsAndParcel(rotatedParcel, _listEP.get(i));
+                        unusableAxis = checkMakesUnusableSpace(rotatedParcel, _listEP.get(i), sizeParcel);
+                        if(currentDiff <= difference && currentDiff >= 0)
+                        {
+                                if(unusableAxis > 0 && currentDiff <= differenceWithUnusableAxis) {
+                                        differenceWithUnusableAxis = currentDiff;
+                                        bestEpWithUnusableAxis = i;
+                                        bestRotationWithUnusableAxis = j;
+                                }
+                                else if(unusableAxis == 0) {
+                                        leaveUsableSpace = true;
+                                        difference = currentDiff;
+                                        bestEpIndex = i;
+                                        rotation = j;
+                                        result[0] = bestEpIndex;
+                                        result[1] = rotation;
+                                }
+                                difference = currentDiff;
+                                bestEpIndex = i;
+                                rotation = j;
+                                result[0] = bestEpIndex;
+                                result[1] = rotation;
                                 //We found a perfect match so no need to keep searching
                                 //System.out.println("Current min diff is " + difference);
                         }

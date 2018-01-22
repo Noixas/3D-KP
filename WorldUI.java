@@ -109,7 +109,12 @@ public class WorldUI {
     nextStep.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent step) {
-
+        Algorithm a = menuRef.getAlgorithm();
+        if(a instanceof AlgorithmZ)
+        {
+          AlgorithmZ z = (AlgorithmZ) a;
+          z.nextStep();
+        }
       }
     });
 
