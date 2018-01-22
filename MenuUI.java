@@ -60,11 +60,11 @@ public class MenuUI {
   private static double yC;
   private static double zC;
 
-  private static double contX;
-  private static double contY;
-  private static double contZ;
+  private static double contX = 16.5;
+  private static double contY = 2.5;
+  private static double contZ = 4;
 
-  private static String chosenAlgorithm;
+  private static String chosenAlgorithm = "Empty";
   private static int errorCheck;
   private static Algorithm _activeAlgorithm;
   private static GreedyAlgorithm greedy = new GreedyAlgorithm();
@@ -482,6 +482,9 @@ public class MenuUI {
         else {
           results.setText("There was an input-error detected.");
         }
+
+        solutions = new SolutionSet();
+        results.setText(getResultText());
       }
     });
 
@@ -545,13 +548,7 @@ public class MenuUI {
     printResult.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent print) {
-                            solutions = new SolutionSet();
-                            results.setText(
-                                    "The algorithm that was used is: " + chosenAlgorithm + "\n" +
-                                    "Total amount of boxes used: " + "46" + "\n" +
-                                    "Total value of the used boxes: " + "635" + "\n" +
-                                    "Total amount of second the algorithm took: " + solutions.getTotalTime() + "\n" +
-                                    "Total amount of different possibilities: " + "4365" + "\n" );
+
                     }
             });
     Button resetWorld = new Button();
@@ -619,7 +616,7 @@ public class MenuUI {
     Parcel parcelA = new ParcelA();
     Parcel parcelB = new ParcelB();
     Parcel parcelC = new ParcelC();
-  
+
     for(int i = 0; i < amountParcelA; i++) {
       parcelA.setSize(new Vector3D(xA, yA, zA));
       parcelA.setValue(valueParcelA);
@@ -641,5 +638,21 @@ public class MenuUI {
 
   public ArrayList<Parcel> getParcelList() {
     return listOfParcels;
+  }
+
+  public Vector3D getContainerSize() {
+    Vector3D tempVector = new Vector3D(contX, contY, contZ);
+    return tempVector;
+  }
+
+  public String getResultText() {
+    String resultString =
+      "The algorithm that was used is: " + chosenAlgorithm + "\n" +
+      "Total amount of boxes used: " + "46" + "\n" +
+      "Total value of the used boxes: " + "635" + "\n" +
+      "Total amount of second the algorithm took: " + solutions.getTotalTime() + "\n" +
+      "Total amount of different possibilities: " + "4365";
+    return resultString;
+
   }
 }
