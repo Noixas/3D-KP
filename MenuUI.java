@@ -12,10 +12,12 @@ import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class MenuUI {
   private static TextArea results;
   private static ComboBox<String> algorithms;
+  private static ComboBox<String> presets;
 
   private static TextField parcelACntr;
   private static TextField parcelBCntr;
@@ -73,7 +75,8 @@ public class MenuUI {
   private static Vector3D vectors;
   private static ArrayList<Parcel> listOfParcels;
   private static SolutionSet solutions;
-  private static AnimationTimer timer;
+  private static AnimationTimer infoTimer;
+  private static AnimationTimer inputTimer;
 
   public MenuUI() {}
 
@@ -96,13 +99,21 @@ public class MenuUI {
     root.setBottom(center);
     root.setMargin(bottom, new Insets(2));
 
-    timer = new AnimationTimer() {
+    infoTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                     WorldUI.printInfo();
                     //WorldUI.printResults();
             }
     };
+
+    inputTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+              updateInputFields();
+            }
+    };
+    inputTimer.start();
   }
 
   public void constructUI(Pane center, Pane top, Pane bottom) {
@@ -144,7 +155,7 @@ public class MenuUI {
     parcelCValue.setPrefSize(80, 20);
     parcelCValue.relocate(460, 90);
 
-//x
+    //x
     lengthA = new TextField();
     lengthA.setText("1");
     lengthA.setPrefSize(80, 20);
@@ -160,7 +171,7 @@ public class MenuUI {
     lengthC.setPrefSize(80, 20);
     lengthC.relocate(460, 125);
 
-//y
+    //y
     widthA = new TextField();
     widthA.setText("1");
     widthA.setPrefSize(80, 20);
@@ -176,7 +187,7 @@ public class MenuUI {
     widthC.setPrefSize(80, 20);
     widthC.relocate(460, 160);
 
-//z
+    //z
     heightA = new TextField();
     heightA.setText("2");
     heightA.setPrefSize(80, 20);
@@ -448,14 +459,28 @@ public class MenuUI {
     algorithms.setPrefSize(140, 20);
     algorithms.relocate(50, 50);
     algorithms.setValue("Greedy Volume");
-    center.getChildren().addAll(algorithms);
+
+    presets = new ComboBox<String>();
+    presets.getItems().addAll(
+      "Manual",
+      "All A",
+      "All B",
+      "All C",
+      "A and B",
+      "A and C",
+      "B and C",
+      "Highest value/volume");
+    presets.setPrefSize(140, 20);
+    presets.relocate(50, 90);
+    presets.setValue("Manual");
+    center.getChildren().addAll(presets, algorithms);
   }
 
   public void constructButtons(Pane center) {
     Button calcButton = new Button();
     calcButton.setText("Calculate");
     calcButton.setPrefSize(140, 20);
-    calcButton.relocate(50, 90);
+    calcButton.relocate(50, 130);
     calcButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent calc) {
@@ -494,59 +519,37 @@ public class MenuUI {
         else {
           results.setText("There was an input-error detected.");
         }
-
+        if(_activeAlgorithm.getSolutions() != null)
         solutions = _activeAlgorithm.getSolutions().get(0);
-        timer.start();
+        infoTimer.start();
         results.setText(getResultText());
       }
     });
 
-    Button display = new Button();
-    display.setText("Display solution");
-    display.setPrefSize(140, 20);
-    display.setOnAction(new EventHandler<ActionEvent>() {
+    Button reset = new Button();
+    reset.setText("Reset");
+    reset.setPrefSize(140, 20);
+    reset.relocate(50, 210);
+    reset.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent display) {
-        errorCheck = 0;
-        updateInput();
-        if(errorCheck == 0) {
-          if(algorithms.getValue() == null) {
-            results.setText("No algorithm was selected.");
-          }
-          else if(algorithms.getValue() == "Greedy Volume") {
-            chosenAlgorithm = algorithms.getValue().toString();
-            greedy.setID(1);
-            greedy.display();
-          }
-          else if(algorithms.getValue() == "Greedy Density") {
-            chosenAlgorithm = algorithms.getValue().toString();
-            greedy.setID(3);
-            greedy.display();
-          }
-          else if(algorithms.getValue() == "Greedy Value") {
-            chosenAlgorithm = algorithms.getValue().toString();
-            greedy.setID(2);
-            greedy.display();
-          }
-          else if(algorithms.getValue() == "Extreme Points") {
-            results.setText("Algorithm B has started calculating the possibilities.");
-            chosenAlgorithm = algorithms.getValue().toString();
-            extremePoints.display();
-          }
-          else if(algorithms.getValue() == "Algorithm C") {
-            chosenAlgorithm = algorithms.getValue().toString();
-          }
+        CreateParcel.clearAllParcels();
+        if(_activeAlgorithm == greedy) {
+          greedy = new GreedyAlgorithm();
+          _activeAlgorithm = greedy;
         }
         else {
-          results.setText("There was an input-error detected.");
+          extremePoints = new AlgorithmZ();
+          _activeAlgorithm = extremePoints;
         }
+        results.setText("");
       }
     });
 
     Button viewCargo = new Button();
     viewCargo.setText("Show 3D-model");
     viewCargo.setPrefSize(140, 20);
-    viewCargo.relocate(50, 130);
+    viewCargo.relocate(50, 170);
     viewCargo.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent swtch) {
@@ -565,6 +568,7 @@ public class MenuUI {
                     }
             });
     Button resetWorld = new Button();
+    resetWorld.setText("Reset");
     resetWorld.setText("Clear all parcels");
     resetWorld.setPrefSize(140, 20);
     resetWorld.relocate(50, 210);
@@ -572,9 +576,18 @@ public class MenuUI {
                     @Override
                     public void handle(ActionEvent clear) {
                             CreateParcel.clearAllParcels();
+                            if(_activeAlgorithm == greedy) {
+                              greedy = new GreedyAlgorithm();
+                              _activeAlgorithm = greedy;
+                            }
+                            else {
+                              extremePoints = new AlgorithmZ();
+                              _activeAlgorithm = extremePoints;
+                            }
                     }
             });
-    center.getChildren().addAll(calcButton, viewCargo, printResult, resetWorld, display);
+
+    center.getChildren().addAll(calcButton, viewCargo, reset);
   }
 
   public void constructResultField(Pane center) {
@@ -663,10 +676,188 @@ public class MenuUI {
     String resultString =
       "The algorithm that was used is: " + chosenAlgorithm + "\n" +
       "Total amount of boxes used: " + solutions.getLength() + "\n" +
-      "Total value of the used boxes: " + "\n" +
-      "Total amount of second the algorithm took: " + solutions.getTotalTime() + "\n" +
-      "Total amount of different possibilities: " + "4365";
+      "Total value of the used boxes: " + solutions.getValue() + "\n" +
+      "Total amount of seconds the algorithm took: " + solutions.getTotalTime() + "\n" +
+      "Total amount of different possibilities: " + _activeAlgorithm.getSolutions().size();
     return resultString;
 
+  }
+
+  public void updateInputFields() {
+    if(presets.getValue() == "All A") {
+      parcelACntr.setText("200");
+      parcelBCntr.setText("0");
+      parcelCCntr.setText("0");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
+    else if(presets.getValue() == "All B") {
+      parcelACntr.setText("0");
+      parcelBCntr.setText("200");
+      parcelCCntr.setText("0");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
+    else if(presets.getValue() == "All C") {
+      parcelACntr.setText("0");
+      parcelBCntr.setText("0");
+      parcelCCntr.setText("200");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
+    else if(presets.getValue() == "A and B") {
+      parcelACntr.setText("200");
+      parcelBCntr.setText("200");
+      parcelCCntr.setText("0");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
+    else if(presets.getValue() == "A and C") {
+      parcelACntr.setText("200");
+      parcelBCntr.setText("0");
+      parcelCCntr.setText("200");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
+    else if(presets.getValue() == "B and C") {
+      parcelACntr.setText("0");
+      parcelBCntr.setText("200");
+      parcelCCntr.setText("200");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
+    else if(presets.getValue() == "Highest value/volume") {
+      parcelACntr.setText("11");
+      parcelBCntr.setText("22");
+      parcelCCntr.setText("22");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
   }
 }
