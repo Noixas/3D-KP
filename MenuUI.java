@@ -74,7 +74,8 @@ public class MenuUI {
   private static Vector3D vectors;
   private static ArrayList<Parcel> listOfParcels;
   private static SolutionSet solutions;
-  private static AnimationTimer timer;
+  private static AnimationTimer infoTimer;
+  private static AnimationTimer inputTimer;
 
   public MenuUI() {}
 
@@ -97,13 +98,21 @@ public class MenuUI {
     root.setBottom(center);
     root.setMargin(bottom, new Insets(2));
 
-    timer = new AnimationTimer() {
+    infoTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                     WorldUI.printInfo();
                     //WorldUI.printResults();
             }
     };
+
+    inputTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+              updateInputFields();
+            }
+    };
+    inputTimer.start();
   }
 
   public void constructUI(Pane center, Pane top, Pane bottom) {
@@ -452,15 +461,17 @@ public class MenuUI {
 
     presets = new ComboBox<String>();
     presets.getItems().addAll(
-      "All parcel A",
-      "All parcel B",
-      "All parcel C",
+      "Manual",
+      "All A",
+      "All B",
+      "All C",
       "A and B",
       "A and C",
-      "B and C");
+      "B and C",
+      "Highest value/volume");
     presets.setPrefSize(140, 20);
     presets.relocate(50, 90);
-    presets.setValue("Presets");
+    presets.setValue("Manual");
     center.getChildren().addAll(presets, algorithms);
   }
 
@@ -509,7 +520,7 @@ public class MenuUI {
         }
 
         solutions = _activeAlgorithm.getSolutions().get(0);
-        timer.start();
+        infoTimer.start();
         results.setText(getResultText());
       }
     });
@@ -633,10 +644,188 @@ public class MenuUI {
     String resultString =
       "The algorithm that was used is: " + chosenAlgorithm + "\n" +
       "Total amount of boxes used: " + solutions.getLength() + "\n" +
-      "Total value of the used boxes: " + "\n" +
+      "Total value of the used boxes: " + solutions.getValue() + "\n" +
       "Total amount of second the algorithm took: " + solutions.getTotalTime() + "\n" +
       "Total amount of different possibilities: " + "4365";
     return resultString;
 
+  }
+
+  public void updateInputFields() {
+    if(presets.getValue() == "All A") {
+      parcelACntr.setText("200");
+      parcelBCntr.setText("0");
+      parcelCCntr.setText("0");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
+    else if(presets.getValue() == "All B") {
+      parcelACntr.setText("0");
+      parcelBCntr.setText("200");
+      parcelCCntr.setText("0");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
+    else if(presets.getValue() == "All C") {
+      parcelACntr.setText("0");
+      parcelBCntr.setText("0");
+      parcelCCntr.setText("200");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
+    else if(presets.getValue() == "A and B") {
+      parcelACntr.setText("200");
+      parcelBCntr.setText("200");
+      parcelCCntr.setText("0");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
+    else if(presets.getValue() == "A and C") {
+      parcelACntr.setText("200");
+      parcelBCntr.setText("0");
+      parcelCCntr.setText("200");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
+    else if(presets.getValue() == "B and C") {
+      parcelACntr.setText("0");
+      parcelBCntr.setText("200");
+      parcelCCntr.setText("200");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
+    else if(presets.getValue() == "Highest value/volume") {
+      parcelACntr.setText("11");
+      parcelBCntr.setText("22");
+      parcelCCntr.setText("22");
+
+      parcelAValue.setText("3");
+      parcelBValue.setText("4");
+      parcelCValue.setText("5");
+
+      widthA.setText("1");
+      heightA.setText("2");
+      lengthA.setText("1");
+
+      widthB.setText("1.5");
+      heightB.setText("2");
+      lengthB.setText("1");
+
+      widthC.setText("1.5");
+      heightC.setText("1.5");
+      lengthC.setText("1.5");
+
+      containerX.setText("16.5");
+      containerY.setText("2.5");
+      containerZ.setText("4");
+    }
   }
 }
