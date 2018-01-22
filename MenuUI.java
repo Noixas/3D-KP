@@ -620,22 +620,23 @@ public class MenuUI {
     Parcel parcelB = new ParcelB();
     Parcel parcelC = new ParcelC();
 
+    parcelA.setSize(new Vector3D(xA, yA, zA));
+    parcelA.setValue(valueParcelA);
+    parcelB.setSize(new Vector3D(xB, yB, zB));
+    parcelB.setValue(valueParcelB);
+    parcelC.setSize(new Vector3D(xC, yC, zC));
+    parcelC.setValue(valueParcelC);
+
     for(int i = 0; i < amountParcelA; i++) {
-      parcelA.setSize(new Vector3D(xA, yA, zA));
-      parcelA.setValue(valueParcelA);
-      listOfParcels.add(parcelA);
+      listOfParcels.add(parcelA.clone());
     }
 
     for(int j = 0; j < amountParcelB; j++) {
-      parcelB.setSize(new Vector3D(xB, yB, zB));
-      parcelB.setValue(valueParcelB);
-      listOfParcels.add(parcelB);
+      listOfParcels.add(parcelB.clone());
     }
 
     for(int k = 0; k < amountParcelC; k++) {
-      parcelC.setSize(new Vector3D(xC, yC, zC));
-      parcelC.setValue(valueParcelC);
-      listOfParcels.add(parcelC);
+      listOfParcels.add(parcelC.clone());
     }
   }
 
