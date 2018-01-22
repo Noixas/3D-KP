@@ -51,6 +51,7 @@ public class WorldUI {
   private static Box temp = new Box();
   private static Button resetView;
   private static Button nextStep;
+  private static Button computeAll;
 
   public WorldUI(Group worldGroup) {
     worldGroup.getChildren().add(world);
@@ -112,10 +113,22 @@ public class WorldUI {
       }
     });
 
+    computeAll = new Button();
+    computeAll = new Button();
+    computeAll.setText("Calculate");
+    computeAll.setPrefSize(140, 20);
+    computeAll.setTranslateY(80);
+    computeAll.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent step) {
+
+      }
+    });
+
     resetView = new Button();
     resetView.setText("Reset View");
     resetView.setPrefSize(140, 20);
-    resetView.setTranslateY(80);
+    resetView.setTranslateY(100);
     resetView.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent step) {
@@ -131,7 +144,8 @@ public class WorldUI {
     root.add(resultsLabel, 0, 4);
     root.add(resultPrint, 0, 5);
     root.add(nextStep, 0, 6);
-    root.add(resetView, 0, 7);
+    root.add(computeAll, 0, 7);
+    root.add(resetView, 0, 8);
 
   }
   public static void printInfo() {
