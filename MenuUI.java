@@ -14,6 +14,10 @@ import javafx.geometry.Pos;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/**
+ * This class creates all of the attributes of which the userinterface consists.
+ */
+
 public class MenuUI {
   private static TextArea results;
   private static ComboBox<String> algorithms;
@@ -78,25 +82,32 @@ public class MenuUI {
   private static AnimationTimer infoTimer;
   private static AnimationTimer inputTimer;
 
+ /**
+  * Default constructor
+  */
   public MenuUI() {}
 
+ /**
+  * This method constructs the borderpane that gets added to the menuScene in sceneManager.
+  * @param root borderpane that is added to the menuScene.
+  */
   public MenuUI(BorderPane root) {
-    Pane center = new Pane();
-    center.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #fffd77, #fa8334)");
-    center.setPrefSize(640, 300);
+    Pane bottom = new Pane();
+    bottom.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #fffd77, #fa8334)");
+    bottom.setPrefSize(640, 300);
     Pane top = new Pane();
     top.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #271033, #388697)");
     top.setPrefSize(640, 250);
-    Pane bottom = new Pane();
-    bottom.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #388697, #271033)");
-    bottom.setPrefSize(640, 110);
+    Pane center = new Pane();
+    center.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #388697, #271033)");
+    center.setPrefSize(640, 110);
 
     constructUI(center, top, bottom);
     root.setTop(top);
     root.setMargin(top, new Insets(2));
-    root.setCenter(bottom);
+    root.setCenter(center);
     root.setMargin(center, new Insets(2));
-    root.setBottom(center);
+    root.setBottom(bottom);
     root.setMargin(bottom, new Insets(2));
 
     infoTimer = new AnimationTimer() {
@@ -116,15 +127,21 @@ public class MenuUI {
     inputTimer.start();
   }
 
+  /**
+   * This method is used in the sceneManager class to construct the menu.
+   * @param center    The
+   * @param top
+   * @param bottom
+   */
   public void constructUI(Pane center, Pane top, Pane bottom) {
-    constructInputFields(top, bottom);
-    constructLabels(top, bottom);
-    constructButtons(center);
-    constructChoices(center);
-    constructResultField(center);
+    constructInputFields(top, center);
+    constructLabels(top, center);
+    constructButtons(bottom);
+    constructChoices(bottom);
+    constructResultField(bottom);
   }
 
-  public void constructInputFields(Pane top, Pane bottom) {
+  public void constructInputFields(Pane top, Pane center) {
     parcelACntr = new TextField();
     parcelACntr.setText("0");
     parcelACntr.setPrefSize(80, 20);
@@ -225,10 +242,10 @@ public class MenuUI {
       heightA, heightB, heightC,
       lengthA, lengthB, lengthC);
 
-    bottom.getChildren().addAll(containerX, containerY, containerZ);
+    center.getChildren().addAll(containerX, containerY, containerZ);
   }
 
-  public void constructLabels(Pane top, Pane bottom) {
+  public void constructLabels(Pane top, Pane center) {
     Label labelBoxA = new Label();
     labelBoxA.setText("Parcel A");
     labelBoxA.setStyle(
@@ -443,12 +460,12 @@ public class MenuUI {
       lengthA, lengthB, lengthC,
       heightA, heightB, heightC);
 
-    bottom.getChildren().addAll(
+    center.getChildren().addAll(
       containerLabel, containerWidth,
       containerHeight, containerLength);
   }
 
-  public void constructChoices(Pane center) {
+  public void constructChoices(Pane bottom) {
     algorithms = new ComboBox<String>();
     algorithms.getItems().addAll(
       "Greedy Volume",
@@ -473,10 +490,10 @@ public class MenuUI {
     presets.setPrefSize(140, 20);
     presets.relocate(50, 60);
     presets.setValue("Manual");
-    center.getChildren().addAll(presets, algorithms);
+    bottom.getChildren().addAll(presets, algorithms);
   }
 
-  public void constructButtons(Pane center) {
+  public void constructButtons(Pane bottom) {
     Button calcButton = new Button();
     calcButton.setText("Calculate");
     calcButton.setPrefSize(140, 20);
@@ -644,10 +661,10 @@ public class MenuUI {
       }
     });
 
-    center.getChildren().addAll(calcButton, viewCargo, reset, display, clearParcels);
+    bottom.getChildren().addAll(calcButton, viewCargo, reset, display, clearParcels);
   }
 
-  public void constructResultField(Pane center) {
+  public void constructResultField(Pane bottom) {
     results = new TextArea();
     results.setPrefSize(320, 190);
     results.relocate(230, 50);
@@ -659,7 +676,7 @@ public class MenuUI {
       "-fx-text-fill: #271033;" +
       "-fx-font-style: italic;");
     resultLabel.relocate(230, 20);
-    center.getChildren().addAll(results, resultLabel);
+    bottom.getChildren().addAll(results, resultLabel);
   }
 
   public void updateInput() {
