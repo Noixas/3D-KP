@@ -350,9 +350,4 @@ private void makeLists(int id) {
       CreateParcel.createParcel(solution.get(p));
     }
   }
-
-  /**
-   * Start() method without implementation to Override the one in the abstract Algorithm class.
-   */
-  public void Start(){}
 }
