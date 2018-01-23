@@ -701,9 +701,48 @@ public class MenuUI {
 
   public void updateInput() {
     try {
-      amountParcelA = Double.parseDouble(parcelACntr.getText());
-      amountParcelB = Double.parseDouble(parcelBCntr.getText());
-      amountParcelC = Double.parseDouble(parcelCCntr.getText());
+      if(parcelACntr.getText().isEmpty() || parcelBCntr.getText().isEmpty() || parcelCCntr.getText().isEmpty()) {
+        if(parcelACntr.getText().isEmpty() && parcelBCntr.getText().isEmpty() && parcelCCntr.getText().isEmpty()) {
+          amountParcelA = 0;
+          amountParcelB = 0;
+          amountParcelC = 0;
+        }
+        else if(parcelACntr.getText().isEmpty() && parcelBCntr.getText().isEmpty()) {
+          amountParcelA = 0;
+          amountParcelB = 0;
+          amountParcelC = Double.parseDouble(parcelCCntr.getText());
+        }
+        else if(parcelBCntr.getText().isEmpty() && parcelCCntr.getText().isEmpty()) {
+          amountParcelB = 0;
+          amountParcelC = 0;
+          amountParcelA = Double.parseDouble(parcelACntr.getText());
+        }
+        else if(parcelACntr.getText().isEmpty() && parcelCCntr.getText().isEmpty()) {
+          amountParcelA = 0;
+          amountParcelC = 0;
+          amountParcelB = Double.parseDouble(parcelBCntr.getText());
+        }
+        else if(parcelACntr.getText().isEmpty()) {
+          amountParcelA = 0;
+          amountParcelB = Double.parseDouble(parcelBCntr.getText());
+          amountParcelC = Double.parseDouble(parcelCCntr.getText());
+        }
+        else if(parcelBCntr.getText().isEmpty()) {
+          amountParcelB = 0;
+          amountParcelA = Double.parseDouble(parcelACntr.getText());
+          amountParcelC = Double.parseDouble(parcelCCntr.getText());
+        }
+        else if(parcelCCntr.getText().isEmpty()) {
+          amountParcelC = 0;
+          amountParcelA = Double.parseDouble(parcelACntr.getText());
+          amountParcelB = Double.parseDouble(parcelBCntr.getText());
+        }
+      }
+      else {
+        amountParcelA = Double.parseDouble(parcelACntr.getText());
+        amountParcelB = Double.parseDouble(parcelBCntr.getText());
+        amountParcelC = Double.parseDouble(parcelCCntr.getText());
+      }
 
       valueParcelA = Double.parseDouble(parcelAValue.getText());
       valueParcelB = Double.parseDouble(parcelBValue.getText());
@@ -727,6 +766,9 @@ public class MenuUI {
     }
     catch(NumberFormatException e) {
       errorCheck = 1;
+    }
+    catch(IndexOutOfBoundsException e) {
+      System.out.println("test");
     }
   }
 
