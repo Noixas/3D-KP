@@ -247,7 +247,7 @@ public class WorldUI {
 
         deltaRY = deltaRY + mouseDeltaX * 180.0 / scene.getWidth();
         deltaRX = deltaRX + -mouseDeltaY * 180.0 / scene.getHeight();
-        System.out.println(deltaRX + "test");
+      //  System.out.println(deltaRX + "test");
       }
       else if (me.isSecondaryButtonDown()) {
         camera.setTranslateZ(camera.getTranslateZ() + mouseDeltaY);
