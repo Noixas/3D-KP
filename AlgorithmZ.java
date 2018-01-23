@@ -273,8 +273,8 @@ private void computeSolutionStep()
                         //Parcel a = randomList.get(s).clone();
                         //P
 
-                        if(checkFit(b, pos))
-                        {
+                    //    if(checkFit(b, pos))
+                    //    {
 
                                 placeParcel(b,pos);
                                 printEextremePoints();
@@ -288,10 +288,10 @@ private void computeSolutionStep()
                                 _parcelList.remove(0);
                                 //i = _listEP.size();
                                 //j = _baseParcels.size();
-                        }
-                        else{
-                          System.out.println("DOESNT FIT "+b + " Doesnt fit in pos " + pos );
-                        }
+                      //  }
+                    //    else{
+                    //      System.out.println("DOESNT FIT "+b + " Doesnt fit in pos " + pos );
+                    //    }
 
                         //  else if(j == _baseParcels.size()-1) {//Tried all the kind of parcels
                         //System.out.println("EP to delete "+pos);
@@ -364,6 +364,8 @@ private int[] findBestEP(Parcel pParcel)
                                 rotation = j;
                                 result[0] = bestEpIndex;
                                 result[1] = rotation;
+                                if(difference == 0 )
+                                return result;
                                 //We found a perfect match so no need to keep searching
                                 //System.out.println("Current min diff is " + difference);
                         }

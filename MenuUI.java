@@ -499,11 +499,13 @@ public class MenuUI {
           }
           else if(algorithms.getValue() == "Greedy Density") {
             chosenAlgorithm = algorithms.getValue().toString();
+            _activeAlgorithm = greedy;
             greedy.setID(3);
             greedy.Start(listOfParcels);
           }
           else if(algorithms.getValue() == "Greedy Value") {
             chosenAlgorithm = algorithms.getValue().toString();
+            _activeAlgorithm = greedy;
             greedy.setID(2);
             greedy.Start(listOfParcels);
           }
