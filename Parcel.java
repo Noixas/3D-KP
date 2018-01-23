@@ -99,5 +99,54 @@ public Parcel clone()
 public String toString() {
         return getClass() + ": [Size = " + getSize() + "] [Position = " + getPosition() + "]";
 }
+public static Parcel getRotated(Parcel pParcel, int pID)
+{
+        Parcel buffer = pParcel.clone();
+        switch(pID)
+        {
+        case 0:
+                //Just the same
+                break;
+        case 1:
+                rotateParcel(buffer, AlgorithmZ.Axis.X);
+                break;
+        case 2:
+                rotateParcel(buffer, AlgorithmZ.Axis.Y);
+                break;
+        case 3:
+                rotateParcel(buffer, AlgorithmZ.Axis.Y);
+                rotateParcel(buffer, AlgorithmZ.Axis.X);
+                break;
+        case 4:
+                rotateParcel(buffer, AlgorithmZ.Axis.Z);
+                break;
+        case 5:
+                rotateParcel(buffer, AlgorithmZ.Axis.Z);
+                rotateParcel(buffer, AlgorithmZ.Axis.X);
+                break;
+        }
+        return buffer;
+}
+/**
+ * Rotate a parcel in an axis by 90° degrees.
+ * @param Parcel pParcel [Parcel to be rotated]
+ * @param Axis   pAxis   [Axis in which it will be rotated]
+ */
+public static void rotateParcel(Parcel pParcel, AlgorithmZ.Axis pAxis)
+{
+        Vector3D size = pParcel.getSize();
+        switch(pAxis)
+        {
+        case X:
+                pParcel.setSize(new Vector3D(size.x, size.z, size.y));
+                break;
+        case Y:
+                pParcel.setSize(new Vector3D(size.z, size.y, size.x));
+                break;
+        case Z:
+                pParcel.setSize(new Vector3D(size.y, size.x, size.z));
+                break;
+        }
+}
 
 }
