@@ -118,6 +118,11 @@ public class WorldUI {
           AlgorithmZ z = (AlgorithmZ) a;
           z.nextStep();
         }
+        if(a instanceof AlgorithmPentomino)
+        {
+          AlgorithmPentomino z = (AlgorithmPentomino) a;
+          z.nextStep();
+        }
       }
     });
 

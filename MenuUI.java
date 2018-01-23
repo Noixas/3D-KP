@@ -72,6 +72,7 @@ public class MenuUI {
   private static Algorithm _activeAlgorithm;
   private static GreedyAlgorithm greedy = new GreedyAlgorithm();
   private static AlgorithmZ extremePoints = new AlgorithmZ();
+  private static AlgorithmPentomino extremePentominos = new AlgorithmPentomino();
   private static Vector3D vectors;
   private static ArrayList<Parcel> listOfParcels;
   private static SolutionSet solutions;
@@ -455,7 +456,7 @@ public class MenuUI {
       "Greedy Density",
       "Greedy Value",
       "Extreme Points",
-      "Algorithm C");
+      "Extreme Pentominos");
     algorithms.setPrefSize(140, 20);
     algorithms.relocate(50, 20);
     algorithms.setValue("Greedy Volume");
@@ -514,7 +515,9 @@ public class MenuUI {
             _activeAlgorithm = extremePoints;
             extremePoints.Start(listOfParcels);
           }
-          else if(algorithms.getValue() == "Algorithm C") {
+          else if(algorithms.getValue() == "Extreme Pentominos") {
+            _activeAlgorithm = extremePentominos;
+            extremePentominos.Start(listOfParcels);
             chosenAlgorithm = algorithms.getValue().toString();
           }
         }
@@ -623,7 +626,7 @@ public class MenuUI {
             chosenAlgorithm = algorithms.getValue().toString();
             extremePoints.display();
           }
-          else if(algorithms.getValue() == "Algorithm C") {
+          else if(algorithms.getValue() == "Extreme Pentominos") {
             chosenAlgorithm = algorithms.getValue().toString();
           }
         }

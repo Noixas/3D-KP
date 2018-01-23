@@ -3,7 +3,7 @@ import java.util.LinkedList;
 import java.util.Collections;
 import java.lang.Exception;
 import  java.lang.Math.*;
-public class AlgorithmZ extends Algorithm
+public class AlgorithmPentomino extends Algorithm
 {
 private Container _container;
 private SolutionSet _solution;
@@ -11,6 +11,7 @@ private List<ExtremePoint> _listEP;
 private boolean _started;
 private List<Parcel> _baseParcels;
 private List<Parcel> _parcelList;
+private List<Pentomino> _pentominoList;
 private Parcel[][][] _containerSpace;
 private int _scalingArrayConst = 2;
 private int _wallsCount;
@@ -22,7 +23,7 @@ private double _xBound = 16.5;
 private double _yBound = 2.5;
 private double _zBound = 4;
 ///////////////////////////////////////
-public AlgorithmZ(){
+public AlgorithmPentomino(){
         _type = SetType.C;
         _container = new Container();
         _xBound = _container.getSize().x;
@@ -38,10 +39,11 @@ public void Start(List<Parcel> list) {
         _type = SetType.B;
         //_solution = new SolutionSet(System.currentTimeMillis());
         initSetType();
-        _parcelList = getOrderParcels(0,list);
+        //_parcelList = getOrderParcels(0,list);
+        _pentominoList = new LinkedList<Pentomino>();
+        _pentominoList.add(new Pentomino(Pentomino.PentominoType.T));
         createContainerWalls();
         computeSolution(1);
-        //debugTest();
         ExtremePoint.displayExtremePoints(_listEP);
         _solution.calculateCurrentValue();
         System.out.println("Current container value: " + _solution.getValue());
@@ -49,21 +51,12 @@ public void Start(List<Parcel> list) {
 }
 public void nextStep()
 {
-
-        computeSolution(1);
+        computeSolution(10);
         _solution.calculateCurrentValue();
         System.out.println("Current container value: " + _solution.getValue());
         _solutions.add(_solution);
         CreateParcel.clearAllParcels();
         display();
-
-}
-private void debugTest()
-{
-        if(_parcelList.size() == 0) return;
-        Parcel test = _parcelList.get(0);
-        Parcel.rotateParcel(test, Axis.Z);
-        computeSolutionStep();
 }
 /**
  * Calls the step method n times to enable faster results
@@ -82,21 +75,23 @@ private void computeSolution(int pIterations)
  */
 private void computeSolutionStep()
 {
-        if(_parcelList.size() == 0) return; //No more parcels to be placed
+        //if(_parcelList.size() == 0) return; //No more parcels to be placed
         if (_started == false) insertFirstParcel();
         else {
-                Parcel currentParcel = _parcelList.get(0).clone();
+
+                Pentomino currentParcel = _pentominoList.get(0).clone();
                 int[] bestInfo = findBestEP(currentParcel);
                 int epIndex = bestInfo[0];
                 if(epIndex == -1) return;    //No available space
                 int rotation = bestInfo[1];
-                currentParcel = Parcel.getRotated(currentParcel, rotation);
-                placeParcel(currentParcel, _listEP.get(epIndex));
+                //currentParcel = Parcel.getRotated(currentParcel, rotation);
+
+                placePentomino(currentParcel, _listEP.get(epIndex));
                 _listEP.remove(epIndex);
-                _parcelList.remove(0);
+                //_parcelList.remove(0);
         }
 }
-private int[] findBestEP(Parcel pParcel)
+private int[] findBestEP(Pentomino pParcel)
 {
 
         int[] result = new int[2];
@@ -104,7 +99,7 @@ private int[] findBestEP(Parcel pParcel)
         if(_listEP.size() == 0)
                 return result;
 
-        Collections.sort(_listEP);
+        //Collections.sort(_listEP);
         int bestEpIndex = 0;
         int rotation = 0;
         int MAXROTATION = 6;
@@ -124,49 +119,44 @@ private int[] findBestEP(Parcel pParcel)
         //TODO: (2) then the smallest difference which is >= smallestSide of any parcel in the list
         //TODO: (3) and finally if all leave unasable space then choose the smallest one
         for (int i = 0; i < _listEP.size(); i++) {
-                for(int j = 0; j < MAXROTATION; j++) {
-                        Parcel rotatedParcel = Parcel.getRotated(pParcel, j);
-                        unusableAxis = 0;
-                        currentDiff = calculateDifferenceRsAndParcel(rotatedParcel, _listEP.get(i));
-                        unusableAxis = checkMakesUnusableSpace(rotatedParcel, _listEP.get(i), sizeParcel);
-                        if(currentDiff > difference && currentDiff >= 0 && checkFit(rotatedParcel, _listEP.get(i)))
-                        {
-                                /*if(unusableAxis > 0 && currentDiff <= differenceWithUnusableAxis) {
-                                        differenceWithUnusableAxis = currentDiff;
-                                        bestEpWithUnusableAxis = i;
-                                        bestRotationWithUnusableAxis = j;
-                                   }
-                                   else if(unusableAxis == 0) {
-                                        leaveUsableSpace = true;
-                                        difference = currentDiff;
-                                        bestEpIndex = i;
-                                        rotation = j;
-                                        result[0] = bestEpIndex;
-                                        result[1] = rotation;
-                                   }*/
-                                difference = currentDiff;
-                                bestEpIndex = i;
-                                rotation = j;
-                                result[0] = bestEpIndex;
-                                result[1] = rotation;
-                                if(difference == 0 )
-                                        return result;
-                                //We found a perfect match so no need to keep searching
-                                //System.out.println("Current min diff is " + difference);
-                        }
+            for(int j = 0; j < MAXROTATION; j++) {
+                Pentomino rotatedParcel = Pentomino.getRotated(pParcel, j);
+                unusableAxis = 0;
+                currentDiff = calculateDifferenceRsPentomino(rotatedParcel, _listEP.get(i));
+                //unusableAxis = checkMakesUnusableSpace(rotatedParcel, _listEP.get(i), sizeParcel);
+                if(currentDiff > difference && currentDiff >= 0 &&  checkPentominoFits(rotatedParcel, _listEP.get(i)))
+                {
+
+                        difference = currentDiff;
+                        bestEpIndex = i;
+                        rotation = j;
+                        result[0] = bestEpIndex;
+                        result[1] = rotation;
+                        //  if(difference == 0 )
+                        //return result;
+
                 }
+                       }
         }
-        //If all options leave unusable spaces then choose the smallest one
-        /*if(leaveUsableSpace == true)
-           {
-                difference = differenceWithUnusableAxis;
-                bestEpIndex = bestEpWithUnusableAxis;
-                rotation = bestRotationWithUnusableAxis;
-                result[0] = bestEpIndex;
-                result[1] = rotation;
-              //  System.out.println("We will leave unusable space");
-           }*/
         return result;
+}
+private boolean checkPentominoFits(Pentomino p, Vector3D pos)
+{
+  Parcel[][][] parcels = p.getShapeList();
+  for(int i = 0; i < parcels.length; i++)
+          for(int j = 0; j < parcels[0].length; j++)
+                  for(int k = 0; k < parcels[0][0].length; k++) {
+                  if(parcels[i][j][k] != null)
+                  {
+                          Vector3D parcelPos = pos.clone();
+                          parcelPos.z += k * 0.5;
+                          parcelPos.y += j * 0.5;
+                          parcelPos.x += i * 0.5;
+                          if(checkFit(parcels[i][j][k], parcelPos) == false)
+                                  return false;
+                  }
+          }
+        return true;
 }
 /**
  * Check if the parcel fits in the 3D array at that position
@@ -186,7 +176,7 @@ private boolean checkFit(Parcel p, Vector3D pos)
                         for(int j = (int)posArray.y; j < posArray.y + spaceIndex(size.y); j++)
                                 for(int k = (int)posArray.z; k < posArray.z + spaceIndex(size.z); k++)
                                         if(_containerSpace[i][j][k] != null) {
-                                                System.out.println(_containerSpace[i][j][k]);
+                                              //  System.out.println(_containerSpace[i][j][k]);
                                                 return false;
                                         }
                 return true;//Didnt found stop condition so it fits
@@ -214,6 +204,7 @@ private int checkMakesUnusableSpace(Parcel pParcel, ExtremePoint pEp, Vector3D p
                 amount++;
         return amount;
 }
+
 private double calculateDifferenceRsAndParcel(Parcel pParcel, ExtremePoint pEp)
 {
         Vector3D size = pParcel.getSize();
@@ -222,6 +213,35 @@ private double calculateDifferenceRsAndParcel(Parcel pParcel, ExtremePoint pEp)
         if(EpSize.x >= size.x &&  EpSize.y >= size.y && EpSize.z >= size.z)
                 result = ((EpSize.x - size.x) + (EpSize.y - size.y) + (EpSize.z - size.z));
         return result;
+}
+private double calculateDifferenceRsPentomino(Pentomino pParcel, ExtremePoint pEp)
+{
+        Vector3D size = pParcel.getSize();
+        Vector3D EpSize = pEp.getRS();
+        double result = 1000000;
+        if(EpSize.x >= size.x &&  EpSize.y >= size.y && EpSize.z >= size.z)
+                result = ((EpSize.x - size.x) + (EpSize.y - size.y) + (EpSize.z - size.z));
+        return result;
+}
+
+private void placePentomino(Pentomino pParcel, Vector3D pos)
+{
+      //  System.out.println("Pentomino being placed at "+ pos);
+        Parcel[][][] parcels = pParcel.getShapeList();
+        for(int i = 0; i < parcels.length; i++)
+                for(int j = 0; j < parcels[0].length; j++)
+                        for(int k = 0; k < parcels[0][0].length; k++) {
+                        if(parcels[i][j][k] != null)
+                        {
+                                Vector3D parcelPos = pos.clone();
+                                parcelPos.z += k * 0.5;
+                                parcelPos.y += j * 0.5;
+                                parcelPos.x += i * 0.5;
+                                placeParcel(parcels[i][j][k], parcelPos);
+                        }
+                }
+
+        //printExtremePointsConsole();
 }
 /**
  * Process to place the parcel in 3D world, 3D array, solution set and any other related behaviour to placing a new parcel
@@ -399,87 +419,87 @@ private void insertFirstParcel()
 /**
  * Reorders the _baseParcels depending on the kind of set that we want to compute
  */
- private List<Parcel> getOrderParcels(int pOrderingType, List<Parcel> pList)
- {
-         List<Parcel> aList  = new LinkedList<Parcel>();
-         List<Parcel> bList  = new LinkedList<Parcel>();
-         List<Parcel> cList  = new LinkedList<Parcel>();
-         List<Parcel> newOrderedList  = new LinkedList<Parcel>();
-         Double[] orderValues = {-1.0,-1.0,-1.0};
-         //double parcelValues = new Vector3D(aValue, bValue, cValue);
-         if(pOrderingType == 0)//Order by value
-         {
-                 for(int i = 0; i < pList.size(); i++)
-                 {
-                         Parcel p = pList.get(i);
-                         if(p instanceof ParcelA)
-                         {
-                                 aList.add(p);
-                                 orderValues[0] = p.getValue();
-                         }
-                         else if(p instanceof ParcelB)
-                         {
-                                 bList.add(p);
-                                 orderValues[1] = p.getValue();
-                         }
-                         else if(p instanceof ParcelC)
-                         {
-                                 cList.add(p);
-                                 orderValues[2] = p.getValue();
-                         }
-                 }
-                 // = new Double[]{aValue, bValue, cValue};
-                 Arrays.sort(orderValues);
-                 for(int i = 0; i < orderValues.length; i++)
-                 {
-                         if(aList.size() > 0 && orderValues[i] == aList.get(0).getValue())
-                                 for(int j = 0; j < aList.size(); j++)
-                                         newOrderedList.add(aList.get(j));
-                         if(bList.size() > 0 && orderValues[i] == bList.get(0).getValue())
-                                 for(int j = 0; j < bList.size(); j++)
-                                         newOrderedList.add(bList.get(j));
-                         if(cList.size() > 0 && orderValues[i] == cList.get(0).getValue())
-                                 for(int j = 0; j < cList.size(); j++)
-                                         newOrderedList.add(cList.get(j));
-                 }
-         }
-         return newOrderedList;
- }
- /**
-  * Creates the invisible container walls of the container in which the EP will be proyected
-  */
- private void createContainerWalls()
- {
-         _wallsCount = 3;
-         for(int i = 0; i < _wallsCount; i++)
-         {
-                 Parcel c = new Parcel(new Vector3D(0,0,0), 0);
-                 c.setInvisible(true);
-                 Vector3D pos = Vector3D.getZero();
-                 Vector3D size = Vector3D.getZero();
-                 switch (i)
-                 {
-                 case 0:  //Negative X
-                         size.y = 100;
-                         size.z = 100;
-                         pos.x = -size.x;
-                         break;
-                 case 1:   //Negative Y
-                         size.x = 100;
-                         size.z = 100;
-                         pos.y = -size.y;
-                         break;
-                 case 2:  //Negative Z
-                         size.x = 100;
-                         size.y = 100;
-                         pos.z = -size.z;
-                         break;
-                 }
-                 c.setSize(size);
-                 c.setPosition(pos);
-                 _solution.addParcel(c);
-         }
- }
+private List<Parcel> getOrderParcels(int pOrderingType, List<Parcel> pList)
+{
+        List<Parcel> aList  = new LinkedList<Parcel>();
+        List<Parcel> bList  = new LinkedList<Parcel>();
+        List<Parcel> cList  = new LinkedList<Parcel>();
+        List<Parcel> newOrderedList  = new LinkedList<Parcel>();
+        Double[] orderValues = {-1.0,-1.0,-1.0};
+        //double parcelValues = new Vector3D(aValue, bValue, cValue);
+        if(pOrderingType == 0) //Order by value
+        {
+                for(int i = 0; i < pList.size(); i++)
+                {
+                        Parcel p = pList.get(i);
+                        if(p instanceof ParcelA)
+                        {
+                                aList.add(p);
+                                orderValues[0] = p.getValue();
+                        }
+                        else if(p instanceof ParcelB)
+                        {
+                                bList.add(p);
+                                orderValues[1] = p.getValue();
+                        }
+                        else if(p instanceof ParcelC)
+                        {
+                                cList.add(p);
+                                orderValues[2] = p.getValue();
+                        }
+                }
+                // = new Double[]{aValue, bValue, cValue};
+                //  Arrays.sort(orderValues);
+                for(int i = 0; i < orderValues.length; i++)
+                {
+                        if(aList.size() > 0 && orderValues[i] == aList.get(0).getValue())
+                                for(int j = 0; j < aList.size(); j++)
+                                        newOrderedList.add(aList.get(j));
+                        if(bList.size() > 0 && orderValues[i] == bList.get(0).getValue())
+                                for(int j = 0; j < bList.size(); j++)
+                                        newOrderedList.add(bList.get(j));
+                        if(cList.size() > 0 && orderValues[i] == cList.get(0).getValue())
+                                for(int j = 0; j < cList.size(); j++)
+                                        newOrderedList.add(cList.get(j));
+                }
+        }
+        return newOrderedList;
+}
+/**
+ * Creates the invisible container walls of the container in which the EP will be proyected
+ */
+private void createContainerWalls()
+{
+        _wallsCount = 3;
+        for(int i = 0; i < _wallsCount; i++)
+        {
+                Parcel c = new Parcel(new Vector3D(0,0,0), 0);
+                c.setInvisible(true);
+                Vector3D pos = Vector3D.getZero();
+                Vector3D size = Vector3D.getZero();
+                switch (i)
+                {
+                case 0:   //Negative X
+                        size.y = 100;
+                        size.z = 100;
+                        pos.x = -size.x;
+                        break;
+                case 1:    //Negative Y
+                        size.x = 100;
+                        size.z = 100;
+                        pos.y = -size.y;
+                        break;
+                case 2:   //Negative Z
+                        size.x = 100;
+                        size.y = 100;
+                        pos.z = -size.z;
+                        break;
+                }
+                c.setSize(size);
+                c.setPosition(pos);
+                _solution.addParcel(c);
+        }
+}
 private void initSetType()
 {
         if(_started) return; //Dont initiate multiple times
