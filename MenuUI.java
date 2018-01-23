@@ -88,7 +88,7 @@ public class MenuUI {
   public MenuUI() {}
 
  /**
-  * This method constructs the borderpane that gets added to the menuScene in sceneManager.
+  * Constructs the borderpane that gets added to the menuScene in sceneManager.
   * @param root borderpane that is added to the menuScene.
   */
   public MenuUI(BorderPane root) {
@@ -128,10 +128,10 @@ public class MenuUI {
   }
 
   /**
-   * This method is used in the sceneManager class to construct the menu.
-   * @param center    The
-   * @param top
-   * @param bottom
+   * Is used in the sceneManager class to construct the menu.
+   * @param center    The pane that gets added to the center of the borderpane.
+   * @param top       The pane that gets added to the top of the borderpane.
+   * @param bottom    The pane that gets added to the bottom of the borderpane.
    */
   public void constructUI(Pane center, Pane top, Pane bottom) {
     constructInputFields(top, center);
@@ -141,6 +141,11 @@ public class MenuUI {
     constructResultField(bottom);
   }
 
+  /**
+   * Constructs the TextFields and adds them to the top and center panes.
+   * @param top       The pane to which TextFields for the input of the parcels are added to.
+   * @param center    The pane to which TextFields for the input of the container size are added to.
+   */
   public void constructInputFields(Pane top, Pane center) {
     parcelACntr = new TextField();
     parcelACntr.setText("0");
@@ -245,6 +250,11 @@ public class MenuUI {
     center.getChildren().addAll(containerX, containerY, containerZ);
   }
 
+  /**
+   * Constructs the labels that gives information about what each inputfield is linked to.
+   * @param top       The pane to which the labels are added that set the information of the parcels.
+   * @param center    The pane to which the labels are added that set the information of the containers.
+   */
   public void constructLabels(Pane top, Pane center) {
     Label labelBoxA = new Label();
     labelBoxA.setText("Parcel A");
@@ -465,6 +475,10 @@ public class MenuUI {
       containerHeight, containerLength);
   }
 
+  /**
+   * Creates dropdown menu's for chosing the algorithms and presets.
+   * @param bottom    The pane to which the ComboBoxes are added to.
+   */
   public void constructChoices(Pane bottom) {
     algorithms = new ComboBox<String>();
     algorithms.getItems().addAll(
@@ -486,13 +500,19 @@ public class MenuUI {
       "A and B",
       "A and C",
       "B and C",
-      "Highest value/volume");
+      "Max Greedy Volume/Value",
+      "Max Greedy Density");
     presets.setPrefSize(140, 20);
     presets.relocate(50, 60);
     presets.setValue("Manual");
     bottom.getChildren().addAll(presets, algorithms);
   }
 
+  /**
+   * Creates the buttons and their actions.
+   *
+   *
+   */
   public void constructButtons(Pane bottom) {
     Button calcButton = new Button();
     calcButton.setText("Calculate");
@@ -908,7 +928,7 @@ public class MenuUI {
       containerY.setText("2.5");
       containerZ.setText("4");
     }
-    else if(presets.getValue() == "Highest value/volume") {
+    else if(presets.getValue() == "Max Greedy Volume/Value") {
       parcelACntr.setText("11");
       parcelBCntr.setText("22");
       parcelCCntr.setText("22");
@@ -933,6 +953,7 @@ public class MenuUI {
       containerY.setText("2.5");
       containerZ.setText("4");
     }
+    else if(presets.getValue() == "Max Greedy Density") {}
   }
 
   public Algorithm getAlgorithm() {

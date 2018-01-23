@@ -38,9 +38,9 @@ public class WorldUI {
   private static double xCoord;
   private static double yCoord;
   private static double zCoord;
-  private static double depth;
   private static double height;
   private static double width;
+  private static double length;
   private static Label coords;
   private static Label dimensions;
   private static Label yLabel;
@@ -166,7 +166,7 @@ public class WorldUI {
       "Z: " + zCoord);
 
     dimensions.setText(
-      "Depth: " + depth + "\n" +
+      "Length: " + length + "\n" +
       "Width: " + width + "\n" +
       "Height: " + height);
 
@@ -195,13 +195,14 @@ public class WorldUI {
       Node testNode = result.getIntersectedNode();
       temp = (Box) testNode;
       temp.setMaterial(CreateParcel.getColor(Color.YELLOW));
-      xCoord = testNode.getTranslateX();
-      yCoord = testNode.getTranslateZ();
-      zCoord = testNode.getTranslateZ();
 
-      depth = temp.getDepth();
-      height = temp.getHeight();
-      width = temp.getWidth();
+      length = temp.getWidth() / 40;
+      width = temp.getHeight() / 40;
+      height = temp.getDepth() / 40;
+
+      xCoord = testNode.getTranslateX() / 40 - length / 2;
+      yCoord = testNode.getTranslateY() / 40 - width / 2;
+      zCoord = testNode.getTranslateZ() / 40 - height / 2;
     }
     catch(NullPointerException e) {
       temp = new Box();
