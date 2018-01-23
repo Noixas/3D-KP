@@ -7,9 +7,9 @@ import java.util.*;
  * -The value density(value/volume) of the parcels in descending order.
  */
 public class GreedyAlgorithm extends Algorithm {
-  private int amountA = 0;//25
-  private int amountB = 0;//19
-  private int amountC = 0;//13
+  private int amountA = 0;//Amount of parcel A
+  private int amountB = 0;//Amount of parcel B
+  private int amountC = 0;//Amount of parcel C
   private int parcelTypes = 0; //Counts how many different types of parcels are present
   private Parcel[] parcelOrder = new Parcel[3]; //Array used for setting up the order of the parcels
   private double[] heuristicOrder = new double[3]; //Array used for determining the order of the parcels
@@ -34,11 +34,9 @@ public class GreedyAlgorithm extends Algorithm {
     sortLists();
     makeOrderedParcelList();
     for(Parcel p : parcelList) {
-      //System.out.println("the current parcel is: " + p.getClass());
       if(parcelFits || !(p.getClass().equals(parcelList.get(parcelList.indexOf(p)-1).getClass()))) { //Checks if the current one is the same size as the previous one and whether it was placed or not (used for optimization)
         if(placeable(p)) {
           placeInArray(p);
-          //System.out.println(p.toString());
         }
       }
     }
@@ -52,9 +50,6 @@ public class GreedyAlgorithm extends Algorithm {
     amountB=0;
     amountC=0;
     System.out.println("Done");
-    System.out.println("Occupied space: " + countOccupiedSpace() + " metres cubed");
-    System.out.println("Parcel's placed: " + solution.getLength());
-    System.out.println("Total value: " + solution.getValue());
     System.out.println(solution.getTotalTime());
   }
 
@@ -69,7 +64,6 @@ public class GreedyAlgorithm extends Algorithm {
       for(int j=arrayIndex(pos.y); j<arrayIndex(size.y) + arrayIndex(pos.y); j++) {
         for(int k=arrayIndex(pos.z); k<arrayIndex(size.z) + arrayIndex(pos.z); k++) {
           containerSpace[i][j][k] = parcel;
-          //System.out.println("placed at " + i + ", " + j + ", " + k);
         }
       }
     }
@@ -141,15 +135,11 @@ public class GreedyAlgorithm extends Algorithm {
      if(canFit(buffer, posIndex)) { //x y z
        return true;
      }
-     if(size.x != size.y || size.x != size.z) {
-
-     }
      rotateX(buffer);
      if(canFit(buffer, posIndex)) { //x z y
        parcel.setSize(buffer.getSize());
        return true;
      }
-
      buffer = parcel.clone();
      rotateY(buffer);
      if(canFit(buffer, posIndex)) { //z y x
@@ -161,7 +151,6 @@ public class GreedyAlgorithm extends Algorithm {
        parcel.setSize(buffer.getSize());
        return true;
      }
-
      buffer = parcel.clone();
      rotateZ(buffer);
      if(canFit(buffer, posIndex)) { //y x z
@@ -177,7 +166,7 @@ public class GreedyAlgorithm extends Algorithm {
    }
 
    /**
-    *
+    * Count how many parcels have been given as an input.
     */
     private void countParcels() {
       for(Parcel p : parcelList) {
