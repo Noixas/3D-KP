@@ -1,3 +1,8 @@
+/**
+  * This class provides the 3D camera for the general scene where you 
+  * can view the container with the placed parcels.
+*/
+
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -55,7 +60,10 @@ public class WorldUI {
   private static double deltaRX = 0;
   private static double deltaRY = 0;
 
-
+  /**
+    * Constructs all 3d aspects.
+    *@param worldGroup group to which all the 3D objects are added.
+    */
   public WorldUI(Group worldGroup) {
     worldGroup.getChildren().add(world);
     worldGroup.setDepthTest(DepthTest.ENABLE);
@@ -67,6 +75,10 @@ public class WorldUI {
     mouseFactorY = 180.0 / SceneManager.getSceneHeight();
   }
 
+  /**
+    * Construcs info scene.
+    * @param root GridPane that is added to the info scene.
+    **/
   public WorldUI(GridPane root) {
     root.setPadding(new Insets(5));
 
@@ -164,6 +176,10 @@ public class WorldUI {
     root.add(resetView, 0, 8);
 
   }
+
+  /**
+    * Method for printing the info for when a parcel is clicked.
+    **/
   public static void printInfo() {
     coords.setText(
       "X: " + xCoord + "\n" +
@@ -178,20 +194,10 @@ public class WorldUI {
     resultPrint.setText(menuRef.getResultText());
   }
 
-  public static void printResults() {
-    try {
-      //resultString = (String) menuRef.getResultText();
-      resultPrint.setText("The algorithm that was used is: " + "chosenAlgorithm" + "\n" +
-      "Total amount of boxes used: " + "46" + "\n" +
-      "Total value of the used boxes: " + "635" + "\n" +
-      "Total amount of second the algorithm took: " + "twer" + "\n" +
-      "Total amount of different possibilities: " + "4365");
-    }
-    catch(NullPointerException e) {
-      resultPrint.setText("error");
-    }
-  }
-
+  /**
+    * Method for taking info of the boxes for the info scene.
+    * @param event MouseEvent for when clicked coordinates are updated.
+    **/
   public void updateCoords(MouseEvent event) {
     try {
       Box temp1 = temp;
@@ -213,7 +219,10 @@ public class WorldUI {
       temp = new Box();
     }
   }
-
+  /** 
+    * Method for constructing the camera
+    * @param worldGroup Group to which the camera is added
+    **/
   private void buildCamera(Group worldGroup) {
     worldGroup.getChildren().add(cameraXform);
     cameraXform.getChildren().add(camera);
@@ -222,6 +231,10 @@ public class WorldUI {
     camera.setTranslateZ(CAMERA_INITIAL_DISTANCE);
   }
 
+  /** 
+    * Method that adds all the parcels to the world
+    * And moves the group so it's centered view.
+    **/
   private void buildBodySystem() {
     Group parcelGroup = parcels.getParcels();
 
@@ -231,6 +244,11 @@ public class WorldUI {
     world.getChildren().addAll(parcelGroup);
   }
 
+  /** 
+    * Method that handles the mousemovement
+    * For leftclicking + dragging changes X and Y (viewing around container)
+    * For rightclicking + dragging changes Z (depth)
+    **/
   private void handleMouse(Scene scene) {
     scene.setOnMousePressed((MouseEvent me) -> {
       mousePosX = me.getSceneX();
@@ -261,7 +279,9 @@ public class WorldUI {
     });
   }
 }
-
+/**
+ * Class for making the world.
+ **/
 class XformWorld extends Group {
 final Translate t = new Translate(0.0, 0.0, 0.0);
 final Rotate rx = new Rotate(0, 0, 0, 0, Rotate.X_AXIS);
@@ -274,6 +294,9 @@ public XformWorld() {
 }
 }
 
+/**
+ * Class for making the camera.
+ **/
 class XformCamera extends Group {
 Point3D px = new Point3D(1.0, 0.0, 0.0);
 Point3D py = new Point3D(0.0, 1.0, 0.0);
@@ -284,13 +307,21 @@ public XformCamera() {
         super();
 }
 
+  /**
+    * Changes the horizontal view
+    * @param angle double that sets how big the rotation is
+    **/
+
 public void rx(double angle) {
         r = new Rotate(angle, px);
         this.t = t.createConcatenation(r);
         this.getTransforms().clear();
         this.getTransforms().addAll(t);
 }
-
+  /**
+    * Changes the vertical view 
+    * @param angle double that sets how big the rotation is
+    **/
 public void ry(double angle) {
         r = new Rotate(angle, py);
         this.t = t.createConcatenation(r);
