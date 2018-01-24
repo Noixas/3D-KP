@@ -24,7 +24,7 @@ private double _xBound = 16.5;//Accesible countainer x size
 private double _yBound = 2.5;//Accesible countainer y size
 private double _zBound = 4;//Accesible countainer z size
 private boolean _findBest = false;
-private int amountParcels = 200;//Try 200 of each type of parcel if not specified
+private int amountParcels = 150;//Try 200 of each type of parcel if not specified
 public AlgorithmZ(){
         _container = new Container();
         _xBound = _container.getSize().x;
