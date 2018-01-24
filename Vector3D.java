@@ -84,21 +84,27 @@ public int compareTo(Vector3D o) {
 
         if (x > o.x) {
                 return 1;
-        } else if (x == o.x) {
+        }
+        else if (x == o.x) {
                 if (y > o.y) {
                         return 1;
-                } else if (y == y) {
+                }
+                else if (y == o.y) {
                         if (z > o.z) {
                                 return 1;
-                        } else if (z == o.z) {
+                        }
+                        else if (z == o.z) {
                                 return 0;
-                        } else {
+                        }
+                        else {
                                 return -1;
                         }
-                } else {
+                }
+                else {
                         return -1;
                 }
-        } else {
+        }
+        else {
                 return -1;
         }
 }

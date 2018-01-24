@@ -28,7 +28,7 @@ public int getLength()
 }
 /**
  * Delete Parcel from solution set
- * @param  Parcel pParcel          [Parcel to be deleted]
+ * @param  Parcel pParcel  [Parcel to be deleted]
  * @return  true if parcel was found and deleted
  */
 public boolean deleteParcel(Parcel pParcel)
@@ -44,6 +44,7 @@ public void endSolution(long pEndTime)
 {
         _endTime = pEndTime;
         _totalTime = _endTime - _startTime;
+        _value = 0;
         for(int i = 0; i<_solution.size(); i++)
         {
                 _value += _solution.get(i).getValue();

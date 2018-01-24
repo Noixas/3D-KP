@@ -76,6 +76,7 @@ public class MenuUI {
   private static Algorithm _activeAlgorithm;
   private static GreedyAlgorithm greedy = new GreedyAlgorithm();
   private static AlgorithmZ extremePoints = new AlgorithmZ();
+  private static AlgorithmPentomino extremePentominos = new AlgorithmPentomino();
   private static Vector3D vectors;
   private static ArrayList<Parcel> listOfParcels;
   private static SolutionSet solutions;
@@ -486,7 +487,7 @@ public class MenuUI {
       "Greedy Density",
       "Greedy Value",
       "Extreme Points",
-      "Algorithm C");
+      "Extreme Pentominos");
     algorithms.setPrefSize(140, 20);
     algorithms.relocate(50, 20);
     algorithms.setValue("Greedy Volume");
@@ -501,7 +502,8 @@ public class MenuUI {
       "A and C",
       "B and C",
       "Max Greedy Volume/Value",
-      "Max Greedy Density");
+      "Max Greedy Density",
+      "Max Extreme Points");
     presets.setPrefSize(140, 20);
     presets.relocate(50, 60);
     presets.setValue("Manual");
@@ -547,10 +549,17 @@ public class MenuUI {
           }
           else if(algorithms.getValue() == "Extreme Points") {
             chosenAlgorithm = algorithms.getValue().toString();
+            System.out.println("Wait, computing best possible way, this could take some seconds");
+            if(presets.getValue() ==  "Max Extreme Points"){
+            extremePoints.findBest();
+            results.setText("Wait, computing best possible way, this could take a few seconds");
+            }
             _activeAlgorithm = extremePoints;
             extremePoints.Start(listOfParcels);
           }
-          else if(algorithms.getValue() == "Algorithm C") {
+          else if(algorithms.getValue() == "Extreme Pentominos") {
+            _activeAlgorithm = extremePentominos;
+            extremePentominos.Start(listOfParcels);
             chosenAlgorithm = algorithms.getValue().toString();
           }
         }
@@ -576,9 +585,13 @@ public class MenuUI {
           greedy = new GreedyAlgorithm();
           _activeAlgorithm = greedy;
         }
-        else {
+        else if(_activeAlgorithm == extremePoints){
           extremePoints = new AlgorithmZ();
           _activeAlgorithm = extremePoints;
+        }
+        else{
+          extremePentominos = new AlgorithmPentomino();
+          _activeAlgorithm = extremePentominos;
         }
         results.setText("");
       }
@@ -618,9 +631,13 @@ public class MenuUI {
                               greedy = new GreedyAlgorithm();
                               _activeAlgorithm = greedy;
                             }
-                            else {
+                            else if(_activeAlgorithm == extremePoints){
                               extremePoints = new AlgorithmZ();
                               _activeAlgorithm = extremePoints;
+                            }
+                            else{
+                              extremePentominos = new AlgorithmPentomino();
+                              _activeAlgorithm = extremePentominos;
                             }
                     }
             });
@@ -659,8 +676,10 @@ public class MenuUI {
             chosenAlgorithm = algorithms.getValue().toString();
             extremePoints.display();
           }
-          else if(algorithms.getValue() == "Algorithm C") {
+          else if(algorithms.getValue() == "Extreme Pentominos") {
             chosenAlgorithm = algorithms.getValue().toString();
+            _activeAlgorithm = extremePentominos;
+            extremePentominos.display();
           }
         }
         else {
@@ -1021,6 +1040,32 @@ public class MenuUI {
       containerZ.setText("4");
     }
     else if(presets.getValue() == "Max Greedy Density") {}
+      else if(presets.getValue() ==  "Max Extreme Points")
+      {
+        parcelACntr.setText("1");
+        parcelBCntr.setText("1");
+        parcelCCntr.setText("1");
+
+        parcelAValue.setText("3");
+        parcelBValue.setText("4");
+        parcelCValue.setText("5");
+
+        widthA.setText("1");
+        heightA.setText("2");
+        lengthA.setText("1");
+
+        widthB.setText("1.5");
+        heightB.setText("2");
+        lengthB.setText("1");
+
+        widthC.setText("1.5");
+        heightC.setText("1.5");
+        lengthC.setText("1.5");
+
+        containerX.setText("16.5");
+        containerY.setText("2.5");
+        containerZ.setText("4");
+      }
   }
 
   /**
