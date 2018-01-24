@@ -11,6 +11,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
+/**
+ * Class that creates and manages which scenes are shown.
+ */
 public class SceneManager {
   private static Stage stage;
   private static Stage secondStage;
@@ -20,6 +23,10 @@ public class SceneManager {
   private static double screenBoundWidth;
   private static double screenBoundHeight;
 
+  /**
+   * Creates the scenes and adds them to the stage.
+   * @param mainStage     The stage to which the scenes are added to.
+   */
   public SceneManager(Stage mainStage){
     BorderPane root = new BorderPane();
     Group worldGroup = new Group();
@@ -72,6 +79,10 @@ public class SceneManager {
     });
   }
 
+  /**
+   * Used to choose which scene is shown at any moment.
+   * @param i     The integer on which is based which scenes are shown.
+   */
   public static void changeScene(int i) {
 
     if (i == 1) {
@@ -91,20 +102,35 @@ public class SceneManager {
     }
   }
 
+  /**
+   * Fetches the screen width and height for the relocation of the windows.
+   */
   public static void getScreenBounds() {
     Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
     screenBoundWidth = screenBounds.getWidth();
     screenBoundHeight = screenBounds.getHeight();
   }
 
+  /**
+   * Fetches the width of the scene.
+   * @return the width of the scene.
+   */
   public static double getSceneWidth() {
     return worldScene.getWidth();
   }
 
+  /**
+   * Fetches the height of the scene.
+   * @return the height of the scene.
+   */
   public static double getSceneHeight() {
     return worldScene.getHeight();
   }
 
+  /**
+   * Fetches the scene that is being used at that moment.
+   * @return the used scene.
+   */
   public static Scene getScene() {
     return worldScene;
   }

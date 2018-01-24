@@ -510,8 +510,7 @@ public class MenuUI {
 
   /**
    * Creates the buttons and their actions.
-   *
-   *
+   * @param Bottom    The pane to which all of the buttons are added.
    */
   public void constructButtons(Pane bottom) {
     Button calcButton = new Button();
@@ -684,6 +683,10 @@ public class MenuUI {
     bottom.getChildren().addAll(calcButton, viewCargo, reset, display, clearParcels);
   }
 
+  /**
+   * Creates the TextField where the results are displayed.
+   * @param bottom    The pane to which the TextField is added.
+   */
   public void constructResultField(Pane bottom) {
     results = new TextArea();
     results.setPrefSize(320, 190);
@@ -699,6 +702,10 @@ public class MenuUI {
     bottom.getChildren().addAll(results, resultLabel);
   }
 
+  /**
+   * Checks the 'amount' inputFields for non-numerical inputs, if the amountfields are empty it will be seen as a value of 0.
+   * Checks the rest of the inputFields for non-numerical inputs, if these are empty there will be an error displayed in the resultsField.
+   */
   public void updateInput() {
     try {
       if(parcelACntr.getText().isEmpty() || parcelBCntr.getText().isEmpty() || parcelCCntr.getText().isEmpty()) {
@@ -772,6 +779,9 @@ public class MenuUI {
     }
   }
 
+  /**
+   * Creates a list of parcels that are used in the algorithms.
+   */
   public void makeParcelList() {
     listOfParcels = new ArrayList<Parcel>();
 
@@ -799,15 +809,27 @@ public class MenuUI {
     }
   }
 
+  /**
+   * Fetches the parcellist that was made in the 'makeParcelList()' method.
+   * @return the ArrayList of Parcels.
+   */
   public ArrayList<Parcel> getParcelList() {
     return listOfParcels;
   }
 
+  /**
+   * Fetches the containersize from the inputFields.
+   * @return the size of the container.
+   */
   public Vector3D getContainerSize() {
     Vector3D tempVector = new Vector3D(contX, contY, contZ);
     return tempVector;
   }
 
+  /**
+   * Fetches the text in which the results are incorporated.
+   * @return the text with the results in it.
+   */
   public String getResultText() {
     String resultString =
       "The algorithm that was used is: " + chosenAlgorithm + "\n" +
@@ -819,6 +841,9 @@ public class MenuUI {
 
   }
 
+  /**
+   * Sets the values of the inputFields depending on which preset was chosen.
+   */
   public void updateInputFields() {
     if(presets.getValue() == "All A") {
       parcelACntr.setText("200");
@@ -998,6 +1023,10 @@ public class MenuUI {
     else if(presets.getValue() == "Max Greedy Density") {}
   }
 
+  /**
+   * Fetches the algorithm that was used to calculate.
+   * @return the used algorithm.
+   */
   public Algorithm getAlgorithm() {
     return _activeAlgorithm;
   }
