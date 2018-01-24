@@ -24,7 +24,7 @@ private double _xBound = 16.5;//Accesible countainer x size
 private double _yBound = 2.5;//Accesible countainer y size
 private double _zBound = 4;//Accesible countainer z size
 private boolean _findBest = false;
-private int amountParcels = 150;//Try 200 of each type of parcel if not specified
+private int amountParcels = 70;//Try 50 of each type of parcel if not specified
 public AlgorithmZ(){
         _container = new Container();
         _xBound = _container.getSize().x;
@@ -44,12 +44,10 @@ public void Start(List<Parcel> list) {
         _solution = new SolutionSet(System.currentTimeMillis());
         _parcelList = getOrderParcels(0,list);
         createContainerWalls();
-        if(_findBest)
-                findBestResults(amountParcels,amountParcels,amountParcels); //Try the same amount with each type of parcels
-        else{
+        //if(_findBest){
                 Vector3D amountEachParcel = countParcels(list);
                 findBestResults(amountEachParcel.x,amountEachParcel.y,amountEachParcel.z);
-        }
+
         _solutions.add(_solution);
         _solution.endSolution(System.currentTimeMillis());
         CreateParcel.clearAllParcels();
@@ -78,6 +76,12 @@ public void nextStep(){
  */
 private void findBestResults(double a, double b, double c)
 {
+        if(a > amountParcels)
+                a = amountParcels;
+        if(b > amountParcels)
+                b = amountParcels;
+        if(c > amountParcels)
+                c = amountParcels;
         for(int i=0; i<=a; i++)
                 for(int j=0; j<=b; j++)
                         for(int k=0; k<=c; k++) {
@@ -91,11 +95,11 @@ private void findBestResults(double a, double b, double c)
                                                 _parcelList = createParcelList(amountA, amountB, amountC);
                                                 nextStep();//Compute the best result with this parcels
                                         }
-                                      }
-                                  else{
-                                          _parcelList = createParcelList(amountA, amountB, amountC);
-                                          nextStep();//Compute the best result with this parcels
-                                  }
+                                }
+                                else{
+                                        _parcelList = createParcelList(amountA, amountB, amountC);
+                                        nextStep();  //Compute the best result with this parcels
+                                }
 
                         }
 

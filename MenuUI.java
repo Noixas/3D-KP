@@ -1042,9 +1042,9 @@ public class MenuUI {
     else if(presets.getValue() == "Max Greedy Density") {}
       else if(presets.getValue() ==  "Max Extreme Points")
       {
-        parcelACntr.setText("1");
-        parcelBCntr.setText("1");
-        parcelCCntr.setText("1");
+        parcelACntr.setText("100");
+        parcelBCntr.setText("100");
+        parcelCCntr.setText("100");
 
         parcelAValue.setText("3");
         parcelBValue.setText("4");
