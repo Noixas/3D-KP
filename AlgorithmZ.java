@@ -55,7 +55,7 @@ public void Start(List<Parcel> list) {
         CreateParcel.clearAllParcels();
         display();
         //_solutions.add(_bestSolution);
-        System.out.println("Current container value: " + _bestSolution.getValue());
+        //    System.out.println("Current container value: " + _bestSolution.getValue());
         _findBest = false;
 }
 /**
@@ -65,7 +65,7 @@ public void nextStep(){
         //_solution = new SolutionSet(System.currentTimeMillis());
         computeSolution(amountParcels);
         _solution.calculateCurrentValue();
-          _solutions.add(_solution);
+        _solutions.add(_solution);
         CreateParcel.clearAllParcels();
         display();
 
@@ -84,10 +84,19 @@ private void findBestResults(double a, double b, double c)
                                 int amountA = i;//Amount of parcels type A
                                 int amountB = j;
                                 int amountC = k;
-                                if((amountA * 2 + amountB * 3 + amountC * 3.375) <= 170 && (3 * amountA + 4 * amountB + 5 * amountC) > 100) {
-                                        _parcelList = createParcelList(amountA, amountB, amountC);
-                                        nextStep();//Compute the best result with this parcels
-                                }
+
+                                if(_findBest || (a + b + c > 60))//Add heuristics for large number of tries
+                                {
+                                        if((amountA * 2 + amountB * 3 + amountC * 3.375) <= 170 && ((3 * amountA + 4 * amountB + 5 * amountC) > 100)) {
+                                                _parcelList = createParcelList(amountA, amountB, amountC);
+                                                nextStep();//Compute the best result with this parcels
+                                        }
+                                      }
+                                  else{
+                                          _parcelList = createParcelList(amountA, amountB, amountC);
+                                          nextStep();//Compute the best result with this parcels
+                                  }
+
                         }
 
 

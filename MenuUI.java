@@ -550,7 +550,7 @@ public class MenuUI {
           else if(algorithms.getValue() == "Extreme Points") {
             chosenAlgorithm = algorithms.getValue().toString();
             System.out.println("Wait, computing best possible way, this could take some seconds");
-            if(presets.getValue() ==  "Max Extreme Points"){
+            if(presets.getValue() !=  "Manual"){
             extremePoints.findBest();
             results.setText("Wait, computing best possible way, this could take a few seconds");
             }
