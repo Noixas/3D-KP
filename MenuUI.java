@@ -258,36 +258,36 @@ public class MenuUI {
    */
   public void constructLabels(Pane top, Pane center) {
     Label labelBoxA = new Label();
-    labelBoxA.setText("Parcel A");
+    labelBoxA.setText("Parcel A / L");
     labelBoxA.setStyle(
       "-fx-font-size: 18px;" +
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    labelBoxA.relocate(105, 20);
-    labelBoxA.setPrefWidth(82);
+    labelBoxA.relocate(95, 20);
+    labelBoxA.setPrefWidth(100);
     labelBoxA.setWrapText(true);
 
     Label labelBoxB = new Label();
-    labelBoxB.setText("Parcel B");
+    labelBoxB.setText("Parcel B / P");
     labelBoxB.setStyle(
       "-fx-font-size: 18px;" +
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    labelBoxB.relocate(285, 20);
-    labelBoxB.setPrefWidth(80);
+    labelBoxB.relocate(275, 20);
+    labelBoxB.setPrefWidth(100);
     labelBoxB.setWrapText(true);
 
     Label labelBoxC = new Label();
-    labelBoxC.setText("Parcel C");
+    labelBoxC.setText("Parcel C / T");
     labelBoxC.setStyle(
       "-fx-font-size: 18px;" +
       "-fx-font-weight: bold;" +
       "-fx-text-fill: #ffe882;" +
       "-fx-font-style: italic;");
-    labelBoxC.relocate(465, 20);
-    labelBoxC.setPrefWidth(80);
+    labelBoxC.relocate(455, 20);
+    labelBoxC.setPrefWidth(100);
     labelBoxC.setWrapText(true);
 
     Label amountA = new Label();
