@@ -44,6 +44,7 @@ public void endSolution(long pEndTime)
 {
         _endTime = pEndTime;
         _totalTime = _endTime - _startTime;
+        _value = 0;
         for(int i = 0; i<_solution.size(); i++)
         {
                 _value += _solution.get(i).getValue();
