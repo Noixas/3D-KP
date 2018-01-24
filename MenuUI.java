@@ -543,9 +543,13 @@ public class MenuUI {
           greedy = new GreedyAlgorithm();
           _activeAlgorithm = greedy;
         }
-        else {
+        else if(_activeAlgorithm == extremePoints){
           extremePoints = new AlgorithmZ();
           _activeAlgorithm = extremePoints;
+        }
+        else{
+          extremePentominos = new AlgorithmPentomino();
+          _activeAlgorithm = extremePentominos;
         }
         results.setText("");
       }
@@ -585,9 +589,13 @@ public class MenuUI {
                               greedy = new GreedyAlgorithm();
                               _activeAlgorithm = greedy;
                             }
-                            else {
+                            else if(_activeAlgorithm == extremePoints){
                               extremePoints = new AlgorithmZ();
                               _activeAlgorithm = extremePoints;
+                            }
+                            else{
+                              extremePentominos = new AlgorithmPentomino();
+                              _activeAlgorithm = extremePentominos;
                             }
                     }
             });
@@ -628,6 +636,8 @@ public class MenuUI {
           }
           else if(algorithms.getValue() == "Extreme Pentominos") {
             chosenAlgorithm = algorithms.getValue().toString();
+            _activeAlgorithm = extremePentominos;
+            extremePentominos.display();
           }
         }
         else {

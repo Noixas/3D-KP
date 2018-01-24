@@ -72,6 +72,42 @@ public void setPosition(Vector3D pPosition)
             _parcels[i][j].setPosition(new Vector3D(pPosition.x + (i * size.x), pPosition.y, pPosition.z));
            }*/
 }
+public void reOrderSize(Vector3D pOrder, AlgorithmZ.Axis pAxis)
+{
+
+//  System.out.println("Starting Rotating " + pAxis +" size "+ pOrder +" ");
+
+  Parcel[][][] newArray = new Parcel[(int)pOrder.x][(int)pOrder.y][(int)pOrder.z];
+  if(pAxis == AlgorithmZ.Axis.X)//X Rotation
+  {
+    for(int i = 0; i < newArray.length; i++)//x
+            for(int j = 0; j < newArray[0].length; j++)//y
+                    for(int k = 0; k < newArray[0][0].length; k++) //z
+                    {
+                      //System.out.println("I: "+i+" J: "+j +" Z: "+k);
+                    //  System.out.println("Length I: "+ newArray.length+" Length J: "+newArray[0].length +" Length Z: "+newArray[0][0].length);
+                    //  System.out.println("OLDLength I: "+ _parcels.length+" OLDLength J: "+ _parcels[0].length +" OLDLength Z: "+_parcels[0][0].length);
+                        newArray[i][j][k] = _parcels[i][k][j];
+                    }
+  }
+  else if(pAxis == AlgorithmZ.Axis.Y)//Y Rotation
+  {
+      for(int i = 0; i < newArray.length; i++)//x
+              for(int j = 0; j < newArray[0].length; j++)//y
+                      for(int k = 0; k < newArray[0][0].length; k++) //z
+                          newArray[i][j][k] = _parcels[k][j][i];
+  }
+  else if(pAxis == AlgorithmZ.Axis.Z)//Z Rotation
+  {
+      for(int i = 0; i < newArray.length; i++)//x
+              for(int j = 0; j < newArray[0].length; j++)//y
+                      for(int k = 0; k < newArray[0][0].length; k++) //z
+                          newArray[i][j][k] = _parcels[j][i][k];
+  }
+  _parcels = newArray;
+  _size = pOrder;
+//  System.out.println("Finished Rotating " + pAxis +" size "+ pOrder +" " +"\n");
+}
 public static Pentomino getRotated(Pentomino pPentomino, int pID)
 {
         Pentomino buffer = pPentomino.clone();
@@ -111,13 +147,13 @@ public static void rotateParcel(Pentomino pPentomino, AlgorithmZ.Axis pAxis)
         switch(pAxis)
         {
         case X:
-                pPentomino.setSize(new Vector3D(size.x, size.z, size.y));
+                pPentomino.reOrderSize(new Vector3D(size.x, size.z, size.y), AlgorithmZ.Axis.X);
                 break;
         case Y:
-                pPentomino.setSize(new Vector3D(size.z, size.y, size.x));
+                pPentomino.reOrderSize(new Vector3D(size.z, size.y, size.x), AlgorithmZ.Axis.Y);
                 break;
         case Z:
-                pPentomino.setSize(new Vector3D(size.y, size.x, size.z));
+                pPentomino.reOrderSize(new Vector3D(size.y, size.x, size.z), AlgorithmZ.Axis.Z);
                 break;
         }
 }

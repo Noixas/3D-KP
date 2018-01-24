@@ -1,29 +1,28 @@
+/**
+ * Algorithm to place Parcels using Extreme Points into a container
+ * By: Rodrigo Alejandro Chavez Mulsa
+ */
 import java.util.*;
 import java.util.LinkedList;
 import java.util.Collections;
 import java.lang.Exception;
 import  java.lang.Math.*;
-public class AlgorithmZ extends Algorithm
-{
-private Container _container;
-private SolutionSet _solution;
-private List<ExtremePoint> _listEP;
-private boolean _started;
+public class AlgorithmZ extends Algorithm{
+private Container _container; // Container reference
+private SolutionSet _solution;//Solution where we keep our progress
+private List<ExtremePoint> _listEP;// List of Extreme Points
+private boolean _started;//Flag to know when the first case has been used
 private List<Parcel> _baseParcels;
 private List<Parcel> _parcelList;
-private Parcel[][][] _containerSpace;
-private int _scalingArrayConst = 2;
-private int _wallsCount;
+private Parcel[][][] _containerSpace; //Array to check if we overlap parcels
+private int _scalingArrayConst = 2;//Constant to enable .5 size parcels
+private int _wallsCount;//Amount of walls in the _Solution set that are just for the EP, not actual solution
 private enum SetType { A, B, C, AB, AC, BC, ABC, BEST, RANDOM, DEBUG }
 public enum Axis { X, Y, Z }
-private SetType _type;
-////////Temporary container boundaries from c#///////////
-private double _xBound = 16.5;
-private double _yBound = 2.5;
-private double _zBound = 4;
-///////////////////////////////////////
+private double _xBound = 16.5;//Accesible countainer x size
+private double _yBound = 2.5;//Accesible countainer y size
+private double _zBound = 4;//Accesible countainer z size
 public AlgorithmZ(){
-        _type = SetType.C;
         _container = new Container();
         _xBound = _container.getSize().x;
         _yBound = _container.getSize().y;
@@ -33,55 +32,47 @@ public AlgorithmZ(){
         _listEP = new LinkedList<ExtremePoint>();
         _solution = new SolutionSet(System.currentTimeMillis());
 }
+/**
+ * Method called from UI to compute the answer
+ * @param List<Parcel> list [The list of Parcels to be placed in the container set in the ui]
+ */
 public void Start(List<Parcel> list) {
 
-        _type = SetType.B;
-        //_solution = new SolutionSet(System.currentTimeMillis());
-        initSetType();
+        _solution = new SolutionSet(System.currentTimeMillis());
         _parcelList = getOrderParcels(0,list);
         createContainerWalls();
-        computeSolution(1);
-        //debugTest();
-        ExtremePoint.displayExtremePoints(_listEP);
-        _solution.calculateCurrentValue();
-        System.out.println("Current container value: " + _solution.getValue());
+        computeSolution(200);
         _solutions.add(_solution);
+        _solution.endSolution(System.currentTimeMillis());
+        CreateParcel.clearAllParcels();
+        display();
+        System.out.println("Current container value: " + _solution.getValue());
 }
-public void nextStep()
-{
-
+/**
+ * Calculates just one step further (Places the next parcel only)
+ */
+public void nextStep(){
         computeSolution(1);
         _solution.calculateCurrentValue();
-        System.out.println("Current container value: " + _solution.getValue());
+        System.out.println("Step has been computed: " + _solution.getValue());
         _solutions.add(_solution);
         CreateParcel.clearAllParcels();
         display();
 
 }
-private void debugTest()
-{
-        if(_parcelList.size() == 0) return;
-        Parcel test = _parcelList.get(0);
-        Parcel.rotateParcel(test, Axis.Z);
-        computeSolutionStep();
-}
 /**
  * Calls the step method n times to enable faster results
  * @param int pIterations [Amount of times that step method will be called]
  */
-private void computeSolution(int pIterations)
-{
+private void computeSolution(int pIterations){
         if(pIterations <= 0) return;
         for(int i = 0; i < pIterations; i++)
-        {
                 computeSolutionStep();
-        }
 }
 /**
  * Computes the parcel and position at which the next one will be placed
  */
-private void computeSolutionStep()
-{
+private void computeSolutionStep(){
         if(_parcelList.size() == 0) return; //No more parcels to be placed
         if (_started == false) insertFirstParcel();
         else {
@@ -96,76 +87,29 @@ private void computeSolutionStep()
                 _parcelList.remove(0);
         }
 }
-private int[] findBestEP(Parcel pParcel)
-{
-
+/**
+ * Loop through all the EP and apply the heuristics to get the best EP to place a parcel
+ * @param  Parcel pParcel       [Parcel to be placed in the container]
+ * @return         [return the index of the best EP in the EPList and the index of the rotation that best suit that point]
+ */
+private int[] findBestEP(Parcel pParcel){
         int[] result = new int[2];
         result[0] = -1;
-        if(_listEP.size() == 0)
-                return result;
-
+        if(_listEP.size() == 0) return result;
         Collections.sort(_listEP);
-        int bestEpIndex = 0;
-        int rotation = 0;
         int MAXROTATION = 6;
         double difference = 0;
         double currentDiff = 0;
-        int unusableAxis = 0;
-        Vector3D sizeParcel = pParcel.getSize();
-        boolean leaveUsableSpace = false;
-        //double smallestSize = Math.min(Math.min(sizeParcel.x,sizeParcel.y),sizeParcel.z);
-
-        int bestEpWithUnusableAxis = 0;
-        int bestRotationWithUnusableAxis = 0;
-        double differenceWithUnusableAxis = Double.MAX_VALUE;
-        //TODO: check if it will leave a side with unable space
-        //TODO: Instead of keeping the smallest difference, grade them with importance of:
-        //TODO: (1) diff == 0 is the best,
-        //TODO: (2) then the smallest difference which is >= smallestSide of any parcel in the list
-        //TODO: (3) and finally if all leave unasable space then choose the smallest one
-        for (int i = 0; i < _listEP.size(); i++) {
+        for (int i = 0; i < _listEP.size(); i++)
                 for(int j = 0; j < MAXROTATION; j++) {
                         Parcel rotatedParcel = Parcel.getRotated(pParcel, j);
-                        unusableAxis = 0;
                         currentDiff = calculateDifferenceRsAndParcel(rotatedParcel, _listEP.get(i));
-                        unusableAxis = checkMakesUnusableSpace(rotatedParcel, _listEP.get(i), sizeParcel);
-                        if(currentDiff > difference && currentDiff >= 0 && checkFit(rotatedParcel, _listEP.get(i)))
-                        {
-                                /*if(unusableAxis > 0 && currentDiff <= differenceWithUnusableAxis) {
-                                        differenceWithUnusableAxis = currentDiff;
-                                        bestEpWithUnusableAxis = i;
-                                        bestRotationWithUnusableAxis = j;
-                                   }
-                                   else if(unusableAxis == 0) {
-                                        leaveUsableSpace = true;
-                                        difference = currentDiff;
-                                        bestEpIndex = i;
-                                        rotation = j;
-                                        result[0] = bestEpIndex;
-                                        result[1] = rotation;
-                                   }*/
+                        if(currentDiff > difference && currentDiff >= 0 && checkParcelFit(rotatedParcel, _listEP.get(i))){
                                 difference = currentDiff;
-                                bestEpIndex = i;
-                                rotation = j;
-                                result[0] = bestEpIndex;
-                                result[1] = rotation;
-                                if(difference == 0 )
-                                        return result;
-                                //We found a perfect match so no need to keep searching
-                                //System.out.println("Current min diff is " + difference);
+                                result[0] = i;
+                                result[1] = j;
                         }
                 }
-        }
-        //If all options leave unusable spaces then choose the smallest one
-        /*if(leaveUsableSpace == true)
-           {
-                difference = differenceWithUnusableAxis;
-                bestEpIndex = bestEpWithUnusableAxis;
-                rotation = bestRotationWithUnusableAxis;
-                result[0] = bestEpIndex;
-                result[1] = rotation;
-              //  System.out.println("We will leave unusable space");
-           }*/
         return result;
 }
 /**
@@ -174,8 +118,7 @@ private int[] findBestEP(Parcel pParcel)
  * @param  Vector3D pos           [Position at which we want to put the parcel]
  * @return          [True if it fits, false if it doesnt]
  */
-private boolean checkFit(Parcel p, Vector3D pos)
-{
+private boolean checkParcelFit(Parcel p, Vector3D pos){
         Vector3D size = p.getSize();
         Vector3D containerSize =_container.getSize();
         Vector3D posArray = new Vector3D(spaceIndex(pos.x), spaceIndex(pos.y), spaceIndex(pos.z));
@@ -194,28 +137,12 @@ private boolean checkFit(Parcel p, Vector3D pos)
                 return false;
 }
 /**
- * Check if placing a Parcel in an Ep will leave unasable space in an axis
- * @param  Parcel       pParcel       [Parcel to be placed]
- * @param  ExtremePoint pEp           [Ep where the parcel will be placed]
- * @param  Vector3D     pMinAxis      [Sizes of the smallest box]
- * @return              [description]
+ *  Calculate an approximate of how much space an extreme point will have left after a parcel is placed there
+ * @param  Parcel       pParcel       [Parcel to be palced]]
+ * @param  ExtremePoint pEp            [Extreme Point to be compared at]
+ * @return              [The difference]
  */
-private int checkMakesUnusableSpace(Parcel pParcel, ExtremePoint pEp, Vector3D pMinAxis)
-{
-        //TODO: maybe try all rotations of the size
-        int amount = 0;
-        Vector3D size = pParcel.getSize();
-        Vector3D EpSize = pEp.getRS();
-        if((EpSize.x - size.x) < pMinAxis.x)
-                amount++;
-        if((EpSize.y - size.y) < pMinAxis.y)
-                amount++;
-        if((EpSize.z - size.z) < pMinAxis.z)
-                amount++;
-        return amount;
-}
-private double calculateDifferenceRsAndParcel(Parcel pParcel, ExtremePoint pEp)
-{
+private double calculateDifferenceRsAndParcel(Parcel pParcel, ExtremePoint pEp){
         Vector3D size = pParcel.getSize();
         Vector3D EpSize = pEp.getRS();
         double result = 1000000;
@@ -228,8 +155,7 @@ private double calculateDifferenceRsAndParcel(Parcel pParcel, ExtremePoint pEp)
  * @param Parcel   pParcel [New parcel to be placed]
  * @param Vector3D pos     [Position at which it will be placed]
  */
-private void placeParcel(Parcel pParcel, Vector3D pos)
-{
+private void placeParcel(Parcel pParcel, Vector3D pos){
         pParcel.setPosition(pos);
         addParcelToArraySpace(pParcel, pos);
         updateEP(_solution, pParcel);
@@ -242,8 +168,7 @@ private void placeParcel(Parcel pParcel, Vector3D pos)
  * @param Parcel   pParcel [Parcel reference to be added]
  * @param Vector3D pos     [Position from which we start adding the new parcel]
  */
-private void addParcelToArraySpace(Parcel pParcel, Vector3D pos)
-{
+private void addParcelToArraySpace(Parcel pParcel, Vector3D pos){
         Vector3D size = pParcel.getSize();
         Vector3D posArray = new Vector3D(spaceIndex(pos.x), spaceIndex(pos.y), spaceIndex(pos.z));
         for(int i = (int)posArray.x; i < posArray.x + spaceIndex(size.x); i++)
@@ -257,8 +182,7 @@ private void addParcelToArraySpace(Parcel pParcel, Vector3D pos)
  * @param List<Vector3D> EP            [The current list of EP]
  * @param Parcel         newParcel     [The new parcel that has been added to the container]
  */
-private void updateEP(SolutionSet placedParcels, Parcel newParcel )
-{
+private void updateEP(SolutionSet placedParcels, Parcel newParcel ){
         double[] maxBound = { -1000000, -1000000, -1000000, -1000000, -1000000, -1000000};
         ExtremePoint[] newEP = ExtremePoint.createNewEps(placedParcels, newParcel); //Proyect the potential points into the placed boxes
         for (int i = 0; i < newEP.length; i++)
@@ -271,13 +195,19 @@ private void updateEP(SolutionSet placedParcels, Parcel newParcel )
         Collections.sort(_listEP);
 
 }
-private void updateResidualSpace()
-{
+/**
+ * Update every EP Residual Space
+ */
+private void updateResidualSpace(){
         for(int i = 0; i < _listEP.size(); i++)
                 calculateResidualSpace(_listEP.get(i));
 }
-private boolean calculateResidualSpace(ExtremePoint pEP)
-{
+/**
+ * Calculate how much space this Extreme Point has in front (Residual Space)
+ * @param  ExtremePoint pEP           [Extreme Point to be updated]
+ * @return              [false if doesnt fit in container]
+ */
+private boolean calculateResidualSpace(ExtremePoint pEP){
         int x = spaceIndex(pEP.x);
         int y = spaceIndex(pEP.y);
         int z = spaceIndex(pEP.z);
@@ -336,8 +266,7 @@ private boolean calculateResidualSpace(ExtremePoint pEP)
  * @param List<Vector3D> originalEP [The current list of EP]
  * @param List<Vector3D> toDeleteEp [The list of EP that need to be deleted from the originalEP]
  */
-private void deleteUselessEP(List<ExtremePoint> originalEP)
-{
+private void deleteUselessEP(List<ExtremePoint> originalEP){
         List<ExtremePoint> toDeleteEp = new LinkedList<ExtremePoint>();
         for(int i = 0; i < originalEP.size(); i++)
         {
@@ -352,10 +281,18 @@ private void deleteUselessEP(List<ExtremePoint> originalEP)
         }
 }
 /**
+ * Creates the visual boxes and EP in the current state of the algorithm
+ */
+public void display(){
+        //  System.out.println("Display button pressed");
+        CreateParcel.clearAllParcels();
+        displayParcels();
+        ExtremePoint.displayExtremePoints(_listEP);
+}
+/**
  * Creates the visualization of the parcels in the 3D world
  */
-public void displayParcels()
-{
+public void displayParcels(){
         for(int i = 0; i < _solution.getLength(); i++)
         {
                 Parcel a = _solution.get(i);
@@ -364,203 +301,114 @@ public void displayParcels()
         }
 }
 /**
- * Creates the visual boxes and EP in the current state of the algorithm
- */
-public void display()
-{
-        //  System.out.println("Display button pressed");
-        CreateParcel.clearAllParcels();
-        displayParcels();
-        ExtremePoint.displayExtremePoints(_listEP);
-}
-/**
- * Multiplies the number by a constant to enable the represantion of decimals in the 3D array
- * @param  double size          [Number to be multiplied]
- * @return        [The input multiplied by the constant]
- */
-private int spaceIndex(double size)
-{
-        return (int)(size * _scalingArrayConst);
-}
-private double undoSpaceIndex(double pPos)
-{
-        return (pPos / _scalingArrayConst);
-}
-/**
  * Creates the first parcel and EP from which the rest will be derived
  */
-private void insertFirstParcel()
-{
+private void insertFirstParcel(){
         _listEP.add(new ExtremePoint(0,0,0));
-        System.out.println("Algorithm Z first parcel inserted with SetType: " + _type);
+        //System.out.println("Algorithm Z first parcel inserted with SetType: " + _type);
         _started = true;
 
 }
 /**
  * Reorders the _baseParcels depending on the kind of set that we want to compute
  */
- private List<Parcel> getOrderParcels(int pOrderingType, List<Parcel> pList)
- {
-         List<Parcel> aList  = new LinkedList<Parcel>();
-         List<Parcel> bList  = new LinkedList<Parcel>();
-         List<Parcel> cList  = new LinkedList<Parcel>();
-         List<Parcel> newOrderedList  = new LinkedList<Parcel>();
-         Double[] orderValues = {-1.0,-1.0,-1.0};
-         //double parcelValues = new Vector3D(aValue, bValue, cValue);
-         if(pOrderingType == 0)//Order by value
-         {
-                 for(int i = 0; i < pList.size(); i++)
-                 {
-                         Parcel p = pList.get(i);
-                         if(p instanceof ParcelA)
-                         {
-                                 aList.add(p);
-                                 orderValues[0] = p.getValue();
-                         }
-                         else if(p instanceof ParcelB)
-                         {
-                                 bList.add(p);
-                                 orderValues[1] = p.getValue();
-                         }
-                         else if(p instanceof ParcelC)
-                         {
-                                 cList.add(p);
-                                 orderValues[2] = p.getValue();
-                         }
-                 }
-                 // = new Double[]{aValue, bValue, cValue};
-                 Arrays.sort(orderValues);
-                 for(int i = 0; i < orderValues.length; i++)
-                 {
-                         if(aList.size() > 0 && orderValues[i] == aList.get(0).getValue())
-                                 for(int j = 0; j < aList.size(); j++)
-                                         newOrderedList.add(aList.get(j));
-                         if(bList.size() > 0 && orderValues[i] == bList.get(0).getValue())
-                                 for(int j = 0; j < bList.size(); j++)
-                                         newOrderedList.add(bList.get(j));
-                         if(cList.size() > 0 && orderValues[i] == cList.get(0).getValue())
-                                 for(int j = 0; j < cList.size(); j++)
-                                         newOrderedList.add(cList.get(j));
-                 }
-         }
-         return newOrderedList;
- }
- /**
-  * Creates the invisible container walls of the container in which the EP will be proyected
-  */
- private void createContainerWalls()
- {
-         _wallsCount = 3;
-         for(int i = 0; i < _wallsCount; i++)
-         {
-                 Parcel c = new Parcel(new Vector3D(0,0,0), 0);
-                 c.setInvisible(true);
-                 Vector3D pos = Vector3D.getZero();
-                 Vector3D size = Vector3D.getZero();
-                 switch (i)
-                 {
-                 case 0:  //Negative X
-                         size.y = 100;
-                         size.z = 100;
-                         pos.x = -size.x;
-                         break;
-                 case 1:   //Negative Y
-                         size.x = 100;
-                         size.z = 100;
-                         pos.y = -size.y;
-                         break;
-                 case 2:  //Negative Z
-                         size.x = 100;
-                         size.y = 100;
-                         pos.z = -size.z;
-                         break;
-                 }
-                 c.setSize(size);
-                 c.setPosition(pos);
-                 _solution.addParcel(c);
-         }
- }
-private void initSetType()
-{
-        if(_started) return; //Dont initiate multiple times
-        Parcel a = new ParcelA();
-        Parcel b = new ParcelB();
-        Parcel c = new ParcelC();
-        _baseParcels = new LinkedList<Parcel>();
-
-        switch(_type) {
-        case A:
-                _baseParcels.add(a);
-                break;
-        case B:
-                _baseParcels.add(b);
-                break;
-        case C:
-                _baseParcels.add(c);
-                break;
-        case AB:
-                if(a.getDensityValue() >= b.getDensityValue()) {//Put parcel a first
-                        _baseParcels.add(a);
-                        _baseParcels.add(b);
+private List<Parcel> getOrderParcels(int pOrderingType, List<Parcel> pList){
+        List<Parcel> aList  = new LinkedList<Parcel>();
+        List<Parcel> bList  = new LinkedList<Parcel>();
+        List<Parcel> cList  = new LinkedList<Parcel>();
+        List<Parcel> newOrderedList  = new LinkedList<Parcel>();
+        Double[] orderValues = {-1.0,-1.0,-1.0};
+        //double parcelValues = new Vector3D(aValue, bValue, cValue);
+        if(pOrderingType == 0) //Order by value
+        {
+                for(int i = 0; i < pList.size(); i++)
+                {
+                        Parcel p = pList.get(i);
+                        if(p instanceof ParcelA)
+                        {
+                                aList.add(p);
+                                orderValues[0] = p.getValue();
+                        }
+                        else if(p instanceof ParcelB)
+                        {
+                                bList.add(p);
+                                orderValues[1] = p.getValue();
+                        }
+                        else if(p instanceof ParcelC)
+                        {
+                                cList.add(p);
+                                orderValues[2] = p.getValue();
+                        }
                 }
-                else{//Put parcel b first
-                        _baseParcels.add(b);
-                        _baseParcels.add(a);
+                Arrays.sort(orderValues);
+                for(int i = 0; i < orderValues.length; i++)
+                {
+                        if(aList.size() > 0 && orderValues[i] == aList.get(0).getValue())
+                                for(int j = 0; j < aList.size(); j++)
+                                        newOrderedList.add(aList.get(j));
+                        if(bList.size() > 0 && orderValues[i] == bList.get(0).getValue())
+                                for(int j = 0; j < bList.size(); j++)
+                                        newOrderedList.add(bList.get(j));
+                        if(cList.size() > 0 && orderValues[i] == cList.get(0).getValue())
+                                for(int j = 0; j < cList.size(); j++)
+                                        newOrderedList.add(cList.get(j));
                 }
-                break;
-        case AC:
-                if(a.getDensityValue() >= c.getDensityValue()) {//Put parcel a first
-                        _baseParcels.add(a);
-                        _baseParcels.add(c);
+        }
+        return newOrderedList;
+}
+/**
+ * Creates the invisible container walls of the container in which the EP will be proyected
+ */
+private void createContainerWalls(){
+        _wallsCount = 3;
+        for(int i = 0; i < _wallsCount; i++)
+        {
+                Parcel c = new Parcel(new Vector3D(0,0,0), 0);
+                c.setInvisible(true);
+                Vector3D pos = Vector3D.getZero();
+                Vector3D size = Vector3D.getZero();
+                switch (i)
+                {
+                case 0:   //Negative X
+                        size.y = 100;
+                        size.z = 100;
+                        pos.x = -size.x;
+                        break;
+                case 1:    //Negative Y
+                        size.x = 100;
+                        size.z = 100;
+                        pos.y = -size.y;
+                        break;
+                case 2:   //Negative Z
+                        size.x = 100;
+                        size.y = 100;
+                        pos.z = -size.z;
+                        break;
                 }
-                else{//Put parcel c first
-                        _baseParcels.add(c);
-                        _baseParcels.add(a);
-                }
-                break;
-        case BC:
-                if(b.getDensityValue() >= c.getDensityValue()) {//Put parcel a first
-                        _baseParcels.add(b);
-                        _baseParcels.add(c);
-                }
-                else{//Put parcel b first
-                        _baseParcels.add(c);
-                        _baseParcels.add(b);
-                }
-                break;
-        case BEST://TODO
-                _baseParcels.add(a);
-                _baseParcels.add(b);
-                _baseParcels.add(c);
-                break;
-        case RANDOM:
-                _baseParcels.add(a);
-                _baseParcels.add(b);
-                _baseParcels.add(c);
-                //_baseParcels = randomizeBaseParcelList();
-                break;
-        case DEBUG:
-                _baseParcels.add(a);
-                break;
-
+                c.setSize(size);
+                c.setPosition(pos);
+                _solution.addParcel(c);
         }
 }
 /**
- * Method to be called from the UI to start calculating a solution
+ * Multiplies the number by a constant to enable the represantion of decimals in the 3D array
+ * @param  double size          [Number to be multiplied]
+ * @return        [The input multiplied by the constant]
  */
-public void Start(){
-        _type = SetType.B;
-
-        initSetType();
-        createContainerWalls();
-        computeSolution(80);
-        //debugTest();
-        ExtremePoint.displayExtremePoints(_listEP);
-        _solution.calculateCurrentValue();
-        System.out.println("Current container value: " + _solution.getValue());
-
-        _solutions.add(_solution);
+private int spaceIndex(double size){
+        return (int)(size * _scalingArrayConst);
 }
+/**
+ * Divides the number by a constant to return the represantion of decimals in the 3D array to the world
+ * @param  double pPos          [Position to be modified]
+ * @return        [The input divided by the constant]
+ */
+private double undoSpaceIndex(double pPos){
+        return (pPos / _scalingArrayConst);
+}
+/**
+ * For debug only, print in console the position and residual space of each Extreme Point
+ */
 private void printExtremePointsConsole(){
         for(int j = 0; j < _listEP.size(); j++)
         {

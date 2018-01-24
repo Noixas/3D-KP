@@ -28,7 +28,7 @@ public int getLength()
 }
 /**
  * Delete Parcel from solution set
- * @param  Parcel pParcel          [Parcel to be deleted]
+ * @param  Parcel pParcel  [Parcel to be deleted]
  * @return  true if parcel was found and deleted
  */
 public boolean deleteParcel(Parcel pParcel)
