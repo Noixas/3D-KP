@@ -1,32 +1,66 @@
+/**
+ * Class which creates Vector3D objects to represent the parcels' sizes and positions.
+ */
 public class Vector3D implements Comparable<Vector3D> {
 public double x;
 public double y;
 public double z;
 //  public static final Vector3D zero = new Vector3D(0,0,0);
+
+/**
+ * Constructor of Vector3D using floats.
+ * @param x Vector value in the x axis.
+ * @param y Vector value in the y axis.
+ * @param z Vector value in the z axis.
+ */
 public Vector3D(float x, float y, float z)
 {
         this.x = x;
         this.y = y;
         this.z = z;
 }
+
+/**
+ * Constructor of Vector3D using doubles.
+ * @param x Vector value in the x axis.
+ * @param y Vector value in the y axis.
+ * @param z Vector value in the z axis.
+ */
 public Vector3D(double x, double y, double z)
 {
         this.x = x;
         this.y = y;
         this.z = z;
 }
+
+/**
+ * Constructor of Vector3D using ints.
+ * @param x Vector value in the x axis.
+ * @param y Vector value in the y axis.
+ * @param z Vector value in the z axis.
+ */
 public Vector3D(int x, int y, int z)
 {
         this.x = x;
         this.y = y;
         this.z = z;
 }
+
+/**
+ * Copy the vector values from another Vector3D object to this one.
+ * @param copy The other Vector3D object to copy the value from.
+ */
 public Vector3D(Vector3D copy)
 {
         this.x = copy.x;
         this.y = copy.y;
         this.z = copy.z;
 }
+
+/**
+ * Clones the Vector3D object.
+ * @param the new cloned Vector3D object.
+ */
 public Vector3D clone()
 {
         return new Vector3D(this);

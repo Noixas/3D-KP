@@ -14,6 +14,10 @@ import javafx.geometry.Pos;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/**
+ * This class creates all of the attributes of which the userinterface consists.
+ */
+
 public class MenuUI {
   private static TextArea results;
   private static ComboBox<String> algorithms;
@@ -79,25 +83,32 @@ public class MenuUI {
   private static AnimationTimer infoTimer;
   private static AnimationTimer inputTimer;
 
+ /**
+  * Default constructor
+  */
   public MenuUI() {}
 
+ /**
+  * Constructs the borderpane that gets added to the menuScene in sceneManager.
+  * @param root borderpane that is added to the menuScene.
+  */
   public MenuUI(BorderPane root) {
-    Pane center = new Pane();
-    center.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #fffd77, #fa8334)");
-    center.setPrefSize(640, 300);
+    Pane bottom = new Pane();
+    bottom.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #fffd77, #fa8334)");
+    bottom.setPrefSize(640, 300);
     Pane top = new Pane();
     top.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #271033, #388697)");
     top.setPrefSize(640, 250);
-    Pane bottom = new Pane();
-    bottom.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #388697, #271033)");
-    bottom.setPrefSize(640, 110);
+    Pane center = new Pane();
+    center.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #388697, #271033)");
+    center.setPrefSize(640, 110);
 
     constructUI(center, top, bottom);
     root.setTop(top);
     root.setMargin(top, new Insets(2));
-    root.setCenter(bottom);
+    root.setCenter(center);
     root.setMargin(center, new Insets(2));
-    root.setBottom(center);
+    root.setBottom(bottom);
     root.setMargin(bottom, new Insets(2));
 
     infoTimer = new AnimationTimer() {
@@ -117,15 +128,26 @@ public class MenuUI {
     inputTimer.start();
   }
 
+  /**
+   * Is used in the sceneManager class to construct the menu.
+   * @param center    The pane that gets added to the center of the borderpane.
+   * @param top       The pane that gets added to the top of the borderpane.
+   * @param bottom    The pane that gets added to the bottom of the borderpane.
+   */
   public void constructUI(Pane center, Pane top, Pane bottom) {
-    constructInputFields(top, bottom);
-    constructLabels(top, bottom);
-    constructButtons(center);
-    constructChoices(center);
-    constructResultField(center);
+    constructInputFields(top, center);
+    constructLabels(top, center);
+    constructButtons(bottom);
+    constructChoices(bottom);
+    constructResultField(bottom);
   }
 
-  public void constructInputFields(Pane top, Pane bottom) {
+  /**
+   * Constructs the TextFields and adds them to the top and center panes.
+   * @param top       The pane to which TextFields for the input of the parcels are added to.
+   * @param center    The pane to which TextFields for the input of the container size are added to.
+   */
+  public void constructInputFields(Pane top, Pane center) {
     parcelACntr = new TextField();
     parcelACntr.setText("0");
     parcelACntr.setPrefSize(80, 20);
@@ -226,10 +248,15 @@ public class MenuUI {
       heightA, heightB, heightC,
       lengthA, lengthB, lengthC);
 
-    bottom.getChildren().addAll(containerX, containerY, containerZ);
+    center.getChildren().addAll(containerX, containerY, containerZ);
   }
 
-  public void constructLabels(Pane top, Pane bottom) {
+  /**
+   * Constructs the labels that gives information about what each inputfield is linked to.
+   * @param top       The pane to which the labels are added that set the information of the parcels.
+   * @param center    The pane to which the labels are added that set the information of the containers.
+   */
+  public void constructLabels(Pane top, Pane center) {
     Label labelBoxA = new Label();
     labelBoxA.setText("Parcel A");
     labelBoxA.setStyle(
@@ -444,12 +471,16 @@ public class MenuUI {
       lengthA, lengthB, lengthC,
       heightA, heightB, heightC);
 
-    bottom.getChildren().addAll(
+    center.getChildren().addAll(
       containerLabel, containerWidth,
       containerHeight, containerLength);
   }
 
-  public void constructChoices(Pane center) {
+  /**
+   * Creates dropdown menu's for chosing the algorithms and presets.
+   * @param bottom    The pane to which the ComboBoxes are added to.
+   */
+  public void constructChoices(Pane bottom) {
     algorithms = new ComboBox<String>();
     algorithms.getItems().addAll(
       "Greedy Volume",
@@ -470,14 +501,20 @@ public class MenuUI {
       "A and B",
       "A and C",
       "B and C",
-      "Highest value/volume");
+      "Max Greedy Volume/Value",
+      "Max Greedy Density");
     presets.setPrefSize(140, 20);
     presets.relocate(50, 60);
     presets.setValue("Manual");
-    center.getChildren().addAll(presets, algorithms);
+    bottom.getChildren().addAll(presets, algorithms);
   }
 
-  public void constructButtons(Pane center) {
+  /**
+   * Creates the buttons and their actions.
+   *
+   *
+   */
+  public void constructButtons(Pane bottom) {
     Button calcButton = new Button();
     calcButton.setText("Calculate");
     calcButton.setPrefSize(140, 20);
@@ -657,10 +694,10 @@ public class MenuUI {
       }
     });
 
-    center.getChildren().addAll(calcButton, viewCargo, reset, display, clearParcels);
+    bottom.getChildren().addAll(calcButton, viewCargo, reset, display, clearParcels);
   }
 
-  public void constructResultField(Pane center) {
+  public void constructResultField(Pane bottom) {
     results = new TextArea();
     results.setPrefSize(320, 190);
     results.relocate(230, 50);
@@ -672,14 +709,53 @@ public class MenuUI {
       "-fx-text-fill: #271033;" +
       "-fx-font-style: italic;");
     resultLabel.relocate(230, 20);
-    center.getChildren().addAll(results, resultLabel);
+    bottom.getChildren().addAll(results, resultLabel);
   }
 
   public void updateInput() {
     try {
-      amountParcelA = Double.parseDouble(parcelACntr.getText());
-      amountParcelB = Double.parseDouble(parcelBCntr.getText());
-      amountParcelC = Double.parseDouble(parcelCCntr.getText());
+      if(parcelACntr.getText().isEmpty() || parcelBCntr.getText().isEmpty() || parcelCCntr.getText().isEmpty()) {
+        if(parcelACntr.getText().isEmpty() && parcelBCntr.getText().isEmpty() && parcelCCntr.getText().isEmpty()) {
+          amountParcelA = 0;
+          amountParcelB = 0;
+          amountParcelC = 0;
+        }
+        else if(parcelACntr.getText().isEmpty() && parcelBCntr.getText().isEmpty()) {
+          amountParcelA = 0;
+          amountParcelB = 0;
+          amountParcelC = Double.parseDouble(parcelCCntr.getText());
+        }
+        else if(parcelBCntr.getText().isEmpty() && parcelCCntr.getText().isEmpty()) {
+          amountParcelB = 0;
+          amountParcelC = 0;
+          amountParcelA = Double.parseDouble(parcelACntr.getText());
+        }
+        else if(parcelACntr.getText().isEmpty() && parcelCCntr.getText().isEmpty()) {
+          amountParcelA = 0;
+          amountParcelC = 0;
+          amountParcelB = Double.parseDouble(parcelBCntr.getText());
+        }
+        else if(parcelACntr.getText().isEmpty()) {
+          amountParcelA = 0;
+          amountParcelB = Double.parseDouble(parcelBCntr.getText());
+          amountParcelC = Double.parseDouble(parcelCCntr.getText());
+        }
+        else if(parcelBCntr.getText().isEmpty()) {
+          amountParcelB = 0;
+          amountParcelA = Double.parseDouble(parcelACntr.getText());
+          amountParcelC = Double.parseDouble(parcelCCntr.getText());
+        }
+        else if(parcelCCntr.getText().isEmpty()) {
+          amountParcelC = 0;
+          amountParcelA = Double.parseDouble(parcelACntr.getText());
+          amountParcelB = Double.parseDouble(parcelBCntr.getText());
+        }
+      }
+      else {
+        amountParcelA = Double.parseDouble(parcelACntr.getText());
+        amountParcelB = Double.parseDouble(parcelBCntr.getText());
+        amountParcelC = Double.parseDouble(parcelCCntr.getText());
+      }
 
       valueParcelA = Double.parseDouble(parcelAValue.getText());
       valueParcelB = Double.parseDouble(parcelBValue.getText());
@@ -703,6 +779,9 @@ public class MenuUI {
     }
     catch(NumberFormatException e) {
       errorCheck = 1;
+    }
+    catch(IndexOutOfBoundsException e) {
+      System.out.println("test");
     }
   }
 
@@ -904,7 +983,7 @@ public class MenuUI {
       containerY.setText("2.5");
       containerZ.setText("4");
     }
-    else if(presets.getValue() == "Highest value/volume") {
+    else if(presets.getValue() == "Max Greedy Volume/Value") {
       parcelACntr.setText("11");
       parcelBCntr.setText("22");
       parcelCCntr.setText("22");
@@ -929,6 +1008,7 @@ public class MenuUI {
       containerY.setText("2.5");
       containerZ.setText("4");
     }
+    else if(presets.getValue() == "Max Greedy Density") {}
   }
 
   public Algorithm getAlgorithm() {

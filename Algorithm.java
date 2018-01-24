@@ -8,7 +8,6 @@ protected List<SolutionSet> _solutions = new LinkedList<SolutionSet>();
  * Start computing solutions separated from constructor to be able to configure it with the UI
  * and use Start button from UI
  */
-//public abstract void Start();
 public abstract void Start(List<Parcel> list);
 /**
  * Check if the Algorithm has finished
