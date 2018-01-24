@@ -82,6 +82,10 @@ private void findBestResults(double a, double b, double c)
                 b = amountParcels;
         if(c > amountParcels)
                 c = amountParcels;
+                System.out.println("A"+a);
+                System.out.println("B"+b);
+                System.out.println("C"+c);
+
         for(int i=0; i<=a; i++)
                 for(int j=0; j<=b; j++)
                         for(int k=0; k<=c; k++) {
@@ -89,7 +93,7 @@ private void findBestResults(double a, double b, double c)
                                 int amountB = j;
                                 int amountC = k;
 
-                                if(_findBest || (a + b + c > 60))//Add heuristics for large number of tries
+                                if(_findBest || (a + b + c) > 60)//Add heuristics for large number of tries
                                 {
                                         if((amountA * 2 + amountB * 3 + amountC * 3.375) <= 170 && ((3 * amountA + 4 * amountB + 5 * amountC) > 100)) {
                                                 _parcelList = createParcelList(amountA, amountB, amountC);
@@ -97,8 +101,13 @@ private void findBestResults(double a, double b, double c)
                                         }
                                 }
                                 else{
-                                        _parcelList = createParcelList(amountA, amountB, amountC);
+                                  System.out.println("This is called"+amountA);
+
+                                        _parcelList = createParcelList((int)a,(int) b, (int)c);
                                         nextStep();  //Compute the best result with this parcels
+                                        i = (int)a+1;
+                                          j = (int) b+1;
+                                            k = (int)c+1;
                                 }
 
                         }
