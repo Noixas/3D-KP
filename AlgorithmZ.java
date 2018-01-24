@@ -7,9 +7,10 @@ import java.util.LinkedList;
 import java.util.Collections;
 import java.lang.Exception;
 import  java.lang.Math.*;
-public class AlgorithmZ extends Algorithm{
+public class AlgorithmZ extends Algorithm {
 private Container _container; // Container reference
 private SolutionSet _solution;//Solution where we keep our progress
+private SolutionSet _bestSolution;//Solution where we keep our progress
 private List<ExtremePoint> _listEP;// List of Extreme Points
 private boolean _started;//Flag to know when the first case has been used
 private List<Parcel> _baseParcels;
@@ -22,6 +23,8 @@ public enum Axis { X, Y, Z }
 private double _xBound = 16.5;//Accesible countainer x size
 private double _yBound = 2.5;//Accesible countainer y size
 private double _zBound = 4;//Accesible countainer z size
+private boolean _findBest = false;
+private int amountParcels = 200;//Try 200 of each type of parcel if not specified
 public AlgorithmZ(){
         _container = new Container();
         _xBound = _container.getSize().x;
@@ -41,25 +44,66 @@ public void Start(List<Parcel> list) {
         _solution = new SolutionSet(System.currentTimeMillis());
         _parcelList = getOrderParcels(0,list);
         createContainerWalls();
-        computeSolution(200);
+        if(_findBest)
+                findBestResults(amountParcels,amountParcels,amountParcels); //Try the same amount with each type of parcels
+        else{
+                Vector3D amountEachParcel = countParcels(list);
+                findBestResults(amountEachParcel.x,amountEachParcel.y,amountEachParcel.z);
+        }
         _solutions.add(_solution);
         _solution.endSolution(System.currentTimeMillis());
         CreateParcel.clearAllParcels();
         display();
-        System.out.println("Current container value: " + _solution.getValue());
+        //_solutions.add(_bestSolution);
+        System.out.println("Current container value: " + _bestSolution.getValue());
+        _findBest = false;
 }
 /**
  * Calculates just one step further (Places the next parcel only)
  */
 public void nextStep(){
-        computeSolution(1);
+        //_solution = new SolutionSet(System.currentTimeMillis());
+        computeSolution(amountParcels);
         _solution.calculateCurrentValue();
-        System.out.println("Step has been computed: " + _solution.getValue());
-        _solutions.add(_solution);
+          _solutions.add(_solution);
         CreateParcel.clearAllParcels();
         display();
 
 }
+/**
+ * Loop through multiple combinations of parcels to get the best outcome
+ * @param double a [Amount of parcel A]
+ * @param double b [Amount of parcel B]
+ * @param double c [Amount of parcel C]
+ */
+private void findBestResults(double a, double b, double c)
+{
+        for(int i=0; i<=a; i++)
+                for(int j=0; j<=b; j++)
+                        for(int k=0; k<=c; k++) {
+                                int amountA = i;//Amount of parcels type A
+                                int amountB = j;
+                                int amountC = k;
+                                if((amountA * 2 + amountB * 3 + amountC * 3.375) <= 170 && (3 * amountA + 4 * amountB + 5 * amountC) > 100) {
+                                        _parcelList = createParcelList(amountA, amountB, amountC);
+                                        nextStep();//Compute the best result with this parcels
+                                }
+                        }
+
+
+}
+private List<Parcel> createParcelList(int a, int b, int c)
+{
+        List<Parcel> newList = new LinkedList<Parcel>();
+        for(int i = 0; i < a; i++)
+                newList.add(new ParcelA());
+        for(int i = 0; i < b; i++)
+                newList.add(new ParcelB());
+        for(int i = 0; i < c; i++)
+                newList.add(new ParcelC());
+        return getOrderParcels(0, newList);
+}
+
 /**
  * Calls the step method n times to enable faster results
  * @param int pIterations [Amount of times that step method will be called]
@@ -104,7 +148,7 @@ private int[] findBestEP(Parcel pParcel){
                 for(int j = 0; j < MAXROTATION; j++) {
                         Parcel rotatedParcel = Parcel.getRotated(pParcel, j);
                         currentDiff = calculateDifferenceRsAndParcel(rotatedParcel, _listEP.get(i));
-                        if(currentDiff > difference && currentDiff >= 0 && checkParcelFit(rotatedParcel, _listEP.get(i))){
+                        if(currentDiff > difference && currentDiff >= 0 && checkParcelFit(rotatedParcel, _listEP.get(i))) {
                                 difference = currentDiff;
                                 result[0] = i;
                                 result[1] = j;
@@ -129,7 +173,7 @@ private boolean checkParcelFit(Parcel p, Vector3D pos){
                         for(int j = (int)posArray.y; j < posArray.y + spaceIndex(size.y); j++)
                                 for(int k = (int)posArray.z; k < posArray.z + spaceIndex(size.z); k++)
                                         if(_containerSpace[i][j][k] != null) {
-                                                System.out.println(_containerSpace[i][j][k]);
+                                                //System.out.println(_containerSpace[i][j][k]);
                                                 return false;
                                         }
                 return true;//Didnt found stop condition so it fits
@@ -307,7 +351,7 @@ private void insertFirstParcel(){
         _listEP.add(new ExtremePoint(0,0,0));
         //System.out.println("Algorithm Z first parcel inserted with SetType: " + _type);
         _started = true;
-
+        _bestSolution = _solution;
 }
 /**
  * Reorders the _baseParcels depending on the kind of set that we want to compute
@@ -415,4 +459,29 @@ private void printExtremePointsConsole(){
                 System.out.println("\n  EP number is " +j+ " values are" + _listEP.get(j));
         }
 }
+
+/**
+ * Count how many parcels have been given as an input.
+ */
+private Vector3D countParcels(List<Parcel> pList) {
+        Vector3D result = Vector3D.getZero();
+        for(Parcel p : pList) {
+                if(p instanceof ParcelA) {
+                        result.x += 1;
+                } else if(p instanceof ParcelB) {
+                        result.y += 1;
+                } else if(p instanceof ParcelC) {
+                        result.z += 1;
+                }
+        }
+        return result;
+}
+/**
+ * Set flag as true to find the best case for 3 parcels together
+ */
+public void findBest()
+{
+        _findBest = true;
+}
+
 }

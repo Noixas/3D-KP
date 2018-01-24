@@ -502,7 +502,8 @@ public class MenuUI {
       "A and C",
       "B and C",
       "Max Greedy Volume/Value",
-      "Max Greedy Density");
+      "Max Greedy Density",
+      "Max Extreme Points");
     presets.setPrefSize(140, 20);
     presets.relocate(50, 60);
     presets.setValue("Manual");
@@ -549,6 +550,11 @@ public class MenuUI {
           }
           else if(algorithms.getValue() == "Extreme Points") {
             chosenAlgorithm = algorithms.getValue().toString();
+            System.out.println("Wait, computing best possible way, this could take some seconds");
+            if(presets.getValue() ==  "Max Extreme Points"){
+            extremePoints.findBest();
+            results.setText("Wait, computing best possible way, this could take a few seconds");
+            }
             _activeAlgorithm = extremePoints;
             extremePoints.Start(listOfParcels);
           }
@@ -1009,6 +1015,32 @@ public class MenuUI {
       containerZ.setText("4");
     }
     else if(presets.getValue() == "Max Greedy Density") {}
+      else if(presets.getValue() ==  "Max Extreme Points")
+      {
+        parcelACntr.setText("1");
+        parcelBCntr.setText("1");
+        parcelCCntr.setText("1");
+
+        parcelAValue.setText("3");
+        parcelBValue.setText("4");
+        parcelCValue.setText("5");
+
+        widthA.setText("1");
+        heightA.setText("2");
+        lengthA.setText("1");
+
+        widthB.setText("1.5");
+        heightB.setText("2");
+        lengthB.setText("1");
+
+        widthC.setText("1.5");
+        heightC.setText("1.5");
+        lengthC.setText("1.5");
+
+        containerX.setText("16.5");
+        containerY.setText("2.5");
+        containerZ.setText("4");
+      }
   }
 
   public Algorithm getAlgorithm() {
