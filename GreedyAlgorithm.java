@@ -75,17 +75,15 @@ public class GreedyAlgorithm extends Algorithm {
    * @return either true or false whether if the parcel is placeable or not.
    */
   private boolean placeable(Parcel parcel) {
-    for(int u=1; u < 4; u++) {
     for(int i=0; i < containerSpace.length;i++) {
       for(int j=0; j < containerSpace[0].length; j++) {
         for(int k=0; k < containerSpace[0][0].length; k++) {
           if(containerSpace[i][j][k] == null) {
             Vector3D posIndex = new Vector3D(i, j, k);
-              if(tryRotations(parcel, posIndex)) {
-                parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
-                parcelFits = true;
-                return true;
-              }
+            if(tryRotations(parcel, posIndex)) {
+              parcel.setPosition(new Vector3D(vectorValue(posIndex.x), vectorValue(posIndex.y), vectorValue(posIndex.z)));
+              parcelFits = true;
+              return true;
             }
           }
         }
