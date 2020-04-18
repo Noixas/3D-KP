@@ -20,6 +20,6 @@ kproblem is a maven project with updated Javafx 11.
 ## Images
 <p align="center">
 <img src="https://raw.githubusercontent.com/Noixas/3D-KP/master/images/Knapsack%20problem%20example%201.png" width="500">
-<img src="https://raw.githubusercontent.com/Noixas/3D-KP/master/images/Kp-extreme-points.png" width="500">
+<img src="https://raw.githubusercontent.com/Noixas/3D-KP/master/images/kp-extreme-points.png" width="500">
 </p>
 
