@@ -1,0 +1,9 @@
+ComputeSolution(){
+    OrderItems()
+    while(item in itemsList && EP in EpList){
+        EP bestEp = FindBestExtremePoint(item, EpList) //Use heuristics to find best EP
+        PlaceNextParcel(item, bestEp)
+        CreateNewExtremePoints(item, bestEp)
+        UpdateExtremePoints(EpList) //Check each EP if should be deleted and update RS
+    }
+}

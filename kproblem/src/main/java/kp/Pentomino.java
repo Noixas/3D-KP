@@ -1,3 +1,4 @@
+package kp;
 public class Pentomino extends Parcel {
 public enum PentominoType {L, P, T};
 private PentominoType _type;

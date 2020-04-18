@@ -1,4 +1,4 @@
-/**
+package kp;/**
  * Class which creates Vector3D objects to represent the parcels' sizes and positions.
  */
 public class Vector3D implements Comparable<Vector3D> {

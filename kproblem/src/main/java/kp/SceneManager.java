@@ -1,3 +1,4 @@
+package kp;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Stage;
 import javafx.stage.Screen;

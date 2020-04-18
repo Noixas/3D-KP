@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="HelloFX" default="default" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
+
+<property name="src.dir"     value="src"/>
+<property name="lib.dir"     value="C:/Program Files/AdoptOpenJDK/javafx-sdk-11.0.2/lib"/>
+<path id="classpath">
+    <fileset dir="${lib.dir}" includes="**/*.jar"/>
+</path>
+
+<property name="build.dir"   value="bin"/>
+<property name="classes.dir" value="${build.dir}/classes"/>
+<property name="jar.dir"     value="${build.dir}/jar"/>
+
+<property name="main-class"  value="hellofx.Main"/>
+
+<property environment="env"/>
+<target name="clean">
+    <!-- Verify that JDK is 11+ -->
+    <echo message="JAVA_HOME is set to = ${env.JAVA_HOME}" />
+    <delete dir="${build.dir}"/>
+</target>
+
+<target name="compile">
+    <mkdir dir="${classes.dir}"/>
+    <javac includeantruntime="false" srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" modulepath="/Users/user/Downloads/javafx-sdk-12.0.1/lib">
+        <compilerarg line="--add-modules javafx.controls,javafx.fxml"/> 
+    </javac>
+    <copy todir="${classes.dir}">
+    <fileset dir="src"
+             includes="**/*.fxml,**/*.properties,**/*.css" />
+</copy>
+</target>
+
+<target name="run" depends="jar">
+    <java fork="true" modulepath="/Users/user/Downloads/javafx-sdk-12.0.1/lib" jar="${jar.dir}/${ant.project.name}.jar">
+        <jvmarg line="--add-modules javafx.controls,javafx.fxml"/> 
+    </java>
+</target>
+
+<target name="jar" depends="compile">
+    <mkdir dir="${jar.dir}"/>
+    <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+        <manifest>
+            <attribute name="Main-Class" value="${main-class}"/>
+        </manifest>
+    </jar>
+</target>
+</project>

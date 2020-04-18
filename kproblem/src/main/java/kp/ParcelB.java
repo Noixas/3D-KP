@@ -1,3 +1,4 @@
+package kp;
 /**
  * Subclass of the Parcel class that represents parcel B.
  */

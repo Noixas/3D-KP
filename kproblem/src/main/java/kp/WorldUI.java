@@ -1,9 +1,10 @@
-/**
+package kp;/**
   * This class provides the 3D camera for the general scene where you 
   * can view the container with the placed parcels.
 */
 
 import javafx.event.EventHandler;
+
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Point3D;
