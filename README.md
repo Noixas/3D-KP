@@ -10,7 +10,7 @@ kproblem is a maven project with updated Javafx 11.
 - Apache Maven 3.6.3 
 
 ## Run:
-#### Windows:
+#### Windows console:
 
 1. cd /repositoryfolder/kproblem
 2. mvn clean javafx:run
