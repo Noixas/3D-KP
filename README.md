@@ -15,8 +15,7 @@ kproblem is a maven project with updated Javafx 11.
 1. cd /repositoryfolder/kproblem
 2. mvn clean javafx:run
 
-## Instructions to use software
- Soon...
+
 ## Images
 <p align="center">
 <img src="https://raw.githubusercontent.com/Noixas/3D-KP/master/images/Knapsack%20problem%20example%201.png" width="500">
